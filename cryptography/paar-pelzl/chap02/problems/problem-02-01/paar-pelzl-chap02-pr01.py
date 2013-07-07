@@ -53,4 +53,5 @@ print( temp );
 temp = decrypt(temp,key,letters2Digits,alphabet)
 print('\ndecrypted test message:');
 print( temp );
+print('');
 
