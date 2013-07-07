@@ -41,9 +41,9 @@ def decrypt(ciphertext,inputKey,dictionaryLetters2Digits,alphabet):
 ciphertext = "bsasppkkuosp"
 key        = "rsidpydkawoa"
 
-temp = decrypt(ciphertext,key,letters2Digits,alphabet)
-print('temp');
-print( temp );
+plaintext = decrypt(ciphertext,key,letters2Digits,alphabet)
+print('plaintext');
+print( plaintext );
 
 testMessage = 'JefferyStraker'
 temp = encrypt(testMessage,key,letters2Digits,alphabet)
