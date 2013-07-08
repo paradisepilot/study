@@ -1,5 +1,4 @@
 from numpy import matrix
-from numpy import transpose
 from numpy.core import *
 from numpy.linalg import *
 
