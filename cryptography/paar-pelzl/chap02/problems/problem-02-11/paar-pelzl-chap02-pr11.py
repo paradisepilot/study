@@ -10,5 +10,8 @@ plaintextPrefix = 'wpi'
 period          = 6
 
 plaintext = y.decrypt(ciphertext,plaintextPrefix,period)
+
+print('')
 print('plaintext: ' + plaintext );
 print('')
+
