@@ -1,9 +1,12 @@
-from numpy import array
+from numpy import matrix
+from numpy import transpose
 from numpy.core import *
 from numpy.linalg import *
 
 class LFSR:
 	def __init__(self):
+		self.numOfBits = 5
+
 		self.alphabet = [
 			'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
 			'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
@@ -11,21 +14,39 @@ class LFSR:
 			'0', '1', '2', '3', '4', '5'
 			]
 
-		self.charToBits = dict()
+		self.bitStrings = dict()
 		for i in range(0,len(self.alphabet)):
-			self.charToBits[self.alphabet[i]] = bin(i).replace('0b','')
+			self.bitStrings[self.alphabet[i]] = bin(i).replace('0b','').zfill(self.numOfBits)
+
+		self.characters = dict()
+		for i in range(0,len(self.alphabet)):
+			self.characters[self.bitStrings[self.alphabet[i]]] = self.alphabet[i]
+
+	def getAlphabet(self):
+		return(self.alphabet)
+
+	def getBitStrings(self):
+		return(self.BitStrings)
 
 	def getChar(self,x):
 		return self.alphabet[x]
 
 	def getBit(self,x):
-		return self.charToBits[x.lower()]
+		return self.bitStrings[x.lower()]
 
 	def text2bits(self,inputText):
 		outputBits = ''
 		for char in list(inputText):
 			outputBits = outputBits + self.getBit(char)
 		return outputBits
+
+	def bits2text(self,plaintextbits):
+		plaintextLength = len(plaintextbits) / self.numOfBits
+		plaintext = ['a'] * plaintextLength
+		for i in range(0,plaintextLength):
+			tempBitString = plaintextbits[(i*self.numOfBits):((i+1)*self.numOfBits)]
+			plaintext[i] = self.characters[tempBitString]
+		return(''.join(plaintext))
 
 	def addBits(self,x,y):
 		temp = min(len(x),len(y)) * [-1];
@@ -34,49 +55,44 @@ class LFSR:
 		return(''.join(temp))
 
 	def toRowVector(self,x):
-		return(array(map(int,list(x))))
+		return(map(int,list(x)))
+
+	def toColumnVector(self,x):
+		return(matrix(map(int,list(x))).transpose())
 
 	def getCoefficientMatrix(self,keystream,period):
-		print('keystream')
-		print( keystream )
-		outputMatrix = array([[-1]*period]*period)
+		outputMatrix = matrix([[-1]*period]*period)
 		for i in range(period):
-			#print('keystream[i:(i+period)]')
-			#print( keystream[i:(i+period)] )
-			#print('self.toRowVector(keystream[i:(i+period)])')
-			#print( self.toRowVector(keystream[i:(i+period)]) )
 			outputMatrix[i,:period] = self.toRowVector(keystream[i:(i+period)])
 		return outputMatrix
 
+	def mod2(self,x):
+		return(int(round(x)) % 2)
+
 	def getFeedbackCoefficients(self,keystream,period):
-		lhs = self.toRowVector(keystream[period:2*period])
-		rhs = keystream[0:period]
+		myLHS    = self.toColumnVector(keystream[period:2*period])
 		myMatrix = self.getCoefficientMatrix(keystream,period)
-		#soln = linalg.solve(myMatrix,lhs)
-		print('lhs')
-		print( lhs )
-		print('rhs')
-		print( rhs )
-		print('myMatrix')
-		print( myMatrix )
-		print('rank(myMatrix)')
-		print( rank(myMatrix) )
-		return(1)
+		soln     = map(self.mod2,linalg.solve(myMatrix,myLHS))
+		return(soln)
+
+	def getKeyStream(self,initialKeyStream,feedbackCoefficients,length):
+		period    = len(initialKeyStream)
+		keystream = [-1] * length
+		keystream[0:period] = map(int,list(initialKeyStream))
+		for i in range(period,len(keystream)):
+			keystream[i] = sum(keystream[(i-period):i] * array(feedbackCoefficients)) % 2
+		return(''.join(map(str,keystream)))
 
 	def decrypt(self,ciphertext,plaintextPrefix,period):
-		cipherbits = self.text2bits(ciphertext)
-		#print('cipherbits')
-		#print( cipherbits )
+		cipherbits      = self.text2bits(ciphertext)
 		plainPrefixBits = self.text2bits(plaintextPrefix)
-		#print('plainPrefixBits')
-		#print( plainPrefixBits )
-		keystream = self.addBits(plainPrefixBits,cipherbits)
-		#print('keystream')
-		#print( keystream )
-		#print('')
-		#print( cipherbits )
-		#print( plainPrefixBits )
-		#print( keystream )
-		temp = self.getFeedbackCoefficients(keystream,period)
-		return 1
+
+		initialKeyStream     = self.addBits(plainPrefixBits,cipherbits)
+		feedbackCoefficients = self.getFeedbackCoefficients(initialKeyStream,period)
+
+		keystream     = self.getKeyStream(initialKeyStream[0:period],feedbackCoefficients,len(cipherbits))
+		plaintextbits = self.addBits(keystream,cipherbits)
+		plaintext     = self.bits2text(plaintextbits)
+
+		return(plaintext)
 
