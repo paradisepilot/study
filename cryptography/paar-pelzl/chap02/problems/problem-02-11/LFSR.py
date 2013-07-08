@@ -88,8 +88,8 @@ class LFSR:
 
 		initialKeyStream     = self.addBits(plainPrefixBits,cipherbits)
 		feedbackCoefficients = self.getFeedbackCoefficients(initialKeyStream,period)
-
-		keystream     = self.getKeyStream(initialKeyStream[0:period],feedbackCoefficients,len(cipherbits))
+		keystream            = self.getKeyStream(initialKeyStream[0:period],feedbackCoefficients,len(cipherbits))
+		
 		plaintextbits = self.addBits(keystream,cipherbits)
 		plaintext     = self.bits2text(plaintextbits)
 
