@@ -176,33 +176,29 @@ class DES:
 			temp[i] = bin((int(x[i]) + int(y[i])) % 2).replace('0b','')
 		return(''.join(temp))
 
-	def encrypt(self,plaintext,key):
-		plainbits    = self.text2bits(plaintext)
-		roundKeys    = self.getRoundKeys(key,self.leftShiftVector)
-		permutedBits = self.initialPermutation(plainbits)
+	def crypt(self,inputText,roundKeys):
+		inputBits    = self.text2bits(inputText)
+		permutedBits = self.initialPermutation(inputBits)
 		FeistelBits  = self.FeistelCipher(permutedBits,roundKeys)
-		cipherbits   = self.finalPermutation(FeistelBits)
-		ciphertext   = self.bits2text(cipherbits)
-		#print('plainbits    = ' + plainbits)
-		#print('key bits     = ' + self.text2bits(key))
+		outputBits   = self.finalPermutation(FeistelBits)
+		outputText   = self.bits2text(outputBits)
+		#print('inputBits    = ' + inputBits)
 		#print('permutedBits = ' + permutedBits)
-		#print('cipherbits   = ' + cipherbits)
-		#print('ciphertext   = ' + ciphertext)
-		#keybits = self.text2bits(key)
-		#print('keybits');
-		#print( keybits );
+		#print('outputBits   = ' + outputBits)
+		#print('outputText   = ' + outputText)
 		#for i in range(0,len(roundKeys)):
 		#	print('i = ' + str(i) + ', roundKey = ' + roundKeys[i])
+		return(outputText)
+
+	def encrypt(self,plaintext,key):
+		roundKeys  = self.getRoundKeys(key,self.leftShiftVector)
+		ciphertext = self.crypt(plaintext,roundKeys)
 		return(ciphertext)
 
 	def decrypt(self,ciphertext,key):
-		cipherbits   = self.text2bits(ciphertext)
-		roundKeys    = self.getRoundKeys(key,self.leftShiftVector)
-		roundKeys    = roundKeys[::-1]
-		permutedBits = self.initialPermutation(cipherbits)
-		FeistelBits  = self.FeistelCipher(permutedBits,roundKeys)
-		plainbits   = self.finalPermutation(FeistelBits)
-		plaintext   = self.bits2text(plainbits)
+		roundKeys = self.getRoundKeys(key,self.leftShiftVector)
+		roundKeys = roundKeys[::-1]
+		plaintext = self.crypt(ciphertext,roundKeys)
 		return(plaintext)
 
 	def initialPermutation(self,bitString):
