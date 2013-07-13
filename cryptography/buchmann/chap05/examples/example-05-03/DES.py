@@ -136,15 +136,16 @@ class DES:
 		temp = [bitString[i-1] for i in self.FeistelExpansionVector]
 		return(''.join(temp))
 
-	def FeistelEncrypt(self,bitString):
+	def FeistelEncrypt(self,bitString,roundIndex):
+		self.FeistelExpand(bitString)
 		return(bitString)
 
 	def FeistelCipher(self,bitString):
 		tempL = ''.join([bitString[i] for i in range(0,len(bitString)/2)])
 		tempR = ''.join([bitString[i] for i in range(len(bitString)/2,len(bitString))])
-		for i in range(0,self.numOfRounds):
+		for roundIndex in range(0,self.numOfRounds):
 			tempL1 = tempL
 			tempL  = tempR
-			tempR  = self.addBits(tempL1,self.FeistelEncrypt(tempR))
+			tempR  = self.addBits(tempL1,self.FeistelEncrypt(tempR),roundIndex)
 		return(tempR + tempL)
 
