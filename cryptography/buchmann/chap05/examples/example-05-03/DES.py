@@ -110,34 +110,14 @@ class DES:
 			temp[i] = bin((int(x[i]) + int(y[i])) % 2).replace('0b','')
 		return(''.join(temp))
 
-	def toRowVector(self,x):
-		return(map(int,list(x)))
+	#def toRowVector(self,x):
+	#	return(map(int,list(x)))
 
-	def toColumnVector(self,x):
-		return(matrix(map(int,list(x))).transpose())
+	#def toColumnVector(self,x):
+	#	return(matrix(map(int,list(x))).transpose())
 
-	def getCoefficientMatrix(self,keystream,period):
-		outputMatrix = matrix([[-1]*period]*period)
-		for i in range(period):
-			outputMatrix[i,:period] = self.toRowVector(keystream[i:(i+period)])
-		return outputMatrix
-
-	def mod2(self,x):
-		return(int(round(x)) % 2)
-
-	#def getFeedbackCoefficients(self,keystream,period):
-	#	myLHS    = self.toColumnVector(keystream[period:2*period])
-	#	myMatrix = self.getCoefficientMatrix(keystream,period)
-	#	soln     = map(self.mod2,linalg.solve(myMatrix,myLHS))
-	#	return(soln)
-
-	#def getKeyStream(self,initialKeyStream,feedbackCoefficients,length):
-	#	period    = len(initialKeyStream)
-	#	keystream = [-1] * length
-	#	keystream[0:period] = map(int,list(initialKeyStream))
-	#	for i in range(period,len(keystream)):
-	#		keystream[i] = sum(keystream[(i-period):i] * array(feedbackCoefficients)) % 2
-	#	return(''.join(map(str,keystream)))
+	#def mod2(self,x):
+	#	return(int(round(x)) % 2)
 
 	def encrypt(self,plaintext,key):
 		plainbits    = self.text2bits(plaintext)
