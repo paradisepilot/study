@@ -4,6 +4,7 @@ from numpy.linalg import *
 
 class DES:
 	def __init__(self):
+
 		self.numOfBits   =  4
 		self.numOfRounds = 16
 
@@ -55,7 +56,7 @@ class DES:
 			28,29,30,31,32, 1
 			]
 
-		self.FeistelPC1Vector = [
+		self.PC1Vector = [
 			57,49,41,33,25,17, 9,
 			 1,58,50,42,34,26,18,
 			10, 2,59,51,43,35,27,
@@ -66,7 +67,7 @@ class DES:
 			21,13, 5,28,20,12, 4
 			]
 
-		self.FeistelPC2Vector = [
+		self.PC2Vector = [
 			14,17,11,24, 1, 5, 3,28,
 			15, 6,21,10,23,19,12, 4,
 			26, 8,16, 7,27,20,13, 2,
@@ -176,6 +177,7 @@ class DES:
 			temp[i] = bin((int(x[i]) + int(y[i])) % 2).replace('0b','')
 		return(''.join(temp))
 
+	# encryption and decryption functions
 	def crypt(self,inputText,roundKeys):
 		inputBits    = self.text2bits(inputText)
 		permutedBits = self.initialPermutation(inputBits)
@@ -207,6 +209,25 @@ class DES:
 	def finalPermutation(self,bitString):
 		return(''.join([bitString[i-1] for i in self.finalPermutationVector]))
 
+	def getRoundKeys(self,key,leftShiftVector):
+		tempCD     = self.PC1(self.text2bits(key))
+		tempLength = len(tempCD)/2
+		roundKeys = [-1]*self.numOfRounds
+		for i in range(0,self.numOfRounds):
+			tempC  = [tempCD[j] for j in range(0,tempLength)]
+			tempD  = [tempCD[j] for j in range(tempLength,2*tempLength)]
+			tempC  = [tempC[(j+leftShiftVector[i]) % tempLength] for j in range(0,tempLength)]
+			tempD  = [tempD[(j+leftShiftVector[i]) % tempLength] for j in range(0,tempLength)]
+			tempCD = tempC + tempD
+			roundKeys[i] = self.PC2(''.join(tempCD))
+		return(roundKeys)
+
+	def PC1(self,bitString):
+		return(''.join([bitString[i-1] for i in self.PC1Vector]))
+
+	def PC2(self,bitString):
+		return(''.join([bitString[i-1] for i in self.PC2Vector]))
+
 	# Feistel Cipher
 	def FeistelCipher(self,bitString,roundKeys):
 		tempL = ''.join([bitString[i] for i in range(0,len(bitString)/2)])
@@ -219,25 +240,6 @@ class DES:
 			tempR  = self.addBits(tempL1,tempF)
 			#print('i = ' + str(roundIndex) + ', f = ' + tempF + ', R = ' + tempR)
 		return(tempR + tempL)
-
-	def FeistelPC1(self,bitString):
-		return(''.join([bitString[i-1] for i in self.FeistelPC1Vector]))
-
-	def FeistelPC2(self,bitString):
-		return(''.join([bitString[i-1] for i in self.FeistelPC2Vector]))
-
-	def getRoundKeys(self,key,leftShiftVector):
-		tempCD     = self.FeistelPC1(self.text2bits(key))
-		tempLength = len(tempCD)/2
-		roundKeys = [-1]*self.numOfRounds
-		for i in range(0,self.numOfRounds):
-			tempC  = [tempCD[j] for j in range(0,tempLength)]
-			tempD  = [tempCD[j] for j in range(tempLength,2*tempLength)]
-			tempC  = [tempC[(j+leftShiftVector[i]) % tempLength] for j in range(0,tempLength)]
-			tempD  = [tempD[(j+leftShiftVector[i]) % tempLength] for j in range(0,tempLength)]
-			tempCD = tempC + tempD
-			roundKeys[i] = self.FeistelPC2(''.join(tempCD))
-		return(roundKeys)
 
 	# Internal Cipher
 	def InternalCipher(self,bitString,roundKey):
