@@ -146,6 +146,6 @@ class DES:
 		for roundIndex in range(0,self.numOfRounds):
 			tempL1 = tempL
 			tempL  = tempR
-			tempR  = self.addBits(tempL1,self.FeistelEncrypt(tempR),roundIndex)
+			tempR  = self.addBits(tempL1,self.FeistelEncrypt(tempR,roundIndex))
 		return(tempR + tempL)
 
