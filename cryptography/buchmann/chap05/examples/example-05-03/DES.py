@@ -58,9 +58,6 @@ class DES:
 	def getAlphabet(self):
 		return(self.alphabet)
 
-	def getBitStrings(self):
-		return(self.BitStrings)
-
 	def getChar(self,x):
 		return self.alphabet[x]
 
