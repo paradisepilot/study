@@ -189,7 +189,8 @@ class DES:
 		plainbits    = self.text2bits(plaintext)
 		roundKeys    = self.getRoundKeys(key,self.leftShiftVector)
 		permutedBits = self.initialPermutation(plainbits)
-		cipherbits   = self.FeistelCipher(permutedBits,roundKeys)
+		FeistelBits  = self.FeistelCipher(permutedBits,roundKeys)
+		cipherbits   = self.finalPermutation(FeistelBits)
 		print('plainbits')
 		print( plainbits )
 		print('permutedBits')
@@ -201,10 +202,13 @@ class DES:
 		#print( keybits );
 		#for i in range(0,len(roundKeys)):
 		#	print('i = ' + str(i) + ', roundKey = ' + roundKeys[i])
-		return(plainbits)
+		return(cipherbits)
 
 	def initialPermutation(self,bitString):
 		return(''.join([bitString[i-1] for i in self.initialPermutationVector]))
+
+	def finalPermutation(self,bitString):
+		return(''.join([bitString[i-1] for i in self.finalPermutationVector]))
 
 	# Feistel Cipher
 	def FeistelCipher(self,bitString,roundKeys):
@@ -212,9 +216,11 @@ class DES:
 		tempR = ''.join([bitString[i] for i in range(len(bitString)/2,len(bitString))])
 		for roundIndex in range(0,self.numOfRounds):
 			tempL1 = tempL
-			tempL  = tempR
-			tempR  = self.addBits(tempL1,self.InternalCipher(tempR,roundKeys[roundIndex]))
-			print('i = ' + str(roundIndex) + ', R = ' + tempR)
+			tempR1 = tempR
+			tempL  = tempR1
+			tempF  = self.InternalCipher(tempR1,roundKeys[roundIndex])
+			tempR  = self.addBits(tempL1,tempF)
+			print('i = ' + str(roundIndex) + ', f = ' + tempF + ', R = ' + tempR)
 		return(tempR + tempL)
 
 	def FeistelPC1(self,bitString):
@@ -239,10 +245,9 @@ class DES:
 	# Internal Cipher
 	def InternalCipher(self,bitString,roundKey):
 		temp = self.addBits(self.InternalExpand(bitString),roundKey)
+		print('InternalEncrypt: E(R) + roundKey = ' + temp)
 		temp = self.InternalApplySBoxes(temp,self.InternalSBoxes)
 		temp = self.InternalPermute(temp)
-		#print('InternalEncrypt')
-		#print( temp )
 		return(temp)
 
 	def InternalExpand(self,bitString):
