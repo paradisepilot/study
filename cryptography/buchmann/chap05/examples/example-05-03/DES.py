@@ -162,12 +162,12 @@ class DES:
 			outputBits = outputBits + self.getBit(char)
 		return outputBits
 
-	def bits2text(self,plaintextbits):
-		plaintextLength = len(plaintextbits) / self.numOfBits
-		plaintext = ['a'] * plaintextLength
-		for i in range(0,plaintextLength):
-			tempBitString = plaintextbits[(i*self.numOfBits):((i+1)*self.numOfBits)]
-			plaintext[i] = self.characters[tempBitString]
+	def bits2text(self,bitString):
+		tempLength = len(bitString) / self.numOfBits
+		plaintext = ['a'] * tempLength
+		for i in range(0,tempLength):
+			tempBitString = bitString[(i*self.numOfBits):((i+1)*self.numOfBits)]
+			plaintext[i]  = self.characters[tempBitString]
 		return(''.join(plaintext))
 
 	def addBits(self,x,y):
@@ -176,33 +176,24 @@ class DES:
 			temp[i] = bin((int(x[i]) + int(y[i])) % 2).replace('0b','')
 		return(''.join(temp))
 
-	#def toRowVector(self,x):
-	#	return(map(int,list(x)))
-
-	#def toColumnVector(self,x):
-	#	return(matrix(map(int,list(x))).transpose())
-
-	#def mod2(self,x):
-	#	return(int(round(x)) % 2)
-
 	def encrypt(self,plaintext,key):
 		plainbits    = self.text2bits(plaintext)
 		roundKeys    = self.getRoundKeys(key,self.leftShiftVector)
 		permutedBits = self.initialPermutation(plainbits)
 		FeistelBits  = self.FeistelCipher(permutedBits,roundKeys)
 		cipherbits   = self.finalPermutation(FeistelBits)
-		print('plainbits')
-		print( plainbits )
-		print('permutedBits')
-		print( permutedBits )
-		print('cipherbits')
-		print( cipherbits )
+		ciphertext   = self.bits2text(cipherbits)
+		print('plainbits    = ' + plainbits)
+		print('key bits     = ' + self.text2bits(key))
+		print('permutedBits = ' + permutedBits)
+		print('cipherbits   = ' + cipherbits)
+		print('ciphertext   = ' + ciphertext)
 		#keybits = self.text2bits(key)
 		#print('keybits');
 		#print( keybits );
 		#for i in range(0,len(roundKeys)):
 		#	print('i = ' + str(i) + ', roundKey = ' + roundKeys[i])
-		return(cipherbits)
+		return(ciphertext)
 
 	def initialPermutation(self,bitString):
 		return(''.join([bitString[i-1] for i in self.initialPermutationVector]))
