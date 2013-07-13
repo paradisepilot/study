@@ -183,17 +183,27 @@ class DES:
 		FeistelBits  = self.FeistelCipher(permutedBits,roundKeys)
 		cipherbits   = self.finalPermutation(FeistelBits)
 		ciphertext   = self.bits2text(cipherbits)
-		print('plainbits    = ' + plainbits)
-		print('key bits     = ' + self.text2bits(key))
-		print('permutedBits = ' + permutedBits)
-		print('cipherbits   = ' + cipherbits)
-		print('ciphertext   = ' + ciphertext)
+		#print('plainbits    = ' + plainbits)
+		#print('key bits     = ' + self.text2bits(key))
+		#print('permutedBits = ' + permutedBits)
+		#print('cipherbits   = ' + cipherbits)
+		#print('ciphertext   = ' + ciphertext)
 		#keybits = self.text2bits(key)
 		#print('keybits');
 		#print( keybits );
 		#for i in range(0,len(roundKeys)):
 		#	print('i = ' + str(i) + ', roundKey = ' + roundKeys[i])
 		return(ciphertext)
+
+	def decrypt(self,ciphertext,key):
+		cipherbits   = self.text2bits(ciphertext)
+		roundKeys    = self.getRoundKeys(key,self.leftShiftVector)
+		roundKeys    = roundKeys[::-1]
+		permutedBits = self.initialPermutation(cipherbits)
+		FeistelBits  = self.FeistelCipher(permutedBits,roundKeys)
+		plainbits   = self.finalPermutation(FeistelBits)
+		plaintext   = self.bits2text(plainbits)
+		return(plaintext)
 
 	def initialPermutation(self,bitString):
 		return(''.join([bitString[i-1] for i in self.initialPermutationVector]))
@@ -211,7 +221,7 @@ class DES:
 			tempL  = tempR1
 			tempF  = self.InternalCipher(tempR1,roundKeys[roundIndex])
 			tempR  = self.addBits(tempL1,tempF)
-			print('i = ' + str(roundIndex) + ', f = ' + tempF + ', R = ' + tempR)
+			#print('i = ' + str(roundIndex) + ', f = ' + tempF + ', R = ' + tempR)
 		return(tempR + tempL)
 
 	def FeistelPC1(self,bitString):
@@ -236,7 +246,7 @@ class DES:
 	# Internal Cipher
 	def InternalCipher(self,bitString,roundKey):
 		temp = self.addBits(self.InternalExpand(bitString),roundKey)
-		print('InternalEncrypt: E(R) + roundKey = ' + temp)
+		#print('InternalEncrypt: E(R) + roundKey = ' + temp)
 		temp = self.InternalApplySBoxes(temp,self.InternalSBoxes)
 		temp = self.InternalPermute(temp)
 		return(temp)
