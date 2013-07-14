@@ -193,6 +193,7 @@ class DES:
 		return(outputText)
 
 	def encrypt(self,plaintext,key):
+		print( 'key bits = ' + self.text2bits(key) )
 		roundKeys  = self.getRoundKeys(key,self.leftShiftVector)
 		ciphertext = self.crypt(plaintext,roundKeys)
 		return(ciphertext)
