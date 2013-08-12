@@ -9,7 +9,7 @@ fi
 
 cd ${outputDIR}
 
-myRscript=buchmann-exercise-09-01.R
+myRscript=buchmann-exercise-08-01.R
 outputFILE=stdout.R.`basename ${myRscript} .R`
 R --no-save < ../${myRscript} 2>&1 > ${outputFILE}
 
