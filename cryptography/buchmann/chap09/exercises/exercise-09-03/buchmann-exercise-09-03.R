@@ -11,5 +11,5 @@ print( results$prime.factors );
 print( results$exponents );
 print( results$unfactored );
 
-prod(results$prime.factors ^ results$exponents);
+results$unfactored * prod(results$prime.factors ^ results$exponents);
 
