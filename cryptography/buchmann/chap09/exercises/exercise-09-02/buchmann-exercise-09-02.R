@@ -1,6 +1,6 @@
 
-source("EratosthenesSieve.R");
-source("TrialDivision.R");
+source("../EratosthenesSieve.R");
+source("../TrialDivision.R");
 
 n <- 831802500;
 
