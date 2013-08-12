@@ -9,10 +9,10 @@ EratosthenesSieve <- function(upper.bound = NULL) {
 	while (current.prime < limit) {
 		primes        <- c(primes,current.prime);
 		remaining     <- setdiff(remaining,current.prime*seq(1:upper.bound));
-		current.prime <- min(setdiff(remaining,primes));
+		current.prime <- min(remaining);
 		}
 
-	return(remaining);
+	return(c(primes,remaining));
 
 	}
 
