@@ -26,7 +26,7 @@ TrialDivision <- function(n = NULL, list.of.primes = NULL) {
 		list.of.primes = list.of.primes,
 		prime.factors  = prime.factors,
 		exponents      = exponents,
-		unfactored     = 1
+		unfactored     = unfactored
 		);
 
 	return(LIST.output);
