@@ -1,7 +1,12 @@
 
 source("../../../code/EratosthenesSieve.R");
 source("../../../code/TrialDivision.R");
+source("../../../code/RepeatedSquaring.R");
 
+####################################################################################################
+RepeatedSquaring(base = 3, exponent = 23, modulus = 5);
+
+####################################################################################################
 n <- 138277151;
 
 primes <- EratosthenesSieve(upper.bound = ceiling(sqrt(n)));
