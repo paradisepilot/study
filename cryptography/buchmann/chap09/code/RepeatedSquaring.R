@@ -5,7 +5,7 @@ RepeatedSquaring <- function(
 	modulus  = NULL
 	) {
 
-	current.base <- base;
+	current.base <- base %% modulus;
 	remainder <- 1;
 	remaining.exponent <- exponent;
 
@@ -14,7 +14,7 @@ RepeatedSquaring <- function(
 			remainder <- (remainder * current.base) %% modulus;
 			}
 		remaining.exponent <- floor(remaining.exponent / 2);
-		current.base <- current.base ^ 2;
+		current.base <- (current.base ^ 2) %% modulus;
 		#print(paste0("remainder = ",remainder,"  exponent = ",remaining.exponent));
 		}
 
