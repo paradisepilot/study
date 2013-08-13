@@ -4,11 +4,24 @@ source("../../../code/TrialDivision.R");
 source("../../../code/RepeatedSquaring.R");
 
 ####################################################################################################
-base <- 7; exponent <- 11; modulus <- 14;
+size     <- 1000;
+base     <- sample(size = size, x = seq( 2,10), replace = TRUE);
+exponent <- sample(size = size, x = seq( 5, 8), replace = TRUE);
+modulus  <- sample(size = size, x = seq(17,51), replace = TRUE);
 
-RepeatedSquaring(base = base, exponent = exponent, modulus = modulus);
-(base ^ exponent);
-(base ^ exponent) %% modulus;
+correct.remainders  <- (base ^ exponent) %% modulus;
+computed.remainders <- integer(length = size);
+for (i in 1:size) {
+	computed.remainders[i] <- RepeatedSquaring(
+		base     = base[i],
+		exponent = exponent[i],
+		modulus  = modulus[i]
+		);
+	}
+
+sum(abs(computed.remainders-correct.remainders));
+all.equal(computed.remainders,correct.remainders);
+cbind(n = (base ^ exponent), modulus, computed.remainders, correct.remainders);
 
 ####################################################################################################
 n <- 138277151;
