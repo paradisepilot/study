@@ -8,7 +8,7 @@ pMinusOne <- function(
 	require(schoolmath);
 
 	for (b in 1:num.bases.to.try) {
-		A.to.i = sample(x = seq(2,n), size = 1);
+		A.to.i = sample(x = seq(2,n-1), size = 1);
 		for (i in seq(1:loop.bound)) {
 			A.to.i   <- RepeatedSquaring(base = A.to.i, exponent = i, modulus = n);
 			temp.gcd <- gcd(A.to.i - 1,n);
