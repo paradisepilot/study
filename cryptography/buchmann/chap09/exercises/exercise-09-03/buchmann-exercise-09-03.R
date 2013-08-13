@@ -4,7 +4,11 @@ source("../../../code/TrialDivision.R");
 source("../../../code/RepeatedSquaring.R");
 
 ####################################################################################################
-RepeatedSquaring(base = 3, exponent = 23, modulus = 5);
+base <- 7; exponent <- 11; modulus <- 14;
+
+RepeatedSquaring(base = base, exponent = exponent, modulus = modulus);
+(base ^ exponent);
+(base ^ exponent) %% modulus;
 
 ####################################################################################################
 n <- 138277151;
