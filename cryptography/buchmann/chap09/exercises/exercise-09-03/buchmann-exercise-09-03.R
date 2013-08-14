@@ -78,10 +78,12 @@ results$unfactored * prod(results$prime.factors ^ results$exponents);
 ####################################################################################################
 #n <- 138277151;
 #n <- (3^2)*(11*5);
-n <- 2999 * 11617;
+#n <- 2999 * 11617;
+#n <- 540143;
+n <- 491389;
 pMinusOne(
 	n                = n,
-	loop.bound       = 30,
+	#loop.bound       = 30,
 	#num.bases.to.try = 100
 	);
 
