@@ -1,0 +1,83 @@
+
+\section{The RSA Cryptosystem}
+\setcounter{theorem}{0}
+\setcounter{equation}{0}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Mechanism}
+
+\textbf{Goal:} Alice wants to send Bob an encrypted message through an insecure channel.
+\begin{itemize}
+\item	Bob chooses his public key $(n,e) \in \N^{2}$ and private key $d \in \N$.
+	Bob publishes his public key.
+	\begin{itemize}
+	\item	$n \in \N$ is called the modulus, with $n = pq$, where $p$ and $q$ are large distinct
+		prime numbers.  Note that Bob publishes $n$ but keeps $p$ and $q$ secret.
+	\item	$e \in \N$ is the called encryption exponent, and satisfies $\gcd(e,(p-1)(q-1)) = 1$.
+	\item	$d \in \N$ is the called decryption exponent, and is determined by $e$ and $n = pq$
+		via $d = e^{-1} \in \Z_{(p-1)(q-1)}$.
+		Note that $e^{-1} \in \Z_{(p-1)(q-1)}$ exists since $\gcd(e,(p-1)(q-1)) = 1$.
+	\end{itemize}
+\item	Alice
+	\begin{itemize}
+	\item	chooses plaintext $m \in \Z_{n} = \Z/n\Z$.
+	\item	encrypts her plaintext $m$ using Bob's public key $(n,e)$
+		by {\color{red}raising $m \in \Z_{n}$ to the $e^{\textnormal{th}}$ power}.
+		In other words, Alice computes her ciphertext $c = m^{e} \in \Z_{n}$.
+	\item	sends to Bob through the insecure channel the ciphertext $c \in \Z_{n}$.
+	\end{itemize}
+\item	Bob decrypts the ciphertext $c \in \Z_{n}$ from Alice by
+	{\color{red}taking the $e^{\textnormal{th}}$ root}
+	of $c$ in $\Z_{n}$ using his private key $d \in \N$ as follows:
+	\begin{equation*}
+	c^{d} = \left(m^{e}\right)^{d} = m^{ed} = m^{1+k(p-1)(q-1)} = m \cdot (m^{(p-1)(q-1)})^{k}
+	= m \cdot (1)^{k} = m \in \Z_{n}
+	\end{equation*}
+	\begin{itemize}
+	\item	The second last equality follows from $m^{(p-1)(q-1)} \equiv 1 \mod n$, which 
+		follows immediately from Euler's Theorem.  It can also be justified with
+		Fermat's Little Theorem as follows:
+		\begin{equation*}
+		\textnormal{Fermat's Little Theorem}
+		\;\;\Longrightarrow\;\;
+		\left\{\begin{array}{l}
+		m^{(p-1)(q-1)} = \left(m^{p-1}\right)^{q-1} \equiv 1 \mod p, \;\;\textnormal{and} \\
+		m^{(p-1)(q-1)} = \left(m^{q-1}\right)^{p-1} \equiv 1 \mod q.
+		\end{array}\right.
+		\end{equation*}
+		Hence, $m^{(p-1)(q-1)} - 1$ is divisble by both $p$ and $q$, and hence also by
+		$pq = n$ (since $p$ and $q$ are distinct primes).
+		Thus, $m^{(p-1)(q-1)} \equiv 1 \mod n = pq$.
+	\end{itemize}
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Comments}
+
+\begin{itemize}
+\item	One-way function (easy): Exponentiation in $\Z_{n}$.
+	\begin{itemize}
+	\item	Repeating Squaring Algorithm
+	\end{itemize}
+\item	(Difficult) inverse function: Taking roots in $\Z_{n}$, for $n = pq$, where $p$ and $q$
+	are large distinct prime numbers.
+\item	Trapdoor: If the factorization of $n = pq$ is known, then we can convert the inverse
+	function (taking roots in $\Z_{n}$, which is slow) to an exponentiation in $\Z_{n}$,
+	which is fast.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{How to find large prime numbers?}
+
+\begin{itemize}
+\item	Generate random numbers $x$ with $2^{1023} < x < 2^{1024}$.
+\item	The Prime Number Theorem (from Analytic Number Theory) implies that, for large values of $N$,
+	the probability that a randomly selected integer $x \in (2^{N-1},2^{N})$ is prime is
+	approximately
+	\begin{equation*}
+	\dfrac{1}{\ln(2^{N})}
+	\end{equation*}
+\item	Test for the compositeness or ``probable primality" of $x$
+	using the Miller-Rabin primality test.
+\end{itemize}
+
