@@ -70,14 +70,134 @@
 \subsection{How to find large prime numbers?}
 
 \begin{itemize}
-\item	Generate random numbers $x$ with $2^{1023} < x < 2^{1024}$.
-\item	The Prime Number Theorem (from Analytic Number Theory) implies that, for large values of $N$,
+\item	Generate a large $N$-bit (say $N = 1024$) random number $x$, i.e. $2^{N-1} < x < 2^{N}$.
+	Use an efficient primality test to check whether $x$ is prime.
+	If so, we are done.  If not, repeat until we succeed.
+\item	The Prime Number Theorem (from Analytic Number Theory) gives an estimate of how many times
+	we need to try before succeeding.
+	The Prime Number Theorem states that
+	\begin{equation*}
+	\lim_{x \rightarrow \infty} \dfrac{\pi(x)/x}{1/\ln(x)} \; = \; 1,
+	\end{equation*}
+	where $\pi(x)$ is the number of prime numbers less than or equal to $x$.
+	Hence, it implies that, for large values of $N$,
 	the probability that a randomly selected integer $x \in (2^{N-1},2^{N})$ is prime is
 	approximately
 	\begin{equation*}
 	\dfrac{1}{\ln(2^{N})}
 	\end{equation*}
-\item	Test for the compositeness or ``probable primality" of $x$
-	using the Miller-Rabin primality test.
+	Conversely, this implies that, on average, out of every
+	$\ln(2^N) = N\cdot\ln(2) \approx 0.693\cdot N$ randomly and independently selected
+	integers from $(2^{N-1},2^{N})$, one of them will be a prime number.
+	For example, if $N = 1024$, then $0.693\cdot N \approx 709.78$; in other words,
+	if we are selecting random integers from $(2^{1023},2^{1024})$, then on average, we
+	expect repeating approximately 710 times before we succeed in selecting a prime number.
+	Note that $2^{1023} = 10^{1023\times\log_{10}(2)} \approx 10^{1023\times0.301} \approx 10^{307.95}$.
+\item	The Miller-Rabin Primality test
+	\begin{itemize}
+	\item	\textbf{Proposition}\quad
+			Let $p$ be an odd prime and write $p-1 = 2^{k}t$, where $t$ is odd.
+			Then, for each $a \in \Z$ with $p \nmid a$, one of the following is true:
+			\begin{itemize}
+			\item[$\bullet$]	$a^{t} \equiv 1 \mod p$,\; or
+			\item[$\bullet$]	One of $a^{t}$, $a^{2t}$, $a^{4t}$, $\ldots$, $a^{2^{k-1}t}$ is congruent to $-1\mod p$.
+			\end{itemize}
+	\item	\textbf{Corollary}\quad
+			Let $n \in \Z$ be an odd number, with $n-1 = 2^{k}t$, $t$ being odd.
+			Then, $n$ is composite, if any of the following is true:
+			\begin{itemize}
+			\item[$\bullet$]	There exists $a \in \Z$ such that $\gcd(a,n) > 1$.
+			\item[$\bullet$]	There exists $a \in \Z$ such that $\gcd(a,n) = 1$, and $a^{t} \not\equiv 1 \mod n$,
+							and $a^{2^{i}t} \not\equiv -1 \mod n$, for each $i = 0, 1, 2, \ldots, k-1$.
+			\end{itemize}	
+	\item	\textbf{Proposition}\quad
+			Let $n$ be an odd composite number.
+			Then, at least $75\%$ of integers between $1$ and $n-1$ are Miller-Rabin witnesses for $n$.
+	\end{itemize}
 \end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Factorization algorithms}
+
+\begin{itemize}
+\item	Pollard's $p-1$ factorization algorithm
+		\vskip 0.1cm
+		This method {\color{red}``probably"} works for producing a non-trivial factor for composite $n \in \N$
+		admitting a prime factor $p$ such that {\color{red}$p-1$ is a product of small primes.}
+		\begin{itemize}
+		\item	\textbf{Proposition:}\quad
+				Let $n = pq$, where $p$ and $q$ are distinct prime numbers.
+				Then the following two statements hold:
+				\begin{itemize}
+				\item[$\bullet$]	For each $L \in \N$, we have the following implications:
+								\begin{equation*}
+								(p-1) \mid L \quad \Longrightarrow \quad p \mid (a^{L} - 1)
+								\end{equation*}				
+				\item[$\bullet$]	For any $a \in \N$ with $p \nmid a$ and $q \nmid a$, and any $L \in \N$, 
+								\begin{equation*}
+								\left.\begin{array}{l}
+								p \mid (a^{L} - 1) \\
+								q \nmid (a^{L} -1) \\
+								\end{array}\right\}
+								\quad\Longrightarrow\quad
+								p = \gcd(a^{L}-1,n)
+								\end{equation*}
+				\end{itemize}
+		\item	\textbf{Key observations:}
+				\begin{itemize}
+				\item[$\bullet$]	If $p-1$ is a product of small primes, then $p \mid N!$, for some not-too-large $N$.  
+				\item[$\bullet$]	If $(q-1) \nmid N!$, then $q \nmid (a^{N!}-1)$ is ``probably" true.
+				\item[$\bullet$]	If $p-1$ is a product of small primes, and $q-1$ is NOT so, then
+								computing $\gcd(a^{k!}-1,n)$, for $k = 2,3,\ldots$, will ``probably" yield
+								$p$ as a non-trivial factor of $n$.
+				\end{itemize}
+		\end{itemize}
+\item	Factorization via difference of squares
+		\begin{itemize}
+		\item	\textbf{Key observations:}\vskip 0.1cm
+				Suppose we know that $n \in \N$ is odd and composite.
+				We want to find a non-trivial factor of $n$.
+				\begin{itemize}
+				\item[$\bullet$]	If we can find $a, b\in\N$ such that $n$ is the difference of their squares,
+								i.e. $n = a^{2} - b^{2} = (a-b)(a+b)$,
+								then computing $\gcd(a-b,n)$ will yield a non-trivial factor of $n$.
+				\item[$\bullet$]	Conversely, suppose $n = cd$.  Since $n$ is odd, both $c$ and $d$
+								must also be odd.
+								Hence, $a := \frac{1}{2}(c+d) \in \Z$ and $b := \frac{1}{2}(c-d) \in \Z$.
+								And, $a^{2} - b^{2} = \cdots = cd = n$.
+								In other words, every composite odd integer can be written as the
+								difference of two squares.
+				\item[$\bullet$]	If some multiple $kn$ is a difference of squares, i.e.
+								$kn = a^{2} - b^{2} = (a-b)(a+b)$,
+								then computing $\gcd(a-b,n)$ will ``probably" yield a non-trivial factor
+								of $n$, since it should be unlikely that $n$ divides $a-b$.
+				\item[$\bullet$]	{\color{red}In summary, if we could find $a,b\in\Z$ such that
+								$a^{2} \equiv b^{2} \mod n$, then computing $\gcd(a-b,n)$ will
+								probably yield a non-trivial factor of $n$.}
+				\end{itemize}
+		\item	\textbf{Outline of general procedure:}\vskip 0.1cm
+				\begin{enumerate}
+				\item	\textbf{Find $B$-smooth perfect squares in $\Z_{n}$.}
+						Find many $a_{1}, a_{2}, \ldots, a_{r} \in \Z$ such that
+						every prime factor of $c_{i} \equiv a_{i}^{2}\mod n$ is less than or equal to $B$.
+				\item	Find sub-collections $c_{i_{1}}, c_{i_{2}}, \ldots, c_{i_{s}}$ such that
+						$c_{i_{1}} c_{i_{2}} \cdots c_{i_{s}} \equiv b^{2} \mod n$ are
+						perfect squares in $\Z_{n}$.
+				\item	Let $a := a_{i_{1}} a_{i_{2}} \cdots a_{i_{s}} \mod n$.
+						Then, computing $\gcd(a-b,n)$ will probably yield a non-trivial factor of $n$.
+				\end{enumerate}
+		\item	Comments on the general procedure:
+				\begin{itemize}
+				\item[$\bullet$]	Step (3) can be performed efficiently using the Euclidean Algorithm.
+				\item[$\bullet$]	Step (2) is equivalent to solving a homogeneous (sparse) system of
+								linear equations over $\F_{2}$.
+				\item[$\bullet$]	The main challenge in difference-of-squares factorization is Step (1),
+								namely, given $n \in \Z$, finding enough $B$-smooth perfect squares
+								in $\Z_{n}$.
+				\end{itemize}
+		\end{itemize}
+\end{itemize}
+
+
+
 
