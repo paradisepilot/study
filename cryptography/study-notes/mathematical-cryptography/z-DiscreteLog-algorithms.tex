@@ -59,7 +59,7 @@
 \begin{enumerate}
 \item	Let $n := 1 + \lfloor\,\sqrt{N}\,\rfloor$, where $\lfloor\,\sqrt{N}\,\rfloor$ is the round-down of $\sqrt{N}$.
 \item	Generate $\mathcal{S}_{1} = \left\{\,g^{i}\;\vert\;i = 0,1,2,\ldots,n\,\right\}=\left\{\;e, g, g^{2}, g^{3}, \ldots, g^{n}\;\right\}$.
-\item	Form the hash table:
+\item	Form the hash table $\mathcal{T}$:
 		\begin{center}
 		\begin{tabular}{|c||c|c|c|c|c|c|}
 		\hline
@@ -73,8 +73,8 @@
 gn := g^{-n};
 temp := h;
 for j = 0, 1, 2, ...
-    if (temp is a key in hashTable) {
-        i := hashTable{temp};
+    if (T{temp} exists) {
+        i := T{temp};
         return(i + n*j);
     } else {
         temp := temp * gn;
