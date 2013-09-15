@@ -98,13 +98,9 @@ end
 \noindent
 \textbf{Theory:}
 \begin{itemize}
-\item	We are seeking $x \in \{\,0,1,2,\ldots,N-1\,\}$ such that $g^{x} = h$.
-\item	If we know the prime factorization of $N = p_{1}^{\alpha_{1}}\,p_{2}^{\alpha_{2}}\,p_{3}^{\alpha_{3}}\,\cdots\,p_{t}^{\alpha_{t}}$,
-		and if we also have solutions
-		\begin{equation*}
-		y_{i} \in \{\,0,1,2,\ldots,p_{i}^{\alpha_{i}}-1\,\}
-		\end{equation*}
-		to the following associated discrete logarithm problems (in finite cyclic groups with prime power order):
+\item	The assumption that $h \in G = \langle\,g\,\rangle$ implies the solvability of $g^{x} = h$ for $x \in \{\,0,1,2,\ldots,N-1\,\}$.
+\item	Let $N = p_{1}^{\alpha_{1}}\,p_{2}^{\alpha_{2}}\,p_{3}^{\alpha_{3}}\,\cdots\,p_{t}^{\alpha_{t}}$ be the prime factorization of $N$.
+		Then, it turns out that the following associated discrete logarithm problems (in finite cyclic groups with prime power order):
 		\begin{equation*}
 		g_{i}^{y_{i}} \; = \; h_{i},
 		\quad\textnormal{where}\quad g_{i} \, := \, g^{N/p_{i}^{\alpha_{i}}},
@@ -113,16 +109,18 @@ end
 		\;\;\textnormal{and}\;\;
 		i = 1,2,\ldots,t\,,
 		\end{equation*}
-		then we can compute $x$ using the Chinese Remainder Theorem, namely, solve the following simultaneous congruences
-		for $x \in \{\,0,1,2,\ldots,N-1\,\}$:
+		are also solvable for
 		\begin{equation*}
-		x \equiv y_{i}\mod p_{i}^{\alpha_{i}}\,,
+		y_{i} \in \{\,0,1,2,\ldots,p_{i}^{\alpha_{i}}-1\,\}\,.
+		\end{equation*}
+		If we also have their solutions $y_{i}$,  then we can compute $x$ using the Chinese Remainder Theorem,
+		namely, by solving the following simultaneous congruences for $x \in \{\,0,1,2,\ldots,N-1\,\}$:
+		\begin{equation*}
+		x \equiv y_{i}\;\;\textnormal{mod}\;\;p_{i}^{\alpha_{i}}\,,
 		\quad\textnormal{for}\;\; i = 1,2,\ldots,t\,.
 		\end{equation*}
 		\underline{Outline of proof:}\vskip 0.1cm
-		\textit{First, note that the assumption that $h \in G = \langle\,g\,\rangle$ implies
-		the solvability of $g^{x} = h$ for $x \in \{\,0,1,2,\ldots,N-1\,\}$.
-		This implies the solvability of the auxiliary discrete logarithm problems
+		\textit{The solvability of $g^{x} = h$ implies the solvability of the auxiliary discrete logarithm problems
 		$g_{i}^{y_{i}} = h_{i}$ for $y_{i} \in \{\,0,1,2,\ldots,p_{i}^{\alpha_{i}}-1\,\}$, for each $i = 1,2,\ldots,t$, since
 		\begin{equation*}
 		g^{x} = h
@@ -133,7 +131,7 @@ end
 		\end{equation*}
 		where $y_{i} := x \; \textnormal{mod} \; p_{i}^{\alpha_{i}}$.
 		Here, note that $\ord(g_{i}) = p_{i}^{\alpha_{i}}$, for each $i = 1,2,\ldots,t$.
-		Lastly, observe that, for each $i = 1,2,\ldots,t$,
+		Next, observe that, for each $i = 1,2,\ldots,t$,
 		\begin{eqnarray*}
 		\left(g^{-x}\cdot h\right)^{N/p_{i}^{\alpha_{i}}}
 		&=& \left(g^{-x}\right)^{N/p_{i}^{\alpha_{i}}} \cdot \left(h\right)^{N/p_{i}^{\alpha_{i}}}
