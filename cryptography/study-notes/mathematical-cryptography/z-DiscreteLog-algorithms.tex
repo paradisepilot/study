@@ -5,10 +5,10 @@
 
 \vskip 1.0cm
 \begin{center}
-\begin{minipage}{0.75\textwidth}
+\begin{minipage}{0.80\textwidth}
 	\begin{center}\textbf{The Discrete Logarithm Problem}\end{center}
 	\begin{itemize}
-	\item	Let $G$ be a cyclic group of order $N \geq 2$, and let $g \in G$ be a generator of $G$.
+	\item	Let $G$ be a finite cyclic group of order $N \geq 2$, and let $g \in G$ be a generator of $G$.
 	\item	Let $h \in G\,\backslash \{\,e\,\}$ be given.
 	\item	Find $x \in \N$, $1 \leq x < N$, such that $g^{x} = h$.
 	\end{itemize}
@@ -98,27 +98,48 @@ end
 \noindent
 \textbf{Theory:}
 \begin{itemize}
-\item	We are seeking $x$ such that $g^{x} = h$. Note that $x$ is well-defined modulo $N$.
+\item	We are seeking $x \in \{\,0,1,2,\ldots,N-1\,\}$ such that $g^{x} = h$.
 \item	If we know the prime factorization of $N = p_{1}^{\alpha_{1}}\,p_{2}^{\alpha_{2}}\,p_{3}^{\alpha_{3}}\,\cdots\,p_{t}^{\alpha_{t}}$,
 		and if we also have solutions
 		\begin{equation*}
-		y_{i} \in \{\,1,2,\ldots,p_{i}^{\alpha_{i}}-1\,\}
+		y_{i} \in \{\,0,1,2,\ldots,p_{i}^{\alpha_{i}}-1\,\}
 		\end{equation*}
-		to the following associated problems:
+		to the following associated discrete logarithm problems (in finite cyclic groups with prime power order):
 		\begin{equation*}
 		g_{i}^{y_{i}} \; = \; h_{i},
-		\quad\textnormal{where}\quad g_{i} := g^{N/p_{i}^{\alpha_{i}}},
+		\quad\textnormal{where}\quad g_{i} \, := \, g^{N/p_{i}^{\alpha_{i}}},
 		\;\;
-		h_{i} = h^{N/p_{i}^{\alpha_{i}}}\,,
+		h_{i} \, := \, h^{N/p_{i}^{\alpha_{i}}}\,,
 		\;\;\textnormal{and}\;\;
-		t = 1,2,\ldots,t\,,
+		i = 1,2,\ldots,t\,,
 		\end{equation*}
 		then we can reconstruct $x$ using the Chinese Remainder Theorem, namely, solve the following simultaneous congruences
-		for $x$:
+		for $x \in \{\,0,1,2,\ldots,N-1\,\}$:
 		\begin{equation*}
 		x \equiv y_{i}\mod p_{i}^{\alpha_{i}}\,,
-		\quad\textnormal{for}\;\; t = 1,2,\ldots,t\,.
-		\end{equation*} 
+		\quad\textnormal{for}\;\; i = 1,2,\ldots,t\,.
+		\end{equation*}
+		\underline{Outline of proof:}\vskip 0.1cm
+		\textit{First, note that $\ord(g_{i}) = p_{i}^{\alpha_{i}}$, for each $i = 1,2,\ldots,t$.
+		Next, note that, for each $i = 1,2,\ldots,t$,
+		\begin{eqnarray*}
+		\left(g^{-x}\cdot h\right)^{N/p_{i}^{\alpha_{i}}}
+		&=& \left(g^{-x}\right)^{N/p_{i}^{\alpha_{i}}} \cdot \left(h\right)^{N/p_{i}^{\alpha_{i}}}
+		\;\;=\;\; \left(g^{N/p_{i}^{\alpha_{i}}}\right)^{-x} \cdot \left(h\right)^{N/p_{i}^{\alpha_{i}}} \\
+		&=& \left(g_{i}\right)^{-x} \cdot h_{i} \\
+		&=& \left(g_{i}\right)^{-y_{i}} \cdot h_{i}\,,
+			\;\;\textnormal{since}\;\; x \equiv y_{i}\;\;\textnormal{mod}\;\;p_{i}^{\alpha_{i}},
+			\;\textnormal{and}\;\;\ord(g_{i}) = p_{i}^{\alpha_{i}} \\
+		&=& 1_{G}\,,\;\;\textnormal{since}\;\;g_{i}^{y_{i}} = h_{i}\\
+		\end{eqnarray*}
+		Hence, $\ord(g^{-x}\cdot h)$ divides $\dfrac{N}{p_{i}^{\alpha_{i}}}$, for each $i = 1,2,\ldots,t$,
+		which in turn implies that
+		$\ord(g^{-x}\cdot h)$ divides $\gcd\left(\frac{N}{p_{1}^{\alpha_{1}}},\ldots,\frac{N}{p_{t}^{\alpha_{t}}}\right)$.
+		However, $\dfrac{N}{p_{1}^{\alpha_{1}}},\ldots,\dfrac{N}{p_{t}^{\alpha_{t}}}$ have no non-trivial common divisors,
+		and hence\\ $\gcd\left(\frac{N}{p_{1}^{\alpha_{1}}},\ldots,\frac{N}{p_{t}^{\alpha_{t}}}\right) = 1$.
+		Thus, $\ord\left(g^{x}\cdot h\right) = 1$; hence, $g^{x} = h$, as desired.
+		}
+
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
