@@ -1,0 +1,108 @@
+
+\section{Algorithms for solving the Discrete Logarithm Problem}
+\setcounter{theorem}{0}
+\setcounter{equation}{0}
+
+\vskip 1.0cm
+\begin{center}
+\begin{minipage}{0.50\textwidth}
+	\begin{center}\textbf{The Discrete Logarithm Problem}\end{center}
+	\begin{itemize}
+	\item	Let $G$ be a group. Let $g \in G$, with order $N \geq 2$.
+	\item	Let $h \in \langle\,g\,\rangle \backslash \{\,e\,\}$ be given.
+	\item	Find $x \in \N$, $1 \leq x < N$, such that $g^{x} = h$.
+	\end{itemize}
+\end{minipage}
+\end{center}
+\vskip 1.0cm
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{The Shank Baby-Step-Giant-Step Algorithm}
+
+\noindent
+\textbf{Theory:}
+\begin{itemize}
+\item	Let $n := 1 + \lfloor\,\sqrt{N}\,\rfloor$, where $\lfloor\,\sqrt{N}\,\rfloor$ is the round-down of $\sqrt{N}$.
+		Note, trivially, that $n^{2} > N$.
+\item	Define:
+		\begin{eqnarray*}
+		\mathcal{S}_{1} & := & \left\{\,g^{i}\;\vert\;i = 0,1,2,\ldots,n\,\right\}\;\;=\;\;\left\{\;e, g, g^{2}, g^{3}, \ldots, g^{n}\;\right\} \\
+		\mathcal{S}_{2} & := & \left\{\,h\cdot(g^{-n})^{i}\;\vert\;i = 0,1,2,\ldots,n\,\right\}\;\;=\;\;\left\{\;h, h\cdot(g^{-n}), h\cdot(g^{-n})^{2}, h\cdot(g^{-n})^{3}, \ldots, h\cdot(g^{-n})^{n}\;\right\}
+		\end{eqnarray*}
+\item	Then, it turns out that $\mathcal{S}_{1}\cap\mathcal{S}_{2} \neq \varnothing$.
+		%Find $i, j \in \{\,0,1,2,\ldots,n\,\}$ such that $g^{i} = h\cdot(g^{-n})^{j} \in \mathcal{S}_{1}\cap\mathcal{S}_{2}$.
+\item	For any $i, j \in \{\,0,1,2,\ldots,n\,\}$ such that $g^{i} = h\cdot(g^{-n})^{j} \in \mathcal{S}_{1}\cap\mathcal{S}_{2}$,
+		the positive integer $x := i + jn \in \Z$ is a solution to the Discrete Logarithm Problem.
+\end{itemize}
+
+\noindent
+\textbf{Outline of proof:}
+\begin{itemize}
+\item	$h \in \langle\,g\,\rangle \backslash \{\,e\,\}$ $\Longrightarrow$ there exists $x \in \N$, $1 \leq x < N$, such that $g^{x} = h$.
+\item 	Then, $x = nq + r$, with $0 \leq r < n$ and $q \geq 0$. We claim that the quotient $q$ in fact satisfies: $q < n$.
+		Indeed, $x < N$ implies
+		\begin{equation*}
+		q = \dfrac{x - r}{n} \leq \dfrac{N}{n} < \dfrac{n^{2}}{n} = n.
+		\end{equation*}
+\item	Hence, $g^{x} = h$ can be rewritten as follows:
+		\begin{equation*}
+		g^{x} = h
+		\;\;\Longleftrightarrow\;\; g^{nq+r} = h
+		\;\;\Longleftrightarrow\;\; g^{r} = h\cdot(g^{-n})^{q} \in \mathcal{S}_{1}\cap\mathcal{S}_{2}\,,
+		\quad
+		\textnormal{for some $0\leq r,q < n$}
+		\end{equation*}
+\end{itemize}
+
+\noindent
+\textbf{Pseudocode:}
+\begin{enumerate}
+\item	Let $n := 1 + \lfloor\,\sqrt{N}\,\rfloor$, where $\lfloor\,\sqrt{N}\,\rfloor$ is the round-down of $\sqrt{N}$.
+\item	Generate $\mathcal{S}_{1} = \left\{\,g^{i}\;\vert\;i = 0,1,2,\ldots,n\,\right\}=\left\{\;e, g, g^{2}, g^{3}, \ldots, g^{n}\;\right\}$.
+\item	Form the hash table:
+		\begin{center}
+		\begin{tabular}{|c||c|c|c|c|c|c|}
+		\hline
+		key $g^{i}$ & $e$ & $g$ & $g^{2}$ & $g^{3}$ & $\cdots$ & $g^{n}$ \\
+		\hline
+		value $i$    & $0$ & $1$ & $2$ & $3$ & $\cdots$ & $n$ \\
+		\hline
+		\end{tabular}
+		\end{center}
+\item	\begin{verbatim}
+gn := g^{-n};
+temp := h;
+for j = 0, 1, 2, ...
+    if (temp is a key in hashTable) {
+        i := hashTable{temp};
+        return(i + n*j);
+    } else {
+        temp := temp * gn;
+    }
+end
+		\end{verbatim}
+\end{enumerate}
+
+\noindent
+\textbf{Complexity: $\mathcal{O}(\sqrt{N})$}
+\begin{itemize}
+\item	The generation of $\mathcal{S}_{1}$ takes approximately $n$ multiplications.
+\item	The generation of the hash table takes $\mathcal{O}(1)$ computation steps.
+\item	The loop takes $\mathcal{O}(n)$ computational steps.
+\item	Hence, the whole algorithm takes $\mathcal{O}(n+n+1) = \mathcal{O}(n) = \mathcal{O}(\sqrt{N})$ computational steps.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{The Pohlig-Hellman Algorithm}
+
+\begin{itemize}
+\item	The ElGamal public key encryption system is at least as secure as the difficulty of Diffie-Hellman problem,
+		in the sense that en ElGamal oracle (efficient solver of the ElGamal cryptosystem problem) can be used
+		solve efficiently solve the Diffie-Hellman problem.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{The Index Calculus Method}
+
+
+
