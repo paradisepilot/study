@@ -96,11 +96,30 @@ end
 \subsection{The Pohlig-Hellman Algorithm}
 
 \noindent
-\textbf{Comments:}
-%\begin{itemize}
-%\item	The Pohlig-Hellman Algorithm efficiently solves the Discrete Logarithm Problem for $G = \F_{p}^{*}$, where $p$ is a prime number,
-%		and $p - 1 = \vert\,\F_{p}^{*}\,\vert = \vert\,G\,\vert$ is the product of small primes. 
-%\end{itemize}
+\textbf{Theory:}
+\begin{itemize}
+\item	We are seeking $x$ such that $g^{x} = h$. Note that $x$ is well-defined modulo $N$.
+\item	If we know the prime factorization of $N = p_{1}^{\alpha_{1}}\,p_{2}^{\alpha_{2}}\,p_{3}^{\alpha_{3}}\,\cdots\,p_{t}^{\alpha_{t}}$,
+		and if we also have solutions
+		\begin{equation*}
+		y_{i} \in \{\,1,2,\ldots,p_{i}^{\alpha_{i}}-1\,\}
+		\end{equation*}
+		to the following associated problems:
+		\begin{equation*}
+		g_{i}^{y_{i}} \; = \; h_{i},
+		\quad\textnormal{where}\quad g_{i} := g^{N/p_{i}^{\alpha_{i}}},
+		\;\;
+		h_{i} = h^{N/p_{i}^{\alpha_{i}}}\,,
+		\;\;\textnormal{and}\;\;
+		t = 1,2,\ldots,t\,,
+		\end{equation*}
+		then we can reconstruct $x$ using the Chinese Remainder Theorem, namely, solve the following simultaneous congruences
+		for $x$:
+		\begin{equation*}
+		x \equiv y_{i}\mod p_{i}^{\alpha_{i}}\,,
+		\quad\textnormal{for}\;\; t = 1,2,\ldots,t\,.
+		\end{equation*} 
+\end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{The Index Calculus Method}
