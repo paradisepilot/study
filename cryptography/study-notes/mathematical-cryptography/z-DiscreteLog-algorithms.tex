@@ -113,15 +113,27 @@ end
 		\;\;\textnormal{and}\;\;
 		i = 1,2,\ldots,t\,,
 		\end{equation*}
-		then we can reconstruct $x$ using the Chinese Remainder Theorem, namely, solve the following simultaneous congruences
+		then we can compute $x$ using the Chinese Remainder Theorem, namely, solve the following simultaneous congruences
 		for $x \in \{\,0,1,2,\ldots,N-1\,\}$:
 		\begin{equation*}
 		x \equiv y_{i}\mod p_{i}^{\alpha_{i}}\,,
 		\quad\textnormal{for}\;\; i = 1,2,\ldots,t\,.
 		\end{equation*}
 		\underline{Outline of proof:}\vskip 0.1cm
-		\textit{First, note that $\ord(g_{i}) = p_{i}^{\alpha_{i}}$, for each $i = 1,2,\ldots,t$.
-		Next, note that, for each $i = 1,2,\ldots,t$,
+		\textit{First, note that the assumption that $h \in G = \langle\,g\,\rangle$ implies
+		the solvability of $g^{x} = h$ for $x \in \{\,0,1,2,\ldots,N-1\,\}$.
+		This implies the solvability of the auxiliary discrete logarithm problems
+		$g_{i}^{y_{i}} = h_{i}$ for $y_{i} \in \{\,0,1,2,\ldots,p_{i}^{\alpha_{i}}-1\,\}$, for each $i = 1,2,\ldots,t$, since
+		\begin{equation*}
+		g^{x} = h
+		\;\;\Longrightarrow\;\; \left(\,g^{x}\,\right)^{N/p_{i}^{\alpha_{i}}} = \left(\,h\,\right)^{N/p_{i}^{\alpha_{i}}}
+		\;\;\Longrightarrow\;\; \left(\,g^{N/p_{i}^{\alpha_{i}}}\,\right)^{x} = \left(\,h\,\right)^{N/p_{i}^{\alpha_{i}}}
+		\;\;\Longrightarrow\;\; \left(\,g_{i}\,\right)^{x} = h_{i}
+		\;\;\Longrightarrow\;\; \left(\,g_{i}\,\right)^{y_{i}} = h_{i}\,,
+		\end{equation*}
+		where $y_{i} := x \; \textnormal{mod} \; p_{i}^{\alpha_{i}}$.
+		Here, note that $\ord(g_{i}) = p_{i}^{\alpha_{i}}$, for each $i = 1,2,\ldots,t$.
+		Lastly, observe that, for each $i = 1,2,\ldots,t$,
 		\begin{eqnarray*}
 		\left(g^{-x}\cdot h\right)^{N/p_{i}^{\alpha_{i}}}
 		&=& \left(g^{-x}\right)^{N/p_{i}^{\alpha_{i}}} \cdot \left(h\right)^{N/p_{i}^{\alpha_{i}}}
