@@ -5,11 +5,11 @@
 
 \vskip 1.0cm
 \begin{center}
-\begin{minipage}{0.50\textwidth}
+\begin{minipage}{0.75\textwidth}
 	\begin{center}\textbf{The Discrete Logarithm Problem}\end{center}
 	\begin{itemize}
-	\item	Let $G$ be a group. Let $g \in G$, with order $N \geq 2$.
-	\item	Let $h \in \langle\,g\,\rangle \backslash \{\,e\,\}$ be given.
+	\item	Let $G$ be a cyclic group of order $N \geq 2$, and let $g \in G$ be a generator of $G$.
+	\item	Let $h \in G\,\backslash \{\,e\,\}$ be given.
 	\item	Find $x \in \N$, $1 \leq x < N$, such that $g^{x} = h$.
 	\end{itemize}
 \end{minipage}
@@ -95,11 +95,12 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{The Pohlig-Hellman Algorithm}
 
-\begin{itemize}
-\item	The ElGamal public key encryption system is at least as secure as the difficulty of Diffie-Hellman problem,
-		in the sense that en ElGamal oracle (efficient solver of the ElGamal cryptosystem problem) can be used
-		solve efficiently solve the Diffie-Hellman problem.
-\end{itemize}
+\noindent
+\textbf{Comments:}
+%\begin{itemize}
+%\item	The Pohlig-Hellman Algorithm efficiently solves the Discrete Logarithm Problem for $G = \F_{p}^{*}$, where $p$ is a prime number,
+%		and $p - 1 = \vert\,\F_{p}^{*}\,\vert = \vert\,G\,\vert$ is the product of small primes. 
+%\end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{The Index Calculus Method}
