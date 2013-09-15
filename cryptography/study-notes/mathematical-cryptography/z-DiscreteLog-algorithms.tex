@@ -96,6 +96,29 @@ end
 \subsection{The Pohlig-Hellman Algorithm}
 
 \noindent
+\textbf{Summary:}
+\begin{itemize}
+\item	The Pohlig-Hellman Algorithm renders efficiently solvable the Discrete Logarithm Problem (DLP) in any
+		finite cyclic group $G$ whose order $\vert\,G\,\vert$ is a product of powers of small primes.
+\item	This is achieved with two results of Pohlig-Hellman:
+		\begin{itemize}
+		\item	The DLP in a finite cyclic group $G$ with
+				$\vert\,G\,\vert = N = p_{1}^{\alpha_{1}}\,p_{2}^{\alpha_{2}} \cdots p_{t}^{\alpha_{t}}$
+				can be ``converted" to $t$ distinct associated DLP's in groups of orders
+				$p_{1}^{\alpha_{1}}, \ldots, p_{t}^{\alpha_{t}}$, respectively.
+				Here, ``converted" means that the solutions of the associated DLP's can be ``combined",
+				via the Chinese Remainder Theorem, to give the solution of the original DLP.
+		\item	The DLP in a finite cyclic group of prime power order $p^{\alpha}$ can be ``converted" to
+				a series of DLP's, each in a group of power $p$.
+		\item	This last set of DLP's in groups of prime power must then be solved by methods other than
+				Pohlig-Hellman, for example, either by brute force, or by Shank's Baby-Step-Giant-Step method.
+				Thus, if each of the primer orders involved is relatively small
+				(\textit{e.g.}, efficiently solvable by brute force or Baby-Step-Giant-Step),
+				then the original DLP can be efficiently solved.
+		\end{itemize}
+\end{itemize}
+
+\noindent
 \textbf{Theory:}
 \begin{itemize}
 \item	The assumption that $h \in G = \langle\,g\,\rangle$ implies the solvability of $g^{x} = h$ for $x \in \{\,0,1,2,\ldots,N-1\,\}$.
