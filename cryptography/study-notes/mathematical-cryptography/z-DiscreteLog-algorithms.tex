@@ -17,7 +17,7 @@
 \vskip 1.0cm
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{The Shank Baby-Step-Giant-Step Algorithm}
+\subsection{Shank's Baby-Step-Giant-Step Algorithm}
 
 \noindent
 \textbf{Theory:}
@@ -203,7 +203,7 @@ end
 		&\Longrightarrow& \left(\,g^{p^{\alpha-1}}\,\right)^{x_{0}}
 				\cdot\left(\,g^{p^{\alpha}}\,\right)^{\sum_{i=1}^{t-1}x_{i}\,p^{i-1}}  = \left(\,h\,\right)^{p^{\alpha-1}} \\
 		&\Longrightarrow& \left(\,g^{p^{\alpha-1}}\,\right)^{x_{0}} = \left(\,h\,\right)^{p^{\alpha-1}}\,,
-			\quad\textnormal{since}\;\; g^{p^{\alpha}} = 1_{G}\,. \\
+			\quad\textnormal{since}\;\; g^{p^{\alpha}} = 1_{G}\,.
 		\end{eqnarray*}
 		Since $\ord\!\left(g^{p^{\alpha-1}}\right) = p$, we can use our oracle to obtain $x_{0} \in \{\,0,1,2,\ldots,p-1\,\}$.
 		\vskip 0.1cm
@@ -216,10 +216,45 @@ end
 		&\Longrightarrow& \left(\,g^{x_{0}}\,\right)^{p^{\alpha-2}} \cdot \left(\,g^{p^{\alpha-1}}\,\right)^{x_{1}}
 				\cdot\left(\,g^{p^{\alpha}}\,\right)^{\sum_{i=2}^{t-1}x_{i}\,p^{i-2}}  = \left(\,h\,\right)^{p^{\alpha-2}} \\
 		&\Longrightarrow& \left(\,g^{p^{\alpha-1}}\,\right)^{x_{1}} = \left(\,h\cdot g^{-x_{0}}\,\right)^{p^{\alpha-2}}\,,
-			\quad\textnormal{since}\;\; g^{p^{\alpha}} = 1_{G}\,. \\
+			\quad\textnormal{since}\;\; g^{p^{\alpha}} = 1_{G}\,.
 		\end{eqnarray*}
 		We can now use our oracle to obtain $x_{1} \in \{\,0,1,2,\ldots,p-1\,\}$.
+		\vskip 0.1cm
+		Assuming we have successfully solved for $x_{0},x_{1} \in \{\,0,1,2,\ldots,p-1\,\}$,
+		we raise both sides of $g^{x} = h$ to the power $p^{\alpha-3}$ and obtain:
+		\begin{eqnarray*}
+		&& \left(\,g^{\sum_{i=0}^{1}x_{i}\,p^{i}+x_{2}p^{2}+\sum_{i=3}^{t-1}x_{i}\,p^{i}}\,\right)^{p^{\alpha-3}}  = \left(\,h\,\right)^{p^{\alpha-3}} \\
+		&\Longrightarrow& \left(\,g^{\sum_{i=0}^{1}x_{i}\,p^{i}}\,\right)^{p^{\alpha-3}} \left(\,g^{x_{2}p^{2}}\,\right)^{p^{\alpha-3}}
+			\left(\,g^{\sum_{i=3}^{t-1}x_{i}\,p^{i}}\,\right)^{p^{\alpha-3}}  = \left(\,h\,\right)^{p^{\alpha-3}} \\
+		&\Longrightarrow& \left(\,g^{\sum_{i=0}^{1}x_{i}\,p^{i}}\,\right)^{p^{\alpha-3}} \left(\,g^{p^{\alpha-1}}\,\right)^{x_{2}}
+			\left(\,g^{p^{\alpha}}\,\right)^{\sum_{i=3}^{t-1}x_{i}\,p^{i-3}}  = \left(\,h\,\right)^{p^{\alpha-3}} \\
+		&\Longrightarrow& \left(\,g^{p^{\alpha-1}}\,\right)^{x_{2}} = \left(\,h\cdot g^{-\sum_{i=0}^{2-1}x_{i}\,p^{i}}\,\right)^{p^{\alpha-3}}\,,
+			\quad\textnormal{since}\;\; g^{p^{\alpha}} = 1_{G}\,.
+		\end{eqnarray*}
+		We can now use our oracle to obtain $x_{2} \in \{\,0,1,2,\ldots,p-1\,\}$.
+		\vskip 0.1cm
+		Assuming we have successfully solved for $x_{0},x_{1},\ldots,x_{k-1} \in \{\,0,1,2,\ldots,p-1\,\}$,
+		we raise both sides of $g^{x} = h$ to the power $p^{\alpha-k-1}$ and obtain:
+		\begin{eqnarray*}
+		&&\left(\,g^{\sum_{i=0}^{k-1}x_{i}\,p^{i}+x_{k}p^{k}+\sum_{i=k+1}^{t-1}x_{i}\,p^{i}}\,\right)^{p^{\alpha-k-1}}  = \left(\,h\,\right)^{p^{\alpha-k-1}}\\
+		&\Longrightarrow& \left(\,g^{\sum_{i=0}^{k-1}x_{i}\,p^{i}}\,\right)^{p^{\alpha-k-1}} \left(\,g^{x_{k}p^{k}}\,\right)^{p^{\alpha-k-1}}
+			\left(\,g^{\sum_{i=k+1}^{t-1}x_{i}\,p^{i}}\,\right)^{p^{\alpha-k-1}}  = \left(\,h\,\right)^{p^{\alpha-k-1}} \\
+		&\Longrightarrow& \left(\,g^{\sum_{i=0}^{k-1}x_{i}\,p^{i}}\,\right)^{p^{\alpha-k-1}} \left(\,g^{p^{\alpha-1}}\,\right)^{x_{k}}
+			\left(\,g^{p^{\alpha}}\,\right)^{\sum_{i=k+1}^{t-1}x_{i}\,p^{i-k-1}}  = \left(\,h\,\right)^{p^{\alpha-k-1}} \\
+		&\Longrightarrow& \left(\,g^{p^{\alpha-1}}\,\right)^{x_{k}} = \left(\,h\cdot g^{-\sum_{i=0}^{k-1}x_{i}\,p^{i}}\,\right)^{p^{\alpha-k-1}}\,,
+			\quad\textnormal{since}\;\; g^{p^{\alpha}} = 1_{G}\,.
+		\end{eqnarray*}
+		We can now use our oracle to obtain $x_{k} \in \{\,0,1,2,\ldots,p-1\,\}$.
 		}
+\item	The preceding two observations together imply that the original discrete logarithm problem in the group $G$,
+		with $\vert\,G\,\vert = N = p_{1}^{\alpha_{1}}p_{2}^{\alpha_{2}}\cdots p_{t}^{\alpha_{t}}$,
+		can be reduced to a number of associated DLP's in groups of order $p_{i}$, $i = 1,2,\ldots,t$.
+		If each of these associated DLP's can be solved sufficiently quickly in practice, then so can the original
+		DLP in $G$.  These associated DLP's in groups of order $p_{i}$ will be solved in practice by methods other
+		than Pohlig-Hellman, such as by brute force, or by Shank's Baby-Step-Giant-Step method
+		(\textit{i.e.} the ``oracle" mentioned above is either brute-force, or Baby-Step-Giant-Step, \textit{etc.}).
+		In particular, if each $p_{i}$ is ``small" (relative to the capacity of the brute-force or the Baby-Step-Giant-Step
+		methods), then the original DLP in $G$ can be solved.
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
