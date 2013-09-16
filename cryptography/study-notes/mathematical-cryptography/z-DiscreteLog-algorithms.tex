@@ -93,6 +93,7 @@ end
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
 \subsection{The Pohlig-Hellman Algorithm}
 
 \noindent
@@ -172,7 +173,53 @@ end
 		and hence\\ $\gcd\left(\frac{N}{p_{1}^{\alpha_{1}}},\ldots,\frac{N}{p_{t}^{\alpha_{t}}}\right) = 1$.
 		Thus, $\ord\left(g^{x}\cdot h\right) = 1$; hence, $g^{x} = h$, as desired.
 		}
-
+\item	The discrete logarithm problem in a finite cyclic group of prime power order $p^{\alpha}$ can be ``converted" to a series of
+		discrete logarithm problems in finite cyclic groups, each of order $p$.
+		\vskip 0.1cm
+		\underline{Outline of proof:}\vskip 0.1cm
+		\textit{Let $G = \langle\,g\,\rangle$ be a finite cyclic group, with $\vert\,G\,\vert = p^{\alpha}$,
+		where $p \in \N$ is a prime number, $\alpha \in \N$, and $g \in G$ is a generator of $G$.
+		Given $h \in G$, we wish to find $x\in\{\,0,1,2,\ldots,p^{\alpha}-1\,\}$ such that $g^{x} = h$.
+		\vskip 0.1cm
+		\noindent
+		We make two key observations:
+		\begin{itemize}
+		\item	$\ord\!\left(\,g^{p^{\alpha-1}}\,\right) = p$, and
+		\item	we may express $x \in \{\,0,1,2,\ldots,p^{\alpha}-1\,\}$ as a linear combination of powers of $p$:
+				\begin{equation*}
+				x = x_{0} + x_{1}\,p + x_{2}\,p^{2} + x_{3}\,p^{3} + \cdots + x_{\alpha-1}\,p^{\alpha-1}\,,
+				\quad\textnormal{where}\;\;x_{i} \in \{\,0,1,2,\ldots,p-1\,\}\,.
+				\end{equation*}
+		\end{itemize}
+		Assuming we have an ``oracle" that can solve the discrete logarithm problem in a finite cyclic group
+		of order $p$, we can then sequentially solve for $x_{0}, x_{1}, x_{2},\ldots,x_{\alpha-1}$ as solutions
+		to discrete logarithm problems in groups of order $p$, starting with $x_{0}$.
+ 		\vskip 0.1cm
+		Raising both sides of $g^{x} = h$ to the power of $p^{\alpha-1}$ yields:
+		\begin{eqnarray*}
+		\left(\,g^{x_{0}+\sum_{i=1}^{t-1}x_{i}\,p^{i}}\,\right)^{p^{\alpha-1}}  = \left(\,h\,\right)^{p^{\alpha-1}}
+		&\Longrightarrow& \left(\,g^{x_{0}}\,\right)^{p^{\alpha-1}}
+				\cdot\left(\,g^{\sum_{i=1}^{t-1}x_{i}p^{i}}\,\right)^{p^{\alpha-1}}  = \left(\,h\,\right)^{p^{\alpha-1}} \\
+		&\Longrightarrow& \left(\,g^{p^{\alpha-1}}\,\right)^{x_{0}}
+				\cdot\left(\,g^{p^{\alpha}}\,\right)^{\sum_{i=1}^{t-1}x_{i}\,p^{i-1}}  = \left(\,h\,\right)^{p^{\alpha-1}} \\
+		&\Longrightarrow& \left(\,g^{p^{\alpha-1}}\,\right)^{x_{0}} = \left(\,h\,\right)^{p^{\alpha-1}}\,,
+			\quad\textnormal{since}\;\; g^{p^{\alpha}} = 1_{G}\,. \\
+		\end{eqnarray*}
+		Since $\ord\!\left(g^{p^{\alpha-1}}\right) = p$, we can use our oracle to obtain $x_{0} \in \{\,0,1,2,\ldots,p-1\,\}$.
+		\vskip 0.1cm
+		Assuming we have successfully solved for $x_{0} \in \{\,0,1,2,\ldots,p-1\,\}$, we raise both sides of $g^{x} = h$
+		to the power $p^{\alpha-2}$ and obtain:
+		\begin{eqnarray*}
+		\left(\,g^{x_{0}+x_{1}p+\sum_{i=2}^{t-1}x_{i}\,p^{i}}\,\right)^{p^{\alpha-2}}  = \left(\,h\,\right)^{p^{\alpha-2}}
+		&\Longrightarrow& \left(\,g^{x_{0}}\,\right)^{p^{\alpha-2}} \cdot \left(\,g^{x_{1}p}\,\right)^{p^{\alpha-2}}
+				\cdot\left(\,g^{\sum_{i=2}^{t-1}x_{i}\,p^{i}}\,\right)^{p^{\alpha-2}}  = \left(\,h\,\right)^{p^{\alpha-2}} \\
+		&\Longrightarrow& \left(\,g^{x_{0}}\,\right)^{p^{\alpha-2}} \cdot \left(\,g^{p^{\alpha-1}}\,\right)^{x_{1}}
+				\cdot\left(\,g^{p^{\alpha}}\,\right)^{\sum_{i=2}^{t-1}x_{i}\,p^{i-2}}  = \left(\,h\,\right)^{p^{\alpha-2}} \\
+		&\Longrightarrow& \left(\,g^{p^{\alpha-1}}\,\right)^{x_{1}} = \left(\,h\cdot g^{-x_{0}}\,\right)^{p^{\alpha-2}}\,,
+			\quad\textnormal{since}\;\; g^{p^{\alpha}} = 1_{G}\,. \\
+		\end{eqnarray*}
+		We can now use our oracle to obtain $x_{1} \in \{\,0,1,2,\ldots,p-1\,\}$.
+		}
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
