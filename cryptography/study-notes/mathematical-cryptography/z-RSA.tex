@@ -129,9 +129,12 @@
 				Let $n = pq$, where $p$ and $q$ are distinct prime numbers.
 				Then the following two statements hold:
 				\begin{itemize}
-				\item[$\bullet$]	For each $L \in \N$, we have the following implications:
+				\item[$\bullet$]	For each $L \in \N$ and $a$ with $p \nmid a$, we have the following implication:
 								\begin{equation*}
-								(p-1) \mid L \quad \Longrightarrow \quad p \mid (a^{L} - 1)
+								(p-1) \mid L
+								\quad \Longrightarrow \quad L = (p-1)K
+								\quad \Longrightarrow \quad a^{L}  = \left(a^{(p-1)}\right)^{K} \equiv 1 \;\textnormal{mod}\; p
+								\quad \Longrightarrow \quad p \mid (a^{L} - 1)
 								\end{equation*}				
 				\item[$\bullet$]	For any $a \in \N$ with $p \nmid a$ and $q \nmid a$, and any $L \in \N$, 
 								\begin{equation*}
@@ -197,7 +200,3 @@
 				\end{itemize}
 		\end{itemize}
 \end{itemize}
-
-
-
-
