@@ -1,0 +1,35 @@
+# This is a Dockerfile
+# VERSION       1.0
+
+# use the ubuntu base image provided by dotCloud
+FROM ubuntu
+
+MAINTAINER Kenneth Chu paradisepilot@gmail.com
+
+# make sure the package repository is up to date
+RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
+RUN apt-get update
+
+# install perl and modules
+RUN apt-get install -y build-essential
+RUN apt-get install -y make
+RUN apt-get install -y perl
+RUN apt-get install -y cpanminus
+
+RUN cpanm -v Getopt::Long
+RUN cpanm -v Data::Dumper
+
+# Add Perl scripts and Perl modules
+ADD ./null-post-alignment-filter-v01-02.pl /opt/null-post-alignment-filter-v01-02.pl
+ADD ./hello-world.pl  /opt/hello-world.pl
+ADD ./CIGAR.pm        /lib/CIGAR.pm
+ADD ./SAMAlignment.pm /lib/SAMAlignment.pm
+
+# Add data file
+RUN mkdir /data
+ADD ./test-data-100K.sam /data/test-data-100K.sam
+
+# ENTRYPOINT
+#ENTRYPOINT ["/usr/bin/perl", "/opt/hello-world.pl"]
+ENTRYPOINT ["/usr/bin/perl", "/opt/null-post-alignment-filter-v01-02.pl"]
+
