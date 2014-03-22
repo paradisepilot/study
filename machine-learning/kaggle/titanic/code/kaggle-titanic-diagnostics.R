@@ -82,6 +82,10 @@ results.glm <- glm(
 	family  = poisson
 	);
 summary(results.glm);
+anova(results.glm,test='LRT');
+
+DF.temp[,'predicted'] <- predict(object = results.glm, type = 'response');
+DF.temp;
 
 #temp.filename <- '.png';
 #my.ggplot <- ggplot(data = NULL);
