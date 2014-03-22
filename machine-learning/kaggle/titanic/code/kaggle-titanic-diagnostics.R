@@ -21,11 +21,22 @@ DF.titanic.training <- read.table(
 	sep    = ',',
 	quote  = "\""
 	);
+DF.titanic.training[,'Pclass'] <- as.factor(DF.titanic.training[,'Pclass']);
+DF.titanic.training[,'Dead']   <- 1 - DF.titanic.training[,'Survived'];
 str(DF.titanic.training);
 
 ####################################################################################################
 setwd(output.directory);
 
+results.glm.logit <- glm(
+	formula = cbind(Survived, 1 - Survived) ~ Sex + Pclass,
+	data    = DF.titanic.training,
+	family  = binomial(link = logit)
+	);
+summary(results.glm.logit);
+anova(results.glm.logit, test = 'LRT');
+
+####################################################################################################
 xtab.sex <- xtabs(
 	formula = ~ Sex + Survived,
 	data    = DF.titanic.training
@@ -43,11 +54,34 @@ results.glm <- glm(formula = cbind(survived,dead) ~ Sex, data = DF.sex, family =
 summary(results.glm);
 
 xtab.pclass <- xtabs(
-	formula = ~ Sex + Pclass + Survived,
+	formula = ~ Survived + Sex + Pclass,
 	data    = DF.titanic.training
 	);
 print('xtab.pclass');
 print( xtab.pclass );
+
+DF.Survived <- aggregate(
+	formula = Survived ~ Sex + Pclass,
+	data    = DF.titanic.training,
+	FUN     = sum
+	);
+
+DF.Dead <- aggregate(
+	formula = Dead ~ Sex + Pclass,
+	data    = DF.titanic.training,
+	FUN     = sum
+	);
+
+DF.temp <- merge(x = DF.Survived, y = DF.Dead, by = c("Sex","Pclass"));
+DF.temp[,'total'] <- DF.temp[,'Survived'] + DF.temp[,'Dead'];
+DF.temp;
+
+results.glm <- glm(
+	formula = Survived ~ offset(log(total)) + Sex + Pclass,
+	data    = DF.temp,
+	family  = poisson
+	);
+summary(results.glm);
 
 #temp.filename <- '.png';
 #my.ggplot <- ggplot(data = NULL);
