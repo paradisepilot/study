@@ -27,14 +27,23 @@ str(DF.titanic.training);
 setwd(output.directory);
 
 xtab.sex <- xtabs(
-	formula = ~ Survived + Sex,
+	formula = ~ Sex + Survived,
 	data    = DF.titanic.training
 	);
-print('xtab.sex');
-print( xtab.sex );
+xtab.sex <- as.matrix(xtab.sex);
+xtab.sex;
+DF.sex <- as.data.frame(xtab.sex[,c('0','1')]);
+colnames(DF.sex) <- gsub(x = colnames(DF.sex), pattern = '0', replacement = 'dead');
+colnames(DF.sex) <- gsub(x = colnames(DF.sex), pattern = '1', replacement = 'survived');
+DF.sex[,'Sex'] <- rownames(DF.sex);
+rownames(DF.sex) <- NULL;
+DF.sex;
+
+results.glm <- glm(formula = cbind(survived,dead) ~ Sex, data = DF.sex, family = binomial);
+summary(results.glm);
 
 xtab.pclass <- xtabs(
-	formula = ~ Survived + Pclass,
+	formula = ~ Sex + Pclass + Survived,
 	data    = DF.titanic.training
 	);
 print('xtab.pclass');
