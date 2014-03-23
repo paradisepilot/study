@@ -84,7 +84,18 @@ results.glm <- glm(
 summary(results.glm);
 anova(results.glm,test='LRT');
 
-DF.temp[,'predicted'] <- predict(object = results.glm, type = 'response');
+DF.temp[,'poisson.predicted'] <- predict(object = results.glm, type = 'response');
+DF.temp;
+
+results.binomial.logit <- glm(
+	formula = cbind(Survived,Dead) ~ Sex + Pclass,
+	data    = DF.temp,
+	family  = binomial(link = 'logit')
+	);
+summary(results.binomial.logit);
+anova(results.binomial.logit,test='LRT');
+
+DF.temp[,'logit.predicted'] <- DF.temp[,'total'] * predict(object = results.binomial.logit, type = 'response');
 DF.temp;
 
 #temp.filename <- '.png';
