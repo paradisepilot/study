@@ -23,18 +23,39 @@ DF.titanic.training <- read.table(
 	);
 DF.titanic.training[,'Pclass'] <- as.factor(DF.titanic.training[,'Pclass']);
 DF.titanic.training[,'Dead']   <- 1 - DF.titanic.training[,'Survived'];
+
+DF.titanic.training[,'with.help'] <- rep(0,nrow(DF.titanic.training));
+temp <- (4 <= DF.titanic.training[,'SibSp'] + DF.titanic.training[,'Parch'])
+DF.titanic.training[temp,'with.help'] <- 1;
+
 str(DF.titanic.training);
+
+summary(DF.titanic.training);
 
 ####################################################################################################
 setwd(output.directory);
 
 results.glm.logit <- glm(
-	formula = cbind(Survived, 1 - Survived) ~ Sex + Pclass,
+	formula = cbind(Survived, 1 - Survived) ~ Sex * Pclass + with.help,
 	data    = DF.titanic.training,
 	family  = binomial(link = logit)
 	);
 summary(results.glm.logit);
 anova(results.glm.logit, test = 'LRT');
+
+(deviance.residuals <- sum(residuals(results.glm.logit)^2));
+df.residual(results.glm.logit);
+pchisq(q = deviance.residuals, df = df.residual(results.glm.logit), lower.tail = FALSE);
+
+survivals <- DF.titanic.training[,'Survived'];
+probs <- predict(results.glm.logit,type='response');
+predictions <- rep(0,length(probs));
+predictions[probs > 0.5] <- 1;
+cbind(Survived = survivals,prediction = predictions, prob = probs);
+sum(survivals == predictions);
+sum(survivals == predictions) / length(survivals);
+
+q();
 
 ####################################################################################################
 xtab.sex <- xtabs(
@@ -76,19 +97,19 @@ DF.temp <- merge(x = DF.Survived, y = DF.Dead, by = c("Sex","Pclass"));
 DF.temp[,'total'] <- DF.temp[,'Survived'] + DF.temp[,'Dead'];
 DF.temp;
 
-results.glm <- glm(
-	formula = Survived ~ offset(log(total)) + Sex + Pclass,
+results.poisson <- glm(
+	formula = Survived ~ offset(log(total)) + Sex * Pclass,
 	data    = DF.temp,
 	family  = poisson
 	);
-summary(results.glm);
-anova(results.glm,test='LRT');
+summary(results.poisson);
+anova(results.poisson,test='LRT');
 
-DF.temp[,'poisson.predicted'] <- predict(object = results.glm, type = 'response');
+DF.temp[,'poisson.predicted'] <- predict(object = results.poisson, type = 'response');
 DF.temp;
 
 results.binomial.logit <- glm(
-	formula = cbind(Survived,Dead) ~ Sex + Pclass,
+	formula = cbind(Survived,Dead) ~ Sex * Pclass,
 	data    = DF.temp,
 	family  = binomial(link = 'logit')
 	);
