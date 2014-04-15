@@ -1,0 +1,9 @@
+Package: rebalance
+Type: Package
+Title: Rebalancing an investment portfolio
+Version: 0.1
+Date: 2014-04-14
+Author: Kenneth Chu
+Maintainer: Kenneth Chu <kenneth.chungkan.chu@gmail.com>
+Description: Provides functions to rebalance investment portfolios
+License: GPL3
