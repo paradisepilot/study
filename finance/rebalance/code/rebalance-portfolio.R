@@ -25,8 +25,14 @@ LIST.config;
 FILE.RRSP <- paste0(data.directory,'/',LIST.config[["RRSP"]]);
 DF.RRSP   <- precprocessTDDownload(inputfile = FILE.RRSP);
 
+FILE.TFSA <- paste0(data.directory,'/',LIST.config[["TFSA"]]);
+DF.TFSA   <- precprocessTDDownload(inputfile = FILE.TFSA);
+
 str(DF.RRSP);
 DF.RRSP;
+
+str(DF.TFSA);
+DF.TFSA;
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 
