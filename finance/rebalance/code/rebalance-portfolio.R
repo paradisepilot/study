@@ -11,6 +11,7 @@ setwd(output.directory);
 library(yaml);
 
 source(paste(code.directory, "getAdjustmentMatrix.R",    sep = "/"));
+source(paste(code.directory, "getPortfolio.R",           sep = "/"));
 source(paste(code.directory, "getPortfolioAdjustment.R", sep = "/"));
 source(paste(code.directory, "readConfig.R",             sep = "/"));
 source(paste(code.directory, "preprocessTDDownload.R",   sep = "/"));
@@ -23,16 +24,15 @@ LIST.config <- readConfig(config = paste0(data.directory,'/config.yml'));
 LIST.config;
 
 FILE.RRSP <- paste0(data.directory,'/',LIST.config[["RRSP"]]);
-DF.RRSP   <- precprocessTDDownload(inputfile = FILE.RRSP);
-
 FILE.TFSA <- paste0(data.directory,'/',LIST.config[["TFSA"]]);
-DF.TFSA   <- precprocessTDDownload(inputfile = FILE.TFSA);
 
-str(DF.RRSP);
-DF.RRSP;
+DF.portfolio <- getPortfolio(
+	raw.RRSP = FILE.RRSP,
+	raw.TFSA = FILE.TFSA
+	);
 
-str(DF.TFSA);
-DF.TFSA;
+str(DF.portfolio);
+DF.portfolio[,c('account','investment','bookValue','marketValue','proportion','growth')];
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 

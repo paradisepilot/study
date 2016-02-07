@@ -1,7 +1,8 @@
 
 precprocessTDDownload <- function(
 	inputfile = NULL,
-	sep       = "\t"
+	sep       = "\t",
+	account   = NULL
 	) {
 
 	### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
@@ -79,6 +80,13 @@ precprocessTDDownload <- function(
 		x           = DF.output[['investment']],
 		pattern     = " & ",
 		replacement = " and "
+		);
+
+	### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+	DF.output <- cbind(
+		account = rep(account,nrow(DF.output)),
+		DF.output,
+		stringsAsFactors = FALSE
 		);
 
 	### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
