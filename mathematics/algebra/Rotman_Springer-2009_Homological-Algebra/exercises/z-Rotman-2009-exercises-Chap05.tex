@@ -1,0 +1,72 @@
+
+          %%%%% ~~~~~~~~~~~~~~~~~~~~ %%%%%
+
+\section{Setting the Stage}
+\setcounter{theorem}{0}
+\setcounter{equation}{0}
+
+%\cite{vanDerVaart1996}
+%\cite{Kosorok2008}
+
+%\renewcommand{\theenumi}{\alph{enumi}}
+%\renewcommand{\labelenumi}{\textnormal{(\theenumi)}$\;\;$}
+\renewcommand{\theenumi}{\roman{enumi}}
+\renewcommand{\labelenumi}{\textnormal{(\theenumi)}$\;\;$}
+
+          %%%%% ~~~~~~~~~~~~~~~~~~~~ %%%%%
+
+\noindent
+\textbf{Exercise 5.1}
+\begin{enumerate}
+\item
+	Prove that $\varemptyset$ is an initial object in \Sets.
+	
+	\proof
+	First, recall that given any two sets $X$ and $Y$, a function $f$ from $X$ into $Y$ is,
+	by definition, a subset
+	\begin{equation*}
+	\textnormal{Graph}(f) \;\; \subset \;\; X \times Y
+	\end{equation*}
+	with the following property:
+	for each $x_{0} \in X$, there {\color{red}exists} a {\color{red}unique} $y_{0} \in Y$ such that
+	$(x_{0},y_{0}) \in \textnormal{Graph}(f) \subset X \times Y$.
+	
+	Thus, given $X, Y \in \Obj(\Sets)$, the set $\textnormal{Hom}_{\,\Sets}(X,Y)$ of all
+	functions (morphisms in \Sets) from $X$ to $Y$ is
+	\begin{equation*}
+	\textnormal{Hom}_{\,\Sets}(X,Y)
+	\;\; := \;\;
+		\left\{\;
+			\mathcal{G} \in \mathcal{P}(X \times Y)
+			\;\left\vert\,
+			\begin{array}{c}
+				\textnormal{for each $x_{0} \in X$,}
+				\\
+				\textnormal{$\exists$\, unique $y_{0} \in Y$ such that $(x_{0},y_{0}) \in \mathcal{G}$}
+			\end{array}
+			\right.
+		\right\}
+	\end{equation*}
+	In particular, for any set $Y$, we have $\textnormal{Hom}_{\,\Sets}(\varemptyset,Y) \,=\, \left\{\,\varemptyset\,\right\}$,
+	since
+	\begin{equation*}
+	\mathcal{G} \in \textnormal{Hom}_{\,\Sets}(\varemptyset,Y)
+	\quad\Longrightarrow\quad
+		\varemptyset \,\subset\, \mathcal{G} \,\subset\, \mathcal{P}(\varemptyset \times Y) \,=\, \varemptyset
+	\quad\Longrightarrow\quad
+		\mathcal{G} = \varemptyset
+	\end{equation*}
+	This shows that $\textnormal{Hom}_{\,\Sets}(\varemptyset,Y) \,=\, \left\{\,\varemptyset\,\right\}$ indeed
+	has a unique element, for each $Y \in \Obj(\Sets)$, and hence $\varemptyset \in \Obj(\Sets)$ is indeed
+	an initial object in \Sets.
+	
+\end{enumerate}
+
+          %%%%% ~~~~~~~~~~~~~~~~~~~~ %%%%%
+
+%\renewcommand{\theenumi}{\alph{enumi}}
+%\renewcommand{\labelenumi}{\textnormal{(\theenumi)}$\;\;$}
+\renewcommand{\theenumi}{\roman{enumi}}
+\renewcommand{\labelenumi}{\textnormal{(\theenumi)}$\;\;$}
+
+          %%%%% ~~~~~~~~~~~~~~~~~~~~ %%%%%
