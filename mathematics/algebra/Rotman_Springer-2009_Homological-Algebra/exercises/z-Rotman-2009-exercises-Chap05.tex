@@ -31,10 +31,10 @@
 	for each $x_{0} \in X$, there {\color{red}exists} a {\color{red}unique} $y_{0} \in Y$ such that
 	$(x_{0},y_{0}) \in \textnormal{Graph}(f) \subset X \times Y$.
 	
-	Thus, given $X, Y \in \Obj(\Sets)$, the set $\textnormal{Hom}_{\,\Sets}(X,Y)$ of all
+	Thus, given $X, Y \in \Obj(\Sets)$, the set $\Hom_{\,\Sets}(X,Y)$ of all
 	functions (morphisms in \Sets) from $X$ to $Y$ is
 	\begin{equation*}
-	\textnormal{Hom}_{\,\Sets}(X,Y)
+	\Hom_{\,\Sets}(X,Y)
 	\;\; := \;\;
 		\left\{\;
 			\mathcal{G} \in \mathcal{P}(X \times Y)
@@ -47,18 +47,106 @@
 			\right.
 		\right\}
 	\end{equation*}
-	In particular, for any set $Y$, we have $\textnormal{Hom}_{\,\Sets}(\varemptyset,Y) \,=\, \left\{\,\varemptyset\,\right\}$,
+	In particular, for any set $Y$, we have $\Hom_{\,\Sets}(\varemptyset,Y) \,=\, \left\{\,\varemptyset\,\right\}$,
 	since
 	\begin{equation*}
-	\mathcal{G} \in \textnormal{Hom}_{\,\Sets}(\varemptyset,Y)
+	\mathcal{G} \in \Hom_{\,\Sets}(\varemptyset,Y)
 	\quad\Longrightarrow\quad
 		\varemptyset \,\subset\, \mathcal{G} \,\subset\, \mathcal{P}(\varemptyset \times Y) \,=\, \varemptyset
 	\quad\Longrightarrow\quad
 		\mathcal{G} = \varemptyset
 	\end{equation*}
-	This shows that $\textnormal{Hom}_{\,\Sets}(\varemptyset,Y) \,=\, \left\{\,\varemptyset\,\right\}$ indeed
+	This shows that $\Hom_{\,\Sets}(\varemptyset,Y) \,=\, \left\{\,\varemptyset\,\right\}$ indeed
 	has a unique element, for each $Y \in \Obj(\Sets)$, and hence $\varemptyset \in \Obj(\Sets)$ is indeed
 	an initial object in \Sets.
+
+\item
+	Prove that any one-point set \,$\Omega = \{\,\omega_{0}\,\}$\, is a terminal object in \Sets.\\
+	In particular, what is the function $\varemptyset \longrightarrow \Omega$\,?
+	
+	\proof
+	It is clear that, for each set $X \in \Obj(\Sets)$, each function $f : X \longrightarrow \{\,\omega_{0}\,\}$
+	with domain $X$ must map each element of $X$ to $\omega_{0}$, which immediately implies
+	\begin{equation*}
+	\Hom_{\,\Sets}\!\left(\overset{{\color{white}.}}{X},\{\,\omega_{0}\,\}\right)
+	\;\; = \;\;
+		\left\{\; \overset{{\color{white}.}}{f}_{X,\,\omega_{0}} \;\right\},
+	\end{equation*}
+	where \,$f_{X,\,\omega_{0}} : X \longrightarrow \{\,\omega_{0}\,\}$\,
+	is the constant function with value $\omega_{0}$ defined on $X$.
+	This proves that the (arbitrary) one-point set \,$\{\,\omega_{0}\,\}$\, is indeed a terminal object in \Sets.
+	
+	In particular,
+	\begin{eqnarray*}
+	\Hom_{\,\Sets}\!\left(\,\overset{{\color{white}.}}{\varemptyset},\{\,\omega_{0}\,\}\,\right)
+	& := &
+		\left\{\;
+			\mathcal{G} \in \mathcal{P}(\varemptyset \times \{\,\omega_{0}\,\})
+			\;\left\vert\,
+			\begin{array}{c}
+				\textnormal{for each $x_{0} \in \varemptyset$,}
+				\\
+				\textnormal{$\exists$\, unique $y_{0} \in \{\,\omega_{0}\,\}$ such that $(x_{0},y_{0}) \in \mathcal{G}$}
+			\end{array}
+			\right.
+		\right\}
+	\\
+	& \overset{{\color{white}\vert}}{=} &
+		\mathcal{P}(\varemptyset \times \{\,\omega_{0}\,\})
+	\;\; = \;\;
+		\left\{\,\varemptyset\,\right\}
+	\end{eqnarray*}
+
+\end{enumerate}
+
+          %%%%% ~~~~~~~~~~~~~~~~~~~~ %%%%%
+
+\vskip 0.5cm
+\noindent
+\textbf{Exercise 5.2}
+\vskip 0.2cm
+\noindent
+A \,\textit{zero object}\, in a category $\mathcal{C}$ is an object that is both an initial object
+and a terminal object.
+\begin{enumerate}
+\item
+	Prove the uniqueness up to isomorphism of initial, terminal, and zero objects, if they exist.
+	
+	\proof
+	\vskip 0.2cm
+	\underline{Initial objects, if they exist, are unique up to isomorphism.}
+	\vskip 0.0cm
+	Suppose $I_{1}, I_{2} \in \Obj(\mathcal{C})$ be two initial objects in the category $\mathcal{C}$.
+	Thus, each of $\Hom_{\,\mathcal{C}}(I_{1},I_{1})$, $\Hom_{\,\mathcal{C}}(I_{2},I_{2})$,
+	$\Hom_{\,\mathcal{C}}(I_{1},I_{2})$ and $\Hom_{\,\mathcal{C}}(I_{2},I_{1})$ is a singleton set.
+	In particular, we have
+	\begin{equation*}
+	\Hom_{\,\mathcal{C}}(I_{1},I_{1}) \,=\, \left\{\;\overset{{\color{white}.}}{\id}_{I_{1}}\right\}
+	\quad\textnormal{and}\quad
+	\Hom_{\,\mathcal{C}}(I_{2},I_{2}) \,=\, \left\{\;\overset{{\color{white}.}}{\id}_{I_{2}}\,\right\}.
+	\end{equation*}
+	Next, write
+	\begin{equation*}
+	\Hom_{\,\mathcal{C}}(I_{1},I_{2}) \,=\, \left\{\;\overset{{\color{white}.}}{f}\,\right\}
+	\quad\textnormal{and}\quad
+	\Hom_{\,\mathcal{C}}(I_{2},I_{1}) \,=\, \left\{\;\overset{{\color{white}-}}{g}\,\right\}.
+	\end{equation*}
+	Then, note that
+	\begin{equation*}
+	f \circ g \;\in\; \Hom_{\,\mathcal{C}}(I_{2},I_{2}) \;=\; \left\{\;\overset{{\color{white}.}}{\id}_{I_{2}}\,\right\}
+	\quad\textnormal{and}\quad
+	g \circ f \;\in\; \Hom_{\,\mathcal{C}}(I_{1},I_{1}) \;=\; \left\{\;\overset{{\color{white}.}}{\id}_{I_{1}}\,\right\}
+	\end{equation*}
+	Thus, \,$f$\, and \,$g$\, are isomorphisms, and are inverses of each other.
+	This proves that initial objects are indeed unique up to isomorphism.
+
+	\vskip 0.2cm
+	\underline{Terminal objects, if they exist, are unique up to isomorphism.}
+	\vskip 0.0cm
+
+\item
+	Prove that \,$\left\{\,0\,\right\}$\, is a zero object in $_{R}\Mod$ and that
+	\,$\left\{\,1\,\right\}$\, is a zero object in \Groups.
 	
 \end{enumerate}
 
