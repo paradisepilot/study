@@ -1,0 +1,245 @@
+
+\section{Perfect Secrecy \& Vernam's One-Time Pad}
+\setcounter{theorem}{0}
+\setcounter{equation}{0}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Crytosystems}
+
+\begin{definition}[Cryptosystem]
+\mbox{}
+\vskip 0.1cm
+\noindent
+A \,\textbf{cryptosystem}\, is a tuple \,$(\mathcal{T},\mathcal{C},\mathcal{K},E,D)$\,, where
+\begin{itemize}
+\item
+	$\mathcal{T}$, $\mathcal{C}$, and $\mathcal{K}$ are non-empty sets,
+\item
+	$E : \mathcal{T} \times \mathcal{K} \longrightarrow \mathcal{C}$
+	is a surjective map, and
+\item
+	$D : \mathcal{C} \times \mathcal{K} \longrightarrow \mathcal{T}$\,
+	is a map that satisfies:
+	For each $k_{1} \in \mathcal{K}$, there exists $k_{2} \in \mathcal{K}$
+	such that
+	\begin{equation*}
+	D\!\left(\,\overset{{\color{white}.}}{E}(t,k_{1})\,,\,k_{2}\,\right) \;\; = \;\; t\,,
+	\quad
+	\textnormal{for each \,$t \in \mathcal{T}$}
+	\end{equation*}
+\end{itemize}
+We shall also use the notation: For each $k \in \mathcal{K}$,
+\begin{equation*}
+E_{k} := E(\,\cdot\,,k) : \mathcal{T} \longrightarrow \mathcal{C}
+\quad\textnormal{and}\quad
+D_{k} := E(\,\cdot\,,k) : \mathcal{C} \longrightarrow \mathcal{T}
+\end{equation*}
+\end{definition}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Perfect secrecy of a Shannon cryptosystem}
+
+\begin{definition}[Shannon Cryptosystem]
+\mbox{}
+\vskip 0.1cm
+\noindent
+A \,\textbf{Shannon cryptosystem}\, is a tuple \,$(\mathcal{T},\mathcal{C},\mathcal{K},E,D,\mu)$\,,
+where
+\begin{itemize}
+\item
+	$(\mathcal{T},\mathcal{C},\mathcal{K},E,D)$ is a cryptosystem,
+\item
+	$\mathcal{T}$, $\mathcal{K}$ and $\mathcal{C}$ are finite sets,
+\item
+	$\mu$ is a probability measure defined on the power set $\mathcal{P}(\mathcal{T}\times\mathcal{F})$
+	of $\mathcal{T}\times\mathcal{K}$ satisfying
+	\begin{equation*}
+	P_{\mu}\!\left(\,\overset{{\color{white}.}}{T} = t\,\right)
+	\, := \,\mu\!\left(\, \{\,t\,\} \overset{{\color{white}.}}{\times} K \,\right)
+	\, > \, 0,
+	\quad
+	\textnormal{for each $t \in \mathcal{T}$}\,,
+	\end{equation*}
+\item
+	the encryption map $E : \mathcal{T} \times \mathcal{K} \longrightarrow \mathcal{C}$ is
+	$\left(
+	\overset{{\color{white}.}}{\mathcal{P}}(\mathcal{T}\times\mathcal{K}),\mathcal{P}(\mathcal{C})
+	\right)$-measurable, where $\mathcal{P}(\mathcal{C})$ is the power set of $\mathcal{C}$.
+\end{itemize}
+\end{definition}
+
+\begin{definition}[Perfect secrecy of a Shannon cryptosystem]
+\mbox{}
+\vskip 0.1cm
+\noindent
+A Shannon cryptosystem
+$(\mathcal{T},\mathcal{C},\mathcal{K},E,D,\mu)$
+is said to have \textbf{perfect secrecy} if
+\begin{equation*}
+P_{\mu}\!\left(\,\left.\overset{{\color{white}.}}{T} = t \;\right\vert C = c\,\right)
+\;\; = \;\;
+	P_{\mu}\!\left(\,\overset{{\color{white}.}}{T} = t\,\right),
+\quad
+\textnormal{for each \,$t \in \mathcal{T}$, and for each \,$c \in \mathcal{C}$\, with \,$\mu\!\left(E^{-1}(c)\right) > 0$}\,,
+\end{equation*}
+where
+\begin{eqnarray*}
+P_{\mu}\!\left(\,\left.\overset{{\color{white}.}}{T} = {\color{red}t} \;\right\vert C = c\,\right)
+& := &
+	\dfrac{
+		\mu\!\left(\,
+			\left(\{\,{\color{red}t}\,\} \overset{{\color{white}.}}{\times} K\right) \,\bigcap\, E^{-1}(c)
+			\,\right)
+		}{
+		\mu\!\left(\, \overset{{\color{white}.}}{E^{-1}}(c) \,\right)
+		}
+\;\; = \;\;
+	\dfrac{
+		\mu\!\left(\left\{\,
+			\left.
+			(\overset{{\color{white}.}}{{\color{red}t}},k) \in \mathcal{T} \times \mathcal{K}
+			\;\right\vert\;
+			E({\color{red}t},k) = c
+			\,\right\}\right)
+		}{
+		\mu\!\left(\left\{\,
+			\left.
+			(\overset{{\color{white}.}}{t^{\prime}},k) \in \mathcal{T} \times \mathcal{K}
+			\;\right\vert\;
+			E(t^{\prime},k) = c
+			\,\right\}\right)
+		}
+\\
+P_{\mu}\!\left(\,\overset{{\color{white}.}}{T} = t\,\right)
+& := &
+	\mu\!\left(\, \{\,t\,\} \overset{{\color{white}.}}{\times} K \,\right)
+\end{eqnarray*}
+\end{definition}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vskip 0.5cm
+\begin{proposition}
+\mbox{}
+\vskip 0.1cm
+\noindent
+If a Shannon cryptosystem
+$(\mathcal{T},\mathcal{C},\mathcal{K},E,D,\mu)$
+has \textbf{perfect secrecy}, then the following statements hold:
+\begin{enumerate}
+\item
+	$\mathcal{K}_{t,c} \; \neq \; \varnothing$\,,
+	for each $t \in \mathcal{T}$
+	and
+	for each $c \in \mathcal{C}$
+	with $P_{\mu}\!\left(\overset{{\color{white}.}}{C}=c\,\right) =
+	\mu\!\left(\,\overset{{\color{white}.}}{E^{-1}}(c)\,\right) > 0 $,
+	where
+	\begin{equation*}
+	\mathcal{K}_{t,c} \, := \, \left\{\,\left. k \overset{{\color{white}.}}{\in} \mathcal{K} \;\,\right\vert\, E(t,k) = c\,\right\},
+	\quad\textnormal{for each $t\in\mathcal{T}$, $c \in \mathcal{C}$}\,,
+	\end{equation*}
+\item
+	$\mathcal{K}_{t_{1},c} \,\cap\, \mathcal{K}_{t_{2},c} \; = \; \varnothing$\,,\;
+	for each $c \in \mathcal{C}$
+	with $P_{\mu}\!\left(\overset{{\color{white}.}}{C}=c\,\right) \,=\,
+	\mu\!\left(\,\overset{{\color{white}.}}{E^{-1}}(c)\,\right) \,>\, 0$,
+	and for each $t_{1}, t_{2} \in \mathcal{T}$ with $t_{1} \neq t_{2}$,
+	and
+\item
+	$\#\!\left(\,\mathcal{T}\,\right) \; \leq \; \#\!\left(\,\mathcal{K}\,\right)$.
+\end{enumerate}
+\end{proposition}
+
+\proof
+\begin{enumerate}
+\item
+	Observe that
+	\begin{eqnarray*}
+	\dfrac{
+		P_{\mu}\!\left(\mathcal{K}_{t,c}\,\right)
+		}{
+		P_{\mu}\!\left(\,T = t\,\right)
+		}
+	& = &
+		\dfrac{
+			P_{\mu}\!\left(\,T = t, C = c\,\right)
+			}{
+			P_{\mu}\!\left(\,T = t\,\right)
+			}
+		\;\; = \;\;
+		\dfrac{
+			P_{\mu}\!\left(\,T = t \;\vert\, C = c\,\right) \cdot P_{\mu}\!\left(C=c\,\right)
+			}{
+			P_{\mu}\!\left(\,T = t\,\right)
+			}
+		\;\; = \;\;
+		\dfrac{
+			P_{\mu}\!\left(\,T = t \,\right) \cdot P_{\mu}\!\left(C=c\,\right)
+			}{
+			P_{\mu}\!\left(\,T = t\,\right)
+			}
+	\\
+	& \overset{{\color{white}1}}{=} &
+		P_{\mu}\!\left(C = c\,\right)
+		\;\; > \;\; 0\,,
+	\end{eqnarray*}
+	where the third equality follows by perfect secrecy hypothesis.
+	The preceding inequality implies $P_{\mu}\!\left(\,\mathcal{K}_{t,c}\,\right) \,>\, 0$,
+	which in turn implies $\mathcal{K}_{t,c} \,\neq\, \varnothing$.
+\item
+	$\mathcal{K}_{t_{1},c} \,\cap\, \mathcal{K}_{t_{2},c} \; \neq \; \varnothing$
+	\;$\Longrightarrow$\;
+	there exists $k \in \mathcal{K}$ such that $E(t_{1},k) = c = E(t_{2},k)$,
+	which contradicts injectivity of
+	$E(\,\cdot\,,k) : \mathcal{T} \longrightarrow \mathcal{C}$.
+	Thus, we must in fact have
+	$\mathcal{K}_{t_{1},c} \,\cap\, \mathcal{K}_{t_{2},c} \; = \; \varnothing$.
+\item
+	First, note that
+	$\mu(\,\mathcal{T} \times \mathcal{K}\,) = 1$,
+	$\#\!\left(\,\mathcal{C}\,\right) < \infty$, and
+	$\mathcal{T} \times \mathcal{K} \, = \underset{c\,\in\,\mathcal{C}}{\bigcup}\,E^{-1}(c)$.
+	Hence, we must have $E^{-1}(c) > 0$, for some $c \in \mathcal{C}$.
+	Let such a $c \in \mathcal{C}$ be fixed.
+	Then, the preceding two statements we just established together imply
+	\begin{equation*}
+	\mathcal{K}
+	\;\; \supset \,
+		\underset{t\,\in\,\mathcal{T}}{\bigsqcup}\, \mathcal{K}_{t,c}
+	\end{equation*}
+	Thus, $\mathcal{K}$ contains the disjoint union of a family, indexed by $\mathcal{T}$,
+	of non-empty subsets of $\mathcal{K}$.
+	It now follows that $\#\!\left(\,\mathcal{T}\,\right) \,\leq\, \#\!\left(\,\mathcal{K}\,\right)$.
+\end{enumerate}
+\qed
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{theorem}[Shannon]
+\mbox{}
+\vskip 0.1cm
+\noindent
+Suppose:
+\begin{itemize}
+\item
+	$(\mathcal{T},\mathcal{C},\mathcal{K},E,D,\mu,\mathcal{F})$
+	is a Shannon cryptosystem, and
+\item
+	$\#\!\left(\,\mathcal{T}\,\right)$
+	\,$=$\,
+	$\#\!\left(\,\mathcal{C}\,\right)$
+	\,$=$\,
+	$\#\!\left(\,\mathcal{K}\,\right)$\,.
+\end{itemize}
+Then, $(\mathcal{T},\mathcal{C},\mathcal{K},E,D,\mu,\mathcal{F})$
+has \textbf{perfect secrecy} if and only if
+\begin{itemize}
+\item
+	the marginal probability distribution induced by $\mu$ on $\mathcal{K}$ is uniform, and
+\item
+	for each $t \in \mathcal{T}$ and $c \in \mathcal{C}$,
+	there exists a unique $k \in \mathcal{K}$
+	such that $E(t,k) = c$.
+\end{itemize}
+\end{theorem}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
