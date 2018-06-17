@@ -36,6 +36,101 @@ D_{k} := E(\,\cdot\,,k) : \mathcal{C} \longrightarrow \mathcal{T}
 \end{equation*}
 \end{definition}
 
+\begin{proposition}\label{proposition:Disjointness}
+\mbox{}
+\vskip 0.1cm
+\noindent
+Suppose:
+\begin{itemize}
+\item
+	$(\mathcal{T},\mathcal{C},\mathcal{K},E,D)$ is a cryptosystem.
+\item
+	For each $t \in \mathcal{T}$ and each $c \in \mathcal{C}$, define
+	\begin{equation*}
+	\mathcal{K}_{t,c}
+	\;\; := \;\;
+		\left\{\,\left.
+			\overset{{\color{white}.}}{k} \in \mathcal{K}
+		\;\,\right\vert\,
+			E(t,k) = c
+		\;\right\}.
+	\end{equation*}
+\end{itemize}
+Then,
+\begin{equation*}
+\mathcal{K}_{t_{1},c} \;\bigcap\; \mathcal{K}_{t_{2},c} \; = \; \varnothing\,,
+\quad
+\textnormal{for each $c \in \mathcal{C}$ and each $t_{1}, t_{2} \in \mathcal{T}$ with $t_{1} \neq t_{2}$}.
+\end{equation*}
+\end{proposition}
+
+\proof
+First, note that
+\begin{eqnarray*}
+&&
+	\mathcal{K}_{t_{1},c} \;\bigcap\; \mathcal{K}_{t_{2},c} \; = \; \varnothing,
+	\;\;\forall\;c \in \mathcal{C}, \;\forall\;t_{1}\neq t_{2}\in\mathcal{T}
+\\
+& \Longleftrightarrow &
+	\left\{\,\left.
+		\overset{{\color{white}.}}{k} \in \mathcal{K}
+	\;\,\right\vert\,
+		E(t_{1},k) = c
+	\;\right\}
+	\;\bigcap\;
+	\left\{\,\left.
+		\overset{{\color{white}.}}{k} \in \mathcal{K}
+	\;\,\right\vert\,
+		E(t_{2},k) = c
+	\;\right\}
+	\; = \;
+	\varnothing\,,
+	\;\;\forall\;c \in \mathcal{C}, \;\forall\;t_{1}\neq t_{2}\in\mathcal{T}
+\\
+& \Longleftrightarrow &
+	\left\{\,\left.
+		\overset{{\color{white}.}}{k} \in \mathcal{K}
+	\;\,\right\vert\,
+		E(t_{1},k) = c \;\,\textnormal{and}\;\, E(t_{2},k) = c
+	\;\right\}
+	\; = \;
+	\varnothing\,,
+	\;\;\forall\;c \in \mathcal{C}, \;\forall\;t_{1}\neq t_{2}\in\mathcal{T}
+\\
+& \Longleftrightarrow &
+	\left\{\,\left.
+		\overset{{\color{white}.}}{k} \in \mathcal{K}
+	\;\,\right\vert\,
+		E(t_{1},k) = c = E(t_{2},k)
+	\;\right\}
+	\; = \;
+	\varnothing\,,
+	\;\;\forall\;c \in \mathcal{C}, \;\forall\;t_{1}\neq t_{2}\in\mathcal{T}
+\\
+& \Longleftrightarrow &
+	\left\{\,\left.
+		\overset{{\color{white}.}}{k} \in \mathcal{K}
+	\;\,\right\vert\,
+		E(t_{1},k) = E(t_{2},k)
+	\;\right\}
+	\; = \;
+	\varnothing\,,
+	\;\;\forall\;t_{1}\neq t_{2}\in\mathcal{T}
+\\
+& \overset{{\color{white}1}}{\Longleftrightarrow} &
+	\textnormal{$E(\,\cdot\,,k) : \mathcal{T} \longrightarrow \mathcal{C}$\, is injective, for each \,$k \in \mathcal{K}$}
+\end{eqnarray*}
+Thus, to complete the proof of the Proposition, it remains only to show that
+$E(\,\cdot\,,k)$ is injective, for each $k \in \mathcal{K}$. 
+To this end, note that, by definition of a cryptosystem, for each $k \in \mathcal{K}$, the encryption map
+$E(\,\cdot\,,k) : \mathcal{T} \longrightarrow \mathcal{C}$
+admits a left inverse (namely, the decryption map
+$D(\,\cdot\,,k^{\prime}) : \mathcal{T} \longrightarrow \mathcal{C}$,
+for some appropriate $k^{\prime}\in\mathcal{K}$).
+This implies that $E(\,\cdot\,,k)$ is indeed injective, for each $k \in \mathcal{K}$.
+This completes the proof of the Proposition.
+\qed
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Perfect secrecy of a Shannon cryptosystem}
 
@@ -67,6 +162,8 @@ where
 	\right)$-measurable, where $\mathcal{P}(\mathcal{C})$ is the power set of $\mathcal{C}$.
 \end{itemize}
 \end{definition}
+
+\vskip 0.5cm
 
 \begin{definition}[Perfect secrecy of a Shannon cryptosystem]
 \mbox{}
@@ -117,7 +214,7 @@ P_{\mu}\!\left(\,\overset{{\color{white}.}}{T} = t\,\right)
 \end{definition}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\vskip 0.5cm
+\clearpage
 \begin{proposition}
 \mbox{}
 \vskip 0.1cm
@@ -138,12 +235,12 @@ has \textbf{perfect secrecy}, then the following statements hold:
 	\mathcal{K}_{t,c} \, := \, \left\{\,\left. k \overset{{\color{white}.}}{\in} \mathcal{K} \;\,\right\vert\, E(t,k) = c\,\right\},
 	\quad\textnormal{for each $t\in\mathcal{T}$, $c \in \mathcal{C}$}\,.
 	\end{equation*}
-\item
-	$\mathcal{K}_{t_{1},c} \,\cap\, \mathcal{K}_{t_{2},c} \; = \; \varnothing$\,,\;
-	for each $c \in \mathcal{C}$
-	with $P_{\mu}\!\left(\overset{{\color{white}.}}{C}=c\,\right) \,=\,
-	\mu\!\left(\,\overset{{\color{white}.}}{E^{-1}}(c)\,\right) \,>\, 0$,
-	and for each $t_{1}, t_{2} \in \mathcal{T}$ with $t_{1} \neq t_{2}$.
+%\item
+%	$\mathcal{K}_{t_{1},c} \,\cap\, \mathcal{K}_{t_{2},c} \; = \; \varnothing$\,,\;
+%	for each $c \in \mathcal{C}$
+%	with $P_{\mu}\!\left(\overset{{\color{white}.}}{C}=c\,\right) \,=\,
+%	\mu\!\left(\,\overset{{\color{white}.}}{E^{-1}}(c)\,\right) \,>\, 0$,
+%	and for each $t_{1}, t_{2} \in \mathcal{T}$ with $t_{1} \neq t_{2}$.
 \item
 	For each $c \in \mathcal{C}$ with $P_{\mu}\!\left(\,C = c\,\right) > 0$, we have:
 	\begin{equation*}
@@ -185,16 +282,16 @@ has \textbf{perfect secrecy}, then the following statements hold:
 	The preceding inequality implies
 	$\left\{\,\overset{{\color{white}.}}{T}=t,C=c\,\right\} \,\neq\, \varnothing$,
 	which in turn implies $\mathcal{K}_{t,c} \,\neq\, \varnothing$.
+%\item
+%	$\mathcal{K}_{t_{1},c} \,\cap\, \mathcal{K}_{t_{2},c} \; \neq \; \varnothing$
+%	\;$\Longrightarrow$\;
+%	there exists $k \in \mathcal{K}$ such that $E(t_{1},k) = c = E(t_{2},k)$,
+%	which contradicts injectivity of
+%	$E(\,\cdot\,,k) : \mathcal{T} \longrightarrow \mathcal{C}$.
+%	Thus, we must in fact have
+%	$\mathcal{K}_{t_{1},c} \,\cap\, \mathcal{K}_{t_{2},c} \; = \; \varnothing$.
 \item
-	$\mathcal{K}_{t_{1},c} \,\cap\, \mathcal{K}_{t_{2},c} \; \neq \; \varnothing$
-	\;$\Longrightarrow$\;
-	there exists $k \in \mathcal{K}$ such that $E(t_{1},k) = c = E(t_{2},k)$,
-	which contradicts injectivity of
-	$E(\,\cdot\,,k) : \mathcal{T} \longrightarrow \mathcal{C}$.
-	Thus, we must in fact have
-	$\mathcal{K}_{t_{1},c} \,\cap\, \mathcal{K}_{t_{2},c} \; = \; \varnothing$.
-\item
-	Immediate by the preceding two statements.
+	Immediate by the preceding statement and Proposition \ref{proposition:Disjointness}.
 \item
 	First, note that
 	$\mu(\,\mathcal{T} \times \mathcal{K}\,) = 1$,
@@ -224,7 +321,11 @@ Suppose:
 \begin{itemize}
 \item
 	$(\mathcal{T},\mathcal{C},\mathcal{K},E,D,\mu)$
-	is a Shannon cryptosystem, and
+	is a Shannon cryptosystem,
+\item
+	$\mu$ is the product measure of the marginal probability measures it induces
+	on $\mathcal{T}$ and $\mathcal{K}$, respectively\\
+	(equivalently, the plaintext and key random variables induced by $\mu$ are independent), and
 \item
 	$\#\!\left(\,\mathcal{T}\,\right)$
 	\,$=$\,
@@ -269,15 +370,124 @@ P_{\mu}\!\left(\,C \overset{{\color{white}.}}{=} c\,\right)
 \end{theorem}
 
 \proof
+For each $t \in \mathcal{T}$ and $c \in \mathcal{C}$, let
+$\mathcal{K}_{t,c} \,:=\, \left\{\,\left. k \overset{{\color{white}.}}{\in} \mathcal{K} \;\,\right\vert\, E(t,k) = c\,\right\}$.
+By Proposition \ref{proposition:Disjointness}, we have
+\begin{equation*}
+\mathcal{K}_{t_{1},c} \;\bigcap\; \mathcal{K}_{t_{2},c} \; = \; \varnothing\,,
+\quad
+\textnormal{for each $c \in \mathcal{C}$ and each $t_{1}, t_{2} \in \mathcal{T}$ with $t_{1} \neq t_{2}$}.
+\end{equation*}
+
 \vskip 0.2cm
+\noindent
+\underline{($\Longleftarrow$)}
+\vskip 0.2cm
+\noindent
+Suppose:
+\begin{itemize}
+\item
+	the marginal probability distribution induced by $\mu$ on $\mathcal{K}$ is uniform, and
+\item
+	for each $t \in \mathcal{T}$ and $c \in \mathcal{C}$
+	with $P_{\mu}\!\left(\,C \overset{{\color{white}.}}{=} c\,\right) > 0$,
+	there exists a unique $k \in \mathcal{K}$
+	such that $E(t,k) = c$.
+\end{itemize}
+We need to establish that $(\mathcal{T},\mathcal{C},\mathcal{K},E,D,\mu)$
+has perfect secrecy, i.e.
+\begin{equation*}
+P_{\mu}\!\left(\,\left. T \overset{{\color{white}-}}{=} t \;\,\right\vert\, C = c \,\right)
+\;\; = \;\;
+	P_{\mu}\!\left(\; T \overset{{\color{white}-}}{=} t \,\right),
+\quad
+\textnormal{for each $t \in \mathcal{T}$ and each $c \in \mathcal{C}$ with $P_{\mu}\!\left(C = c\right) > 0$}.
+\end{equation*}
+First, note that
+\begin{eqnarray*}
+P_{\mu}\!\left(\, C \overset{{\color{white}1}}{=} c \,\right)
+& = &
+	\underset{\zeta\,\in\,\mathcal{T}}{\sum}\;
+	P_{\mu}\!\left(\, C \overset{{\color{white}1}}{=} c \,, T = \zeta \,\right)
+\;\; = \;\;
+	\underset{\zeta\,\in\,\mathcal{T}}{\sum}\;
+	P_{\mu}\!\left(\, T \overset{{\color{white}1}}{=} \zeta \,, K = k_{\,\zeta,c} \,\right)
+\\
+& = &
+	\underset{\zeta\,\in\,\mathcal{T}}{\sum}\;
+	P_{\mu}\!\left(\, T \overset{{\color{white}1}}{=} \zeta \,\right)
+	\cdot
+	P_{\mu}\!\left(\, K \overset{{\color{white}1}}{=} k_{\,\zeta,c} \,\right)\,,
+	\quad
+	\textnormal{by independence assumption on $T$ and $K$}
+\\
+& = &
+	\underset{\zeta\,\in\,\mathcal{T}}{\sum}\;
+	P_{\mu}\!\left(\, T \overset{{\color{white}1}}{=} \zeta \,\right)
+	\cdot
+	\dfrac{1}{\#\!\left(\,\overset{{\color{white}.}}{\mathcal{K}}\,\right)}
+\;\; = \;\;
+	\dfrac{1}{\#\!\left(\,\overset{{\color{white}.}}{\mathcal{K}}\,\right)}
+	\cdot
+	\underset{\zeta\,\in\,\mathcal{T}}{\sum}\;
+	P_{\mu}\!\left(\, T \overset{{\color{white}1}}{=} \zeta \,\right)
+\;\; = \;\;
+	\dfrac{1}{\#\!\left(\,\overset{{\color{white}.}}{\mathcal{K}}\,\right)} \cdot 1
+\\
+& = &
+	\dfrac{1}{\#\!\left(\,\overset{{\color{white}.}}{\mathcal{K}}\,\right)}
+\end{eqnarray*}
+Now, by the second bullet, we see that $\mathcal{K}_{t,c}$ is a singleton set,
+for each $t \in \mathcal{T}$ and $c \in \mathcal{C}$ with $P_{\mu}\!\left(\,C = c\,\right) > 0$.
+In other words, given each $t \in \mathcal{T}$ and $c \in \mathcal{C}$ with $P_{\mu}\!\left(\,C = c\,\right) > 0$,
+there exists a unique $k_{\,t,c} \in \mathcal{K}$ such that $E(t,k_{\,t,c}) = c$.
+Thus, for each $t \in \mathcal{T}$ and $c \in \mathcal{C}$ with $P_{\mu}\!\left(\,C = c\,\right) > 0$, we have
+\begin{eqnarray*}
+P_{\mu}\!\left(\,\left. T \overset{{\color{white}1}}{=} t \;\right\vert C = c \,\right)
+& = &
+	\dfrac{
+		P_{\mu}\!\left(\, T \overset{{\color{white}1}}{=} t \;,\, C = c \,\right)
+		}{
+		P_{\mu}\!\left(\, C \overset{{\color{white}1}}{=} c \,\right)
+		}
+\;\; = \;\;
+	\dfrac{
+		P_{\mu}\!\left(\, T \overset{{\color{white}1}}{=} t \;,\, K = k_{\,t,c} \,\right)
+		}{
+		P_{\mu}\!\left(\, C \overset{{\color{white}1}}{=} c \,\right)
+		}
+\\
+& = &
+	\dfrac{
+		P_{\mu}\!\left(\, T \overset{{\color{white}1}}{=} t \,\right)
+		\cdot
+		P_{\mu}\!\left(\, K \overset{{\color{white}1}}{=} k_{\,t,c} \,\right)
+		}{
+		P_{\mu}\!\left(\, C \overset{{\color{white}1}}{=} c \,\right)
+		}
+\;\; = \;\;
+	\dfrac{1}{\#\!\left(\,\overset{{\color{white}.}}{\mathcal{K}}\,\right)}
+	\cdot
+	\dfrac{
+		P_{\mu}\!\left(\, T \overset{{\color{white}1}}{=} t \,\right)
+		}{
+		1 \left\slash \#\!\left(\,\overset{{\color{white}.}}{\mathcal{K}}\,\right) \right.
+		}
+\\
+& = &
+	P_{\mu}\!\left(\, T \overset{{\color{white}1}}{=} t \,\right),
+\end{eqnarray*}
+as required.
+This proves that $(\mathcal{T},\mathcal{C},\mathcal{K},E,D,\mu)$ indeed
+has perfect secrecy.
+
+
+\vskip 1.0cm
 \noindent
 \underline{($\Longrightarrow$)}
 \vskip 0.2cm
 \noindent
 Suppose $(\mathcal{T},\mathcal{C},\mathcal{K},E,D,\mu)$ has perfect secrecy.
-For each $t \in \mathcal{T}$ and $c \in \mathcal{C}$, let
-$\mathcal{K}_{t,c} \,:=\, \left\{\,\left. k \overset{{\color{white}.}}{\in} \mathcal{K} \;\,\right\vert\, E(t,k) = c\,\right\}$.
-
 \vskip 0.3cm
 \noindent
 \textbf{Claim 1:}\quad
@@ -469,12 +679,9 @@ We now complete this direction of the proof by noting that Claims 1, 2, and 3
 together yield the two bullets in the Theorem's conclusions, while Claim 4 yields
 the ``furthermore'' part of the Theorem's conclusions.
 
-\vskip 1.0cm
+\vskip 0.5cm
 \noindent
-\underline{($\Longleftarrow$)}\quad
-Suppose $(\mathcal{T},\mathcal{C},\mathcal{K},E,D,\mu)$
-has \textbf{perfect secrecy}.
-
+This completes the proof of the Theorem.
 \qed
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
