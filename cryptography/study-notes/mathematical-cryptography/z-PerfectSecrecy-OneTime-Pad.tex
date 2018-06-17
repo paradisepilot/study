@@ -136,15 +136,21 @@ has \textbf{perfect secrecy}, then the following statements hold:
 	where
 	\begin{equation*}
 	\mathcal{K}_{t,c} \, := \, \left\{\,\left. k \overset{{\color{white}.}}{\in} \mathcal{K} \;\,\right\vert\, E(t,k) = c\,\right\},
-	\quad\textnormal{for each $t\in\mathcal{T}$, $c \in \mathcal{C}$}\,,
+	\quad\textnormal{for each $t\in\mathcal{T}$, $c \in \mathcal{C}$}\,.
 	\end{equation*}
 \item
 	$\mathcal{K}_{t_{1},c} \,\cap\, \mathcal{K}_{t_{2},c} \; = \; \varnothing$\,,\;
 	for each $c \in \mathcal{C}$
 	with $P_{\mu}\!\left(\overset{{\color{white}.}}{C}=c\,\right) \,=\,
 	\mu\!\left(\,\overset{{\color{white}.}}{E^{-1}}(c)\,\right) \,>\, 0$,
-	and for each $t_{1}, t_{2} \in \mathcal{T}$ with $t_{1} \neq t_{2}$,
-	and
+	and for each $t_{1}, t_{2} \in \mathcal{T}$ with $t_{1} \neq t_{2}$.
+\item
+	For each $c \in \mathcal{C}$ with $P_{\mu}\!\left(\,C = c\,\right) > 0$, we have:
+	\begin{equation*}
+	\underset{t\,\in\,\mathcal{T}}{\bigsqcup}\; \mathcal{K}_{t,c}
+	\; \subset \;\;
+	\mathcal{K}
+	\end{equation*}
 \item
 	$\#\!\left(\,\mathcal{T}\,\right) \; \leq \; \#\!\left(\,\mathcal{K}\,\right)$.
 \end{enumerate}
@@ -153,38 +159,31 @@ has \textbf{perfect secrecy}, then the following statements hold:
 \proof
 \begin{enumerate}
 \item
-	Observe that
+	First, observe that the non-emptiness of
+	\begin{equation*}
+	\left\{\,\overset{{\color{white}.}}{T}=t,C=c\,\right\}
+	\; := \;
+		\left\{\,\left. (t,k) \overset{{\color{white}.}}{\in} \mathcal{T}\times\mathcal{K} \;\,\right\vert\, E(t,k) = c\,\right\}
+	\; = \;
+		\left(\,\{\,t\,\} \overset{{\color{white}.}}{\times} K\,\right) \, \bigcap \, E^{-1}(c)
+	\end{equation*}
+	will immediately implies the non-emptiness of
+	\begin{equation*}
+	\mathcal{K}_{t,c} \; := \; \left\{\,\left. k \overset{{\color{white}.}}{\in} \mathcal{K} \;\,\right\vert\, E(t,k) = c\,\right\}.
+	\end{equation*}
+	Next, note that
 	\begin{eqnarray*}
-	\dfrac{
-		P_{\mu}\!\left(\mathcal{K}_{t,c}\,\right)
-		}{
-		P_{\mu}\!\left(\,T = t\,\right)
-		}
-	& = &
-		\dfrac{
-			P_{\mu}\!\left(\,T = t, C = c\,\right)
-			}{
-			P_{\mu}\!\left(\,T = t\,\right)
-			}
-		\;\; = \;\;
-		\dfrac{
-			P_{\mu}\!\left(\,T = t \;\vert\, C = c\,\right) \cdot P_{\mu}\!\left(C=c\,\right)
-			}{
-			P_{\mu}\!\left(\,T = t\,\right)
-			}
-		\;\; = \;\;
-		\dfrac{
-			P_{\mu}\!\left(\,T = t \,\right) \cdot P_{\mu}\!\left(C=c\,\right)
-			}{
-			P_{\mu}\!\left(\,T = t\,\right)
-			}
-	\\
-	& \overset{{\color{white}1}}{=} &
-		P_{\mu}\!\left(C = c\,\right)
-		\;\; > \;\; 0\,,
+	P_{\mu}\!\left(\,T = t, C = c\,\right)
+	\;\, = \;\,
+		P_{\mu}\!\left(\,T = t \;\vert\, C = c\,\right) \cdot P_{\mu}\!\left(C=c\,\right)
+	\;\, = \;\,
+		P_{\mu}\!\left(\,T = t \,\right) \cdot P_{\mu}\!\left(C=c\,\right)
+	\;\, > \;\,
+		0\,,
 	\end{eqnarray*}
-	where the third equality follows by perfect secrecy hypothesis.
-	The preceding inequality implies $P_{\mu}\!\left(\,\mathcal{K}_{t,c}\,\right) \,>\, 0$,
+	where the second equality follows by perfect secrecy hypothesis.\\
+	The preceding inequality implies
+	$\left\{\,\overset{{\color{white}.}}{T}=t,C=c\,\right\} \,\neq\, \varnothing$,
 	which in turn implies $\mathcal{K}_{t,c} \,\neq\, \varnothing$.
 \item
 	$\mathcal{K}_{t_{1},c} \,\cap\, \mathcal{K}_{t_{2},c} \; \neq \; \varnothing$
@@ -195,13 +194,15 @@ has \textbf{perfect secrecy}, then the following statements hold:
 	Thus, we must in fact have
 	$\mathcal{K}_{t_{1},c} \,\cap\, \mathcal{K}_{t_{2},c} \; = \; \varnothing$.
 \item
+	Immediate by the preceding two statements.
+\item
 	First, note that
 	$\mu(\,\mathcal{T} \times \mathcal{K}\,) = 1$,
 	$\#\!\left(\,\mathcal{C}\,\right) < \infty$, and
 	$\mathcal{T} \times \mathcal{K} \, = \underset{c\,\in\,\mathcal{C}}{\bigcup}\,E^{-1}(c)$.
 	Hence, we must have $E^{-1}(c) > 0$, for some $c \in \mathcal{C}$.
 	Let such a $c \in \mathcal{C}$ be fixed.
-	Then, the preceding two statements we just established together imply
+	Then, by the preceding statement, we have
 	\begin{equation*}
 	\mathcal{K}
 	\;\; \supset \,
@@ -214,6 +215,7 @@ has \textbf{perfect secrecy}, then the following statements hold:
 \qed
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
 \begin{theorem}[Shannon]
 \mbox{}
 \vskip 0.1cm
@@ -236,10 +238,243 @@ has \textbf{perfect secrecy} if and only if
 \item
 	the marginal probability distribution induced by $\mu$ on $\mathcal{K}$ is uniform, and
 \item
-	for each $t \in \mathcal{T}$ and $c \in \mathcal{C}$,
+	for each $t \in \mathcal{T}$ and $c \in \mathcal{C}$
+	with $P_{\mu}\!\left(\,C \overset{{\color{white}.}}{=} c\,\right) > 0$,
 	there exists a unique $k \in \mathcal{K}$
 	such that $E(t,k) = c$.
 \end{itemize}
+Furthermore, if $(\mathcal{T},\mathcal{C},\mathcal{K},E,D,\mu)$
+has perfect secrecy, then the probability distribution induced on $\mathcal{C}$ by
+\begin{equation*}
+E
+\; : \;
+	\left(
+		\mathcal{T}\overset{{\color{white}.}}{\times}\mathcal{K}
+		\,,\,\mathcal{P}(\mathcal{T}\times\mathcal{K})
+		\,,\,\mu
+	\right)
+\;\longrightarrow\;
+	\mathcal{C}
+\end{equation*}
+is also uniform; in particular, in this case, we in fact must have
+\begin{equation*}
+P_{\mu}\!\left(\,C \overset{{\color{white}.}}{=} c\,\right)
+\;\; = \;\;
+	\dfrac{1}{\#\!\left(\,C\,\right)}
+\;\; > \;\;
+	0\,,
+\quad
+\textnormal{for each $c \in \mathcal{C}$}.
+\end{equation*}
 \end{theorem}
+
+\proof
+\vskip 0.2cm
+\noindent
+\underline{($\Longrightarrow$)}
+\vskip 0.2cm
+\noindent
+Suppose $(\mathcal{T},\mathcal{C},\mathcal{K},E,D,\mu)$ has perfect secrecy.
+For each $t \in \mathcal{T}$ and $c \in \mathcal{C}$, let
+$\mathcal{K}_{t,c} \,:=\, \left\{\,\left. k \overset{{\color{white}.}}{\in} \mathcal{K} \;\,\right\vert\, E(t,k) = c\,\right\}$.
+
+\vskip 0.3cm
+\noindent
+\textbf{Claim 1:}\quad
+$\#\!\left(\,\mathcal{K}_{t,c}\,\right) = 1$, for each $t \in \mathcal{T}$ and each $c \in \mathcal{C}$ with
+$P_{\mu}\!\left(\,C=c\,\right) > 0$.
+\vskip 0.2cm
+\noindent
+Proof of Claim 1:\quad
+Let $c \in \mathcal{C}$ with $P_{\mu}\!\left(\,C=c\,\right) > 0$ be fixed.
+By the preceding Proposition, we have that
+$\left\{\,\overset{{\color{white}.}}{K}_{t,c}\,\right\}_{t\in\mathcal{T}}$
+is a pairwise disjoint collection, indexed by $\mathcal{T}$, of nonempty subsets of $\mathcal{K}$:
+\begin{equation*}
+\underset{t\,\in\,\mathcal{T}}{\bigsqcup}\; \mathcal{K}_{t,c}
+\; \subset \;\;
+\mathcal{K}
+\end{equation*}
+Thus, we have
+\begin{equation*}
+\#\!\left(\,\mathcal{T}\,\right)
+\;\; = \;\;
+	\underset{t\,\in\,\mathcal{T}}{\sum}\; 1
+\;\; \leq \;\;
+	\underset{t\,\in\,\mathcal{T}}{\sum}\, \#\!\left(\,\mathcal{K}_{t,c}\,\right)
+\;\; \leq \;\;
+	\#\!\left(\,\mathcal{K}\,\right)
+\;\; = \;\;
+	\#\!\left(\,\mathcal{T}\,\right),
+\end{equation*}
+which implies
+\begin{equation*}
+\underset{t\,\in\,\mathcal{T}}{\sum}\, \#\!\left(\,\mathcal{K}_{t,c}\,\right)
+\;\; = \;\;
+	\#\!\left(\,\mathcal{T}\,\right),
+\end{equation*}
+which in turn implies
+\begin{equation*}
+\#\!\left(\,\mathcal{K}_{t,c}\,\right) \; = \; 1\,,
+\quad
+\textnormal{for each \,$t \in \mathcal{T}$}
+\end{equation*}
+This proves Claim 1.
+
+\vskip 0.5cm
+\noindent
+\textbf{Claim 2:}\quad
+$P_{\mu}\!\left(\,K \overset{{\color{white}1}}{=} k\,\right)$ $=$
+$P_{\mu}\!\left(\, C \overset{{\color{white}1}}{=} c \,\right)$\,,\;
+for each $k \in \mathcal{K}$ and each $c \in \mathcal{C}$ with $P_{\mu}\!\left(\, C \overset{{\color{white}1}}{=} c \,\right) > 0$.
+%$\mu$ induces the uniform probability distribution on $\mathcal{K}$.
+\vskip 0.2cm
+\noindent
+Proof of Claim 2:\quad
+Let $c \in \mathcal{C}$ with $P_{\mu}\!\left(\,C=c\,\right) > 0$ be fixed.
+By Claim 1, $\#\!\left(\,\mathcal{K}_{t,c}\,\right) \; = \; 1$, for each $t \in \mathcal{T}$.
+In other words, given $t \in \mathcal{T}$ and $c \in \mathcal{C}$ with $P_{\mu}\!\left(\,C = c\,\right) > 0$,
+a unique $k_{\,t,c} \in \mathcal{K}$ is determined via $E(t,k) = c$.
+Note that $\mathcal{K}_{t,c} \,=\, \left\{\,k_{\,t,c}\,\right\}$, and by the proof of Claim 1,
+we see also that
+\begin{equation*}
+\mathcal{K}
+\;\; = \;\;
+	\underset{t\,\in\,\mathcal{T}}{\bigsqcup}\; \mathcal{K}_{t,c}
+\;\; = \;\;
+	\underset{t\,\in\,\mathcal{T}}{\bigsqcup}\, \left\{\, \overset{{\color{white}.}}{k}_{\,t,c}\, \right\}
+\end{equation*}
+Hence,
+\begin{eqnarray*}
+\left\{\,\overset{{\color{white}.}}{T}=t \,, C=c\,\right\}
+& = &
+	\left(\,\{\,t\,\} \overset{{\color{white}.}}{\times} K\,\right) \; \bigcap \; E^{-1}(c)
+\\
+& = &
+	\left\{\,\left. (t,k) \overset{{\color{white}.}}{\in} \mathcal{T}\times\mathcal{K} \;\,\right\vert\, E(t,k) = c\,\right\}
+\;\; = \;\;
+	\left\{\,(\,\overset{{\color{white}.}}{t},k_{\,t,c}\,)\,\right\}
+\;\; = \;\;
+	\left\{\,\overset{{\color{white}.}}{T}=t \,, K=k_{\,t,c}\,\right\}
+\end{eqnarray*}
+Therefore,
+\begin{eqnarray*}
+P_{\mu}\!\left(\,T = t\,\right)
+& = &
+	P_{\mu}\!\left(\,\left. T \overset{{\color{white}1}}{=} t \;\right\vert C = c\,\right)
+	\;\; = \;\;
+	\dfrac{
+		P_{\mu}\!\left(\, T \overset{{\color{white}1}}{=} t \,, C = c\,\right)
+		}{
+		P_{\mu}\!\left(\, C \overset{{\color{white}1}}{=} c \,\right)
+		}
+	\;\; = \;\;
+	\dfrac{
+		P_{\mu}\!\left(\, T \overset{{\color{white}1}}{=} t \,, K = k_{\,t,c}\,\right)
+		}{
+		P_{\mu}\!\left(\, C \overset{{\color{white}1}}{=} c \,\right)
+		}
+\\
+& = &
+	\dfrac{
+		P_{\mu}\!\left(\, T \overset{{\color{white}1}}{=} t \,\right)
+		\cdot
+		P_{\mu}\!\left(\, K \overset{{\color{white}1}}{=} k_{\,t,c}\,\right)
+		}{
+		P_{\mu}\!\left(\, C \overset{{\color{white}1}}{=} c \,\right)
+		}
+\end{eqnarray*}
+Since $P_{\mu}\!\left(\, T \overset{{\color{white}1}}{=} t \,\right) > 0$,
+we may cancel it on both sides of the preceding equality, which then implies
+$P_{\mu}\!\left(\,K \overset{{\color{white}1}}{=} k_{\,t,c}\,\right)$
+$=$ $P_{\mu}\!\left(\,C \overset{{\color{white}1}}{=} c\,\right)$,
+for each $t \in \mathcal{T}$.
+On the other hand, since
+\begin{equation*}
+\mathcal{K}
+\;\; = \;\;
+	\underset{t\,\in\,\mathcal{T}}{\bigsqcup}\; \mathcal{K}_{t,c}
+\;\; = \;\;
+	\underset{t\,\in\,\mathcal{T}}{\bigsqcup}\, \left\{\, \overset{{\color{white}.}}{k}_{\,t,c}\, \right\},
+\end{equation*}
+it follows that
+\begin{equation*}
+P_{\mu}\!\left(\,K \overset{{\color{white}1}}{=} k\,\right)
+\;\; = \;\;
+	P_{\mu}\!\left(\,C \overset{{\color{white}1}}{=} c\,\right),
+\quad
+\textnormal{for each $k \in \mathcal{K}$}\,.
+\end{equation*}
+This proves Claim 2.
+
+\vskip 0.5cm
+\noindent
+\textbf{Claim 3:}\quad
+$P_{\mu}\!\left(\,K \overset{{\color{white}1}}{=} k\,\right)$
+$=$ $\dfrac{1}{\#\!\left(\,\mathcal{K}\,\right)}$\,,\,
+for each $k \in \mathcal{K}$. 
+\vskip 0.2cm
+\noindent
+Proof of Claim 3:\quad
+By Claim 2, we see that $P_{\mu}\!\left(\,K \overset{{\color{white}1}}{=} k\,\right)$
+is in fact constant in $k \in \mathcal{K}$, from which Claim 3 follows immediately.
+
+
+\vskip 0.5cm
+\noindent
+\textbf{Claim 4:}\quad
+$P_{\mu}\!\left(\,C \overset{{\color{white}1}}{=} c\,\right)$
+$=$ $\dfrac{1}{\#\!\left(\,\mathcal{C}\,\right)}$\,,
+for each $c \in \mathcal{C}$.
+In particular, we in fact have
+$P_{\mu}\!\left(\, C \overset{{\color{white}1}}{=} c \,\right) > 0$,
+for each $c \in \mathcal{C}$.
+\vskip 0.2cm
+\noindent
+Proof of Claim 4:\quad
+By Claim 2 and Claim 3, we have that
+\begin{equation*}
+P_{\mu}\!\left(\, C \overset{{\color{white}1}}{=} c \,\right)
+\;\; = \;\;
+	\dfrac{1}{\#\!\left(\,\mathcal{K}\,\right)}
+\;\; = \;\;
+	\dfrac{1}{\#\!\left(\,\mathcal{C}\,\right)}\,,
+\quad
+\textnormal{for each $c \in \mathcal{C}$ with $P_{\mu}\!\left(\, C \overset{{\color{white}1}}{=} c \,\right) > 0$}\,.
+\end{equation*}
+Lastly, note that
+\begin{eqnarray*}
+1
+& = &
+	\underset{c\,\in\,\mathcal{C}}{\sum}\; P_{\mu}\!\left(\, C \overset{{\color{white}1}}{=} c \,\right)
+\;\; = \;\;
+	\underset{P_{\mu}(C=c)\,>\,0}{\underset{c\;\in\;\mathcal{C}}{\sum}}
+	P_{\mu}\!\left(\, C \overset{{\color{white}1}}{=} c \,\right)
+\;\; = \;\;
+	\underset{P_{\mu}(C=c)\,>\,0}{\underset{c\;\in\;\mathcal{C}}{\sum}}
+	\dfrac{1}{\#\!\left(\,\mathcal{C}\,\right)}
+\\
+& = &
+	\dfrac{1}{\#\!\left(\,\mathcal{C}\,\right)}
+	\cdot
+	\#\!\left(\left\{\,\left. c \overset{{\color{white}.}}{\in} \mathcal{C} \;\,\right\vert\, P_{\mu}(C=c)\,>\,0 \,\right\}\right),
+\end{eqnarray*}
+which implies that $P_{\mu}\!\left(\,C \overset{{\color{white}.}}{=} c\,\right) > 0$,
+for each $c \in \mathcal{C}$.
+This proves Claim 4.
+
+\vskip 0.5cm
+\noindent
+We now complete this direction of the proof by noting that Claims 1, 2, and 3
+together yield the two bullets in the Theorem's conclusions, while Claim 4 yields
+the ``furthermore'' part of the Theorem's conclusions.
+
+\vskip 1.0cm
+\noindent
+\underline{($\Longleftarrow$)}\quad
+Suppose $(\mathcal{T},\mathcal{C},\mathcal{K},E,D,\mu)$
+has \textbf{perfect secrecy}.
+
+\qed
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
