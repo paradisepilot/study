@@ -1,0 +1,33 @@
+
+\section{Block Ciphers}
+\setcounter{theorem}{0}
+\setcounter{equation}{0}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{itemize}
+\item
+	Core encryption map:
+	\begin{equation*}
+	E : \Sigma^{n} \times \mathcal{K} \longrightarrow \Sigma^{n}\,
+	\end{equation*}
+	\begin{itemize}
+	\item
+		$\Sigma$ is a finite set, and serves as the alphabet of the plain texts as well as cipher texts.
+	\item
+		$n \in \N$ is the block size
+	\item
+		$\mathcal{K}$ is a finite set, and serves as the key space.
+	\item
+		For each key $k \in \mathcal{K}$, the map
+		\begin{equation*}
+		E(\,\cdot\,,k) : \Sigma^{n} \longrightarrow \Sigma^{n}
+		\end{equation*}
+		is a bijection.
+		Each $E(\,\cdot\,,k)$ bijectively maps strings of characters in $\Sigma$ of length $n \in \N$
+		to strings of characters in $\Sigma$ of length $n$.
+	\end{itemize}
+\item
+	Modes of operation:
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
