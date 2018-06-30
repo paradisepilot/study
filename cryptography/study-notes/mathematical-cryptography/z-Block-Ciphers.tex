@@ -20,11 +20,58 @@
 	\item
 		For each key $k \in \mathcal{K}$, the map
 		\begin{equation*}
-		E(\,\cdot\,,k) : \Sigma^{n} \longrightarrow \Sigma^{n}
+		E(\,\cdot\,;k) : \Sigma^{n} \longrightarrow \Sigma^{n}
 		\end{equation*}
 		is a bijection.
 		Each $E(\,\cdot\,,k)$ bijectively maps strings of characters in $\Sigma$ of length $n \in \N$
 		to strings of characters in $\Sigma$ of length $n$.
+	\end{itemize}
+\item
+	Special cases:
+	\begin{itemize}
+	\item
+		\textbf{Substitution ciphers}: block ciphers of block size $n = 1$.
+		Thus, a substitution cipher encrypts by permuting the labels of the characters in the alphabet $\Sigma$.
+	\item
+		\textbf{Permutation ciphers}: $\mathcal{K} = S_{n}$,
+		\begin{eqnarray*}
+		E\!\left(\,x_{1}x_{2} \cdots x_{n}\,;\pi\,\right)
+		& = &
+			\;\; x_{\pi(1)} \;\;\, x_{\pi(2)} \;\;\, \cdots \;\; x_{\pi(n)} \,,
+		\quad\;\,
+		\textnormal{for each \,$\pi \in S_{n}$\, and \,$x \in \Z_{m}^{n}$}
+		\\
+		D\!\left(\;y_{1}y_{2} \cdots y_{n}\;;\pi\,\right)
+		& = &
+			y_{\pi^{-1}(1)}\,y_{\pi^{-1}(2)} \, \cdots \, y_{\pi^{-1}(n)}\,,
+		\quad
+		\textnormal{for each \,$\pi \in S_{n}$\, and \,$y \in \Z_{m}^{n}$}
+		\end{eqnarray*}
+	\item
+		\textbf{Affine block ciphers}: $\Sigma = \Z_{m} = \Z / m\Z$, for some $m \in \N$,
+		\begin{equation*}
+		\mathcal{K}
+		\;\; = \;\;
+			\left\{\,
+			\left.
+				(A,b) \in \Z_{m}^{n \times n} \overset{{\color{white}.}}{\times} \Z_{m}
+			\;\,\right\vert\;
+				\det(A) \in \Z_{m}^{\times}
+			\;\right\}
+		\end{equation*}
+		\begin{eqnarray*}
+		E\!\left(\,x\,;A,b\,\right)
+		& = &
+			A \cdot x + b\,,
+		\quad\quad\;\;\,
+		\textnormal{for each \,$(A,b) \in \mathcal{K}$\, and \,$x \in \Z_{m}^{n}$}
+		\\
+		D\!\left(\,y\,;A,b\,\right)
+		& = &
+			A^{-1} \cdot (y - b)\,,
+		\quad
+		\textnormal{for each \,$(A,b) \in \mathcal{K}$\, and \,$y \in \Z_{m}^{n}$} 
+		\end{eqnarray*}
 	\end{itemize}
 \item
 	Modes of operation:
