@@ -51,12 +51,19 @@
 		\textbf{Affine block ciphers}: $\Sigma = \Z_{m} = \Z / m\Z$, for some $m \in \N$,
 		\begin{equation*}
 		\mathcal{K}
-		\;\; = \;\;
+		\; = \;
 			\left\{\,
 			\left.
-				(A,b) \in \Z_{m}^{n \times n} \overset{{\color{white}.}}{\times} \Z_{m}
+				(A,b) \in \Z_{m}^{n \times n} \overset{{\color{white}.}}{\times} \Z_{m}^{n}
 			\;\,\right\vert\;
 				\det(A) \in \Z_{m}^{\times}
+			\;\right\}
+		\; = \;
+			\left\{\,
+			\left.
+				(A,b) \in \Z_{m}^{n \times n} \overset{{\color{white}.}}{\times} \Z_{m}^{n}
+			\;\,\right\vert\;
+				\gcd\!\left(\det(A),\overset{{\color{white}.}}{m}\right) = 1
 			\;\right\}
 		\end{equation*}
 		\begin{eqnarray*}
@@ -72,6 +79,32 @@
 		\quad
 		\textnormal{for each \,$(A,b) \in \mathcal{K}$\, and \,$y \in \Z_{m}^{n}$} 
 		\end{eqnarray*}
+	\item
+		\textbf{Vigen\`ere cipher}: affine block cipher with $A = I_{n \times n}$,
+		hence $\mathcal{K} = \Z_{m}^{n}$.
+	\item
+		\textbf{Hill cipher}: affine block cipher with $b = 0_{n} \in \Z_{m}^{n}$,
+		hence
+		\begin{equation*}
+		\mathcal{K}
+		\; = \;
+			\left\{\,
+			\left.
+				A \overset{{\color{white}.}}{\in} \Z_{m}^{n \times n}
+			\;\,\right\vert\;
+				\det(A) \in \Z_{m}^{\times}
+			\;\right\}
+		\; = \;
+			\left\{\,
+			\left.
+				A \overset{{\color{white}.}}{\in} \Z_{m}^{n \times n}
+			\;\,\right\vert\;
+				\gcd\!\left(\det(A),\overset{{\color{white}.}}{m}\right) = 1
+			\;\right\}
+		\end{equation*}
+	\item
+		\textbf{Affine permutation cipher}: a Hill cipher (hence, also an affine block cipher)
+		where each $A \in \Z_{m}^{n \times n}$ is a permutation matrix.
 	\end{itemize}
 \item
 	Modes of operation:
