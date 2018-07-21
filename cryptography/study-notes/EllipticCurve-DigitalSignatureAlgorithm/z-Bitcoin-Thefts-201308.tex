@@ -31,8 +31,8 @@ Then, given two signed messages
 \;\; \in \;\;
 	\Sigma^{*} \times \Z_{q}^{*} \times \Z_{q}^{*}
 \end{equation*}
-signed using the same
-private signing key $a \in \Z_{q}^{*}$ and the same (secret) ephemeral key $k \in \Z_{q}^{*}$,
+signed using the same (static private) signing key $a \in \Z_{q}^{*}$ and
+the same (``ephemeral'' private) key $k \in \Z_{q}^{*}$,
 the private signing key $a \in \Z_{q}^{*}$ can be computed as follows:
 \begin{equation*}
 a
@@ -134,7 +134,53 @@ Proposition to determine the private signing key of that Bitcoin user.
 \mbox{}
 \vskip 0.1cm
 \noindent
-Bitcoin thefts based on the above vulnerability indeed occurred in August 2013.
+Bitcoin thefts exploiting the above Proposition have indeed occurred.
+They were apparently first reported on Saturday, August 10, 2013
+(see \cite{BitcoinTalk20130810}).
+The thefts concerned certain Android Bitcoin wallets.
+Updates of several Bitcoin wallet Android apps were available
+as early as the following day \cite{BitcoinOrg20130811}.
+
+The underlying vulnerability was caused by the fact that
+when instances of the Java classes
+\emph{\texttt{SecureRandom}}, \emph{\texttt{KeyGenerator}},
+\emph{\texttt{KeyPairGenerator}}, \emph{\texttt{KeyAgreement}}, and
+\emph{\texttt{Signature}} in Android's Java Cryptography Architecture (JCA)
+invoked the system-provided OpenSSL PRNG
+(pseudo-random number generator),
+%in order to generate pseudo-random numbers,
+(the instances of) these Java classes failed to properly initialize
+the Open SSL PRNG. See \cite{AndroidDev20130814}.
+
+In the cases of the Bitcoin thefts, certain Android Bitcoin wallets used
+Android's JCA for ephemeral key generation (during execution of ECDSA),
+and the aforementioned vulnerability led to the unintentional reuse of some
+of these ephemeral keys, which were exploited by attackers.
+
+\vskip 0.3cm
+\noindent
+Mitigations:
+\begin{itemize}
+\item
+	Android Bitcoin wallet developers: Update their apps to enforce key
+	rotation ASAP.
+	\begin{itemize}
+	\item
+		Make the supposedly ephemeral keys truly ephemeral.
+	\item
+		Seed OpenSSL PRNG with values from
+		\emph{\texttt{/dev/random}} or \emph{\texttt{/dev/urandom}}.
+	\end{itemize}
+\item
+	Android Bitcoin wallet users:
+	Stop using the compromized Bitcoin addresses.
+	\begin{itemize}
+	\item
+		Create new and secure Bitcoin addresses with updated apps.
+	\item
+		Transfer all Bitcoins in compromized addresses to new and secure ones.
+	\end{itemize}
+\end{itemize}
 \end{remark}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

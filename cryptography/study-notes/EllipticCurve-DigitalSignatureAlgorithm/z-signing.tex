@@ -9,11 +9,12 @@
 \textbf{Key Generation}
 \begin{itemize}
 \item
-	Generate a random private signing key $a \in \{1,2,\ldots,q-1\} \subset \N$.
-	Keep the private key \,$a$\, \textbf{\color{red}secret}.
+	Generate a random \textbf{\color{red}static private} signing key
+	$a \in \{1,2,\ldots,q-1\} \subset \N$.
+	%Keep the private key \,$a$\, \textbf{\color{red}secret}.
 \item
 	Compute \,$A = a \cdot G \in E$.
-	\textbf{\color{red}Publish} \,$A \in E$\, as the public verification key .
+	Publish \,$A \in E$\, as the \textbf{\color{red}static public} verification key .
 %\item
 %	Think of $a \in \{1,\ldots,q-1\}$ as the secret signing key, and
 %	$A = a\cdot G \in E$ as the public verification key. 
@@ -31,7 +32,8 @@ compute \,$e = H(m) \in \Sigma^{n} \cong \{0,1,2,\ldots,N\}$.
 Then, execute the following steps:
 \begin{itemize}
 \item
-	Generate a secret random ephemeral key $k \in \Z_{q}^{*} = \{1,2,\ldots,q-1\} \subset \N$.
+	Generate a random \textbf{\color{red}ephemeral private} key
+	$k \in \Z_{q}^{*} = \{1,2,\ldots,q-1\} \subset \N$.
 	\begin{itemize}
 	\item
 		Compute $R \, := \, k \cdot G \,=\, \left(\,x_{R}\,,\,y_{R}\,\right) \,\in\, \Z_{p} \times \Z_{p}$.
