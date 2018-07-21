@@ -94,7 +94,7 @@ as desired.
 \vskip 0.1cm
 \noindent
 By the above Proposition, an attacker will be able to recover the secret
-private signing key \,$a \in \Z_{q}^{*}$\, of a Bitcoin user, based only on
+private signing key \,$a \in \Z_{q}^{*}$\, of a Bitcoin address, based only on
 publicly viewable information, whenever the attacker can find two
 Bitcoin transactions (signed messages):
 \begin{equation*}
@@ -104,11 +104,11 @@ Bitcoin transactions (signed messages):
 \;\; \in \;\;
 	\Sigma^{*} \times \Z_{q}^{*} \times \Z_{q}^{*}
 \end{equation*}
-of the same Bitcoin user satisfying:
+of the same Bitcoin address satisfying:
 \begin{itemize}
 \item
 	the two signed messages were generated
-	with the same (secret) ephemeral key $k \in \Z_{q}^{*}$\,,
+	with the same (private) ephemeral key $k \in \Z_{q}^{*}$\,,
 	%which will necessarily imply \,$r_{1} \,=\, r_{2}$\,,
 	and
 \item
@@ -123,10 +123,13 @@ same ephemeral key \,$k \,\in\, \Z_{q}^{*}$\,, then we must have
 Therefore, operationally speaking, the attacker can proceed by
 searching for a pair of signed messages (Bitcoin transactions)
 whose $r$-values are equal and whose $s$-values are distinct,
-for each given Bitcoin user.
-Once such a pair of Bitcoin transactions have been found
-for a given Bitcoin user, the attacker can involve the
-Proposition to determine the private signing key of that Bitcoin user.
+for each given Bitcoin address.
+Once such a pair of Bitcoin transactions have been identified
+for a given Bitcoin address, the attacker can involve the
+Proposition to determine the private signing key of that Bitcoin
+address, and then proceed to steal the Bitcoins assigned to
+that address (e.g. by transferring those Bitcoins to the attacker's
+own Bitcoin address).
 \end{remark}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
