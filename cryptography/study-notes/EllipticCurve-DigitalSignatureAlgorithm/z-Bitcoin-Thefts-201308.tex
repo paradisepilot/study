@@ -156,14 +156,24 @@ invoked the system-provided OpenSSL PRNG
 the Open SSL PRNG. See \cite{AndroidDev20130814}.
 
 In the cases of the Bitcoin thefts, certain Android Bitcoin wallets used
-Android's JCA for ephemeral key generation (during execution of ECDSA),
+\emph{\texttt{SecureRandom}} for ephemeral key generation
+(during execution of ECDSA),
 and the aforementioned vulnerability led to the unintentional reuse of some
 of these ephemeral keys, which were exploited by attackers.
 
 \vskip 0.3cm
 \noindent
-Mitigations:
+Mitigations (see \cite{AndroidDev20130814}):
 \begin{itemize}
+\item
+	Android developers:
+	\begin{itemize}
+	\item
+		Release patches to ensure OpenSSL PRNG is properly seeded
+		when invoked by JCA classes.
+	\item
+		Share patches with OHA (Open Handset Alliance) partners ASAP.
+	\end{itemize}
 \item
 	Android Bitcoin wallet developers: Update their apps to enforce key
 	rotation ASAP.
