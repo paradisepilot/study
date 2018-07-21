@@ -1,0 +1,64 @@
+
+\section{Verification}
+\setcounter{theorem}{0}
+\setcounter{equation}{0}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Receives the signed message
+\,$\left(\,m \,\overset{{\color{white}.}}{;}\,(\,r,s\,)\,\right) \,\in\, \Sigma^{*} \times \Z_{q}^{*} \times \Z_{q}^{*}$.
+
+\begin{itemize}
+\item
+	Retrieve the public verification key \,$A \,\in\, E$.
+\item
+	Compute \,$e \,=\, H(m) \,\in\, \{0,1,2,\ldots,N\}$.
+\item
+	Compute \,$u_{1} \,:=\, s^{-1} \cdot H(m) \!\mod q$.\; Note that \,$u_{1}\,\in\, \Z_{q}$.
+\item
+	Compute \,$u_{2} \,:=\, s^{-1} \cdot r \!\mod q$.\; Note that \,$u_{2}\,\in\, \Z_{q}$.
+\item
+	Compute \,$P \,=\, u_{1}\cdot G +  u_{2} \cdot A \,=\, (\,x_{P}\,,\, y_{P}\,) \,\in\, \Z_{p} \times \Z_{p}$
+\end{itemize}
+
+\noindent
+Then,
+\begin{center}
+Accept signature\;\; if and only if \;\;$r \,=\, x_{P} \!\mod q$
+\end{center}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\vskip 0.8cm
+\noindent
+\textbf{Proof of validity of the ECDSA verification procdure}
+
+\vskip 0.3cm
+\noindent
+More precisely, we prove that $x_{P} \in \Z_{p}$ indeed satisfies the equation:
+\begin{equation*}
+r \;=\; x_{P} \!\mod q
+\end{equation*}
+To this end, simply observe that
+\begin{eqnarray*}
+&&
+	s \,:=\, k^{-1} \cdot\left(\,H(m) + a\,r\,\right) \!\mod q
+\\
+&\Longleftrightarrow&
+	k \,=\, s^{-1} \cdot\left(\,H(m) + a\,r\,\right)	\!\mod q
+\\
+&\Longleftrightarrow&
+	k \,=\, s^{-1} \cdot H(m) + a \cdot s^{-1} \cdot r \!\mod q
+\\
+&\Longleftrightarrow&
+	k \,=\, u_{1} + a \cdot u_{2} \!\mod q
+\\
+&\Longrightarrow&
+	R \,:=\, k \cdot G \,=\, \left(\,u_{1} + a \cdot u_{2} \,\right) \cdot G \,=:\, P \,\in\, E 
+\\
+&\Longrightarrow&
+	r \;\;:=\;\; x_{R}\!\!\mod q \;\;=\;\; x_{P} \!\!\mod q
+\end{eqnarray*}
+\qed
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

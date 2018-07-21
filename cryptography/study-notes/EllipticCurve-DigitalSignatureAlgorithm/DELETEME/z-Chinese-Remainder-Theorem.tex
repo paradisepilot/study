@@ -1,0 +1,425 @@
+
+\section{The Chinese Remainder Theorem}
+\setcounter{theorem}{0}
+\setcounter{equation}{0}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{proposition}
+\mbox{}
+\vskip 0.2cm
+\noindent
+Suppose:
+\begin{itemize}
+\item
+	$R$ is a commutative ring with identity $1 \neq 0$.
+\item
+	$A \subset R$ and $B \subset R$ are ideals in $R$. 
+\end{itemize}
+Then,
+\begin{enumerate}
+\item
+	$A + B \, := \, \left\{\;\left. a + b \overset{{\color{white}.}}{\in} R \;\,\right\vert\, a \in A, b \in B \;\right\}$
+	is an ideal in $R$.
+\item
+	$A + B \subset C$, for each ideal $C$ in $R$ containing $A \cup B$.
+\item
+	$A \cap B$ is an ideal of $R$.
+\item
+	$A \cdot B \, := \, \left\{\;\,
+		\overset{n}{\underset{i\,=\,1}{\sum}}\, a_{i} \cdot b_{i} \overset{{\color{white}.}}{\in} R
+		\;\;\left\vert
+		\begin{array}{c} n \in \N, \\ a_{1}, \ldots, a_{n} \in A, \\ b_{1}, \ldots , b_{n} \in B \end{array}
+		\right.\right\}$
+	is an ideal in $R$, and
+	$A \cdot B \subset A \cap B$.
+\end{enumerate}
+\end{proposition}
+\proof
+\begin{enumerate}
+\item
+	Clearly, $A + B$ is closed under addition;
+	indeed, for any $(a_{1} + b_{1}), (a_{2} + b_{2}) \in A + B$,
+	we have $(a_{1} + b_{1}) + (a_{2} + b_{2}) = (a_{1} + a_{2}) + (b_{1} + b_{2}) \in A + B$.
+	Next, let $r \in R$ be an arbitrary element of $R$. Then,
+	\begin{eqnarray*}
+	r \cdot (A+B)
+	& = &
+		r \cdot \left\{\;\left. a + b \overset{{\color{white}.}}{\in} R \;\,\right\vert\, a \in A, b \in B \;\right\}
+	\;\; = \;\;
+		\left\{\;\left. r \cdot (a + b) \overset{{\color{white}.}}{\in} R \;\,\right\vert\, a \in A, b \in B \;\right\}
+	\\
+	& = &
+		\left\{\;\left. r \cdot a + r \cdot b \overset{{\color{white}.}}{\in} R \;\,\right\vert\, a \in A, b \in B \;\right\}
+	\;\; \subset \;\;
+		A + B\,,
+	\end{eqnarray*}
+	and
+	\begin{eqnarray*}
+	(A+B) \cdot r
+	& = &
+		\left\{\;\left. a + b \overset{{\color{white}.}}{\in} R \;\,\right\vert\, a \in A, b \in B \;\right\} \cdot r
+	\;\; = \;\;
+		\left\{\;\left. (a + b) \cdot r \overset{{\color{white}.}}{\in} R \;\,\right\vert\, a \in A, b \in B \;\right\}
+	\\
+	& = &
+		\left\{\;\left. a \cdot r + b \cdot r \overset{{\color{white}.}}{\in} R \;\,\right\vert\, a \in A, b \in B \;\right\}
+	\;\; \subset \;\;
+		A + B\,,
+	\end{eqnarray*}
+	where both inclusions above follow from the hypothesis that $A$ and $B$ are ideals of $R$.
+	We thus see that $A + B$ is itself an ideal of $R$.
+\item
+	Closedness of $C$ under addition and $A \cup B \subset C$ immediately imply $A + B \subset C$.
+\item
+	Obvious.
+\item
+	It is obvious that $A \cdot B$ is closed under addition and $A \cdot B \subset A \cap B$.
+	Next, we show that
+	$r \cdot (A \cdot B) \subset A \cdot B$ and
+	$(A \cdot B) \cdot r \subset A \cdot B$, for each $r \in R$.
+	To this end, let $n \in \N$ and $a_{1}, \ldots , a_{n} \in A$ and $b_{1}, \ldots , b_{n} \in B$.
+	Then, observe that
+	\begin{equation*}
+	r \cdot \left(\, \overset{n}{\underset{i\,=\,1}{\sum}}\, a_{i} \cdot b_{i} \right)
+	\; = \;
+		\overset{n}{\underset{i\,=\,1}{\sum}}\, r \cdot \left(\, a_{i} \cdot b_{i} \right)
+	\; = \;
+		\overset{n}{\underset{i\,=\,1}{\sum}}\, \underset{\in\,A}{\underbrace{\left(\, r \cdot a_{i} \right)}} \,\cdot\, b_{i}
+	\; \in \;
+		A \cdot B\,,
+	\end{equation*}
+	which shows that $r \cdot (A \cdot B) \subset A \cdot B$.
+	Similarly,
+	\begin{equation*}
+	\left(\, \overset{n}{\underset{i\,=\,1}{\sum}}\, a_{i} \cdot b_{i} \right) \cdot r
+	\; = \;
+		\overset{n}{\underset{i\,=\,1}{\sum}}\, \left(\, a_{i} \cdot b_{i} \right) \cdot r
+	\; = \;
+		\overset{n}{\underset{i\,=\,1}{\sum}}\, a_{i} \cdot \underset{\in\,B}{\underbrace{\left(\, b_{i} \cdot r \right)}}
+	\; \in \;
+		A \cdot B\,,
+	\end{equation*}
+	which shows that $(A \cdot B) \cdot r \subset A \cdot B$.
+	This completes the proof that $A \cdot B$ is an ideal of $R$.
+\end{enumerate}
+\qed
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{definition}[Comaximality of two ideals]
+\mbox{}
+\vskip 0.2cm
+\noindent
+Let $R$ be a commutative ring with identity $1 \neq 0$.
+Two ideals $A$ and $B$ in $R$ are said to be \textbf{comaximal} if $A + B = R$.
+\end{definition}
+
+\begin{theorem}[The Chinese Remainder Theorem for Commutative Rings]
+\mbox{}
+\vskip 0.2cm
+\noindent
+Suppose:
+\begin{itemize}
+\item
+	$R$ is a commutative ring with identity $1 \neq 0$.
+\item
+	$A_{1}, A_{2}, \ldots , A_{k}$ are ideals in $R$. 
+\end{itemize}
+Then, the following statements hold:
+\begin{enumerate}
+\item
+	The map
+	\,$\varphi \;:\, R \,\longrightarrow\, R/A_{1} \,\times\, R/A_{2} \,\times\, \cdots \,\times\, R/A_{k}$\,
+	defined by
+	\begin{equation*}
+	r \; \longmapsto \; \left(\, r+A_{1} \,,\, r+A_{2} \,,\, \cdots \,,\, r+A_{k}\,\right)
+	\end{equation*}
+	is a ring homomorphism, with kernel $A_{1} \cap A_{2} \cap \cdots \cap A_{k}$.
+\item\label{surjectivityOfPhiProductEqualsIntersection}
+	If the ideals $A_{1}, A_{2}, \ldots, A_{k}$ are pairwise comaximal, then
+	\begin{enumerate}
+	\item
+		the map $\varphi$ is surjective,
+	\item
+		$A_{1} \cap A_{2} \cap \cdots \cap A_{k} \;\; = \;\; A_{1} \cdot A_{2} \cdot \cdots \cdot A_{k}$\,, and
+	\item
+		$R \,/\, (A_{1} \cdot A_{2} \cdot \cdots \cdot A_{k})$
+		\,$=$\,
+			$R \,/\, (A_{1} \cap A_{2} \cap \cdots \cap A_{k})$
+		\,$=$\,
+			$R \,/ \ker(\varphi)$
+		\,$\cong$\,
+			$R/A_{1} \,\times\, R/A_{2} \,\times\, \cdots \,\times\, R/A_{k}$\,.
+	\end{enumerate}
+\end{enumerate}
+\end{theorem}
+\proof
+\begin{enumerate}
+\item
+	It is clear that the map $\varphi$ is a ring homomorphism.
+	To see that $\ker(\varphi) \subset A_{1} \cap A_{2} \cap \cdots \cap A_{k}$,
+	simply note that
+	\begin{eqnarray*}
+	r \in \ker(\varphi)
+	& \Longleftrightarrow &
+		\left(\, r+A_{1} \,,\, r+A_{2} \,,\, \cdots \,,\, r+A_{k}\,\right)
+		\; = \;
+		\left(\, 0+A_{1} \,,\, 0+A_{2} \,,\, \cdots \,,\, 0+A_{k}\,\right)
+	\\
+	& \Longleftrightarrow &
+		r \in A_{i}\,, \quad\textnormal{for each \,$i = 1, 2, \ldots, k$}
+	\\
+	& \Longleftrightarrow &
+		r \in A_{1} \cap A_{2} \cap \cdots \cap A_{k}
+	\end{eqnarray*}
+\item
+	We proceed by induction on $k \geq 2$.
+
+	\vskip 0.1cm
+	\underline{Case:{\color{white}j}$k = 2$}\quad
+	Since $A_{1} + A_{2} = R$, there exist $a_{1} \in A_{1}$ and $a_{2} \in A_{2}$
+	such that $a_{1} + a_{2} = 1_{R}$.
+	This implies that $\varphi(a_{1}) = (0,1)$ and $\varphi(a_{2}) = (1,0)$.
+	First, note that
+	\begin{eqnarray*}
+	(\,a_{2} + A_{1} \,,\, a_{1} + A_{2}\,)
+	& = &
+		(\,a_{1} + a_{2} + A_{1} \,,\, a_{1} + a_{2} + A_{2}\,)
+	\;\; = \;\;
+		\varphi(\,a_{1} + a_{2}\,)
+	\;\; = \;\;
+		\varphi(\,1_{R}\,)
+	\\
+	& = &
+	(\,1_{R} + A_{1} \,,\, 1_{R} + A_{2}\,)\,,
+	\end{eqnarray*}
+	which shows that
+	$a_{2} + A_{1} = 1_{R} + A_{1}$ and $a_{1} + A_{2} = 1_{R} + A_{2}$.
+	Now, observe that
+	\begin{eqnarray*}
+	\varphi(a_{1}) &=& (\,a_{1} + A_{1} \,,\, a_{1} + A_{2}\,) \;\;=\;\; (\,0 + A_{1} \,,\, a_{1} + A_{2}\,) \;\;=\;\; (\,0 \,,\,1\,)\,,
+	\quad\textnormal{and}
+	\\
+	\varphi(a_{2}) &=& (\,a_{2} + A_{1} \,,\, a_{2} + A_{2}\,) \;\;=\;\; (\,a_{2} + A_{1} \,,\, 0 + A_{2}\,) \;\;=\;\; (\,1\,,\,0\,)\,.
+	\end{eqnarray*}
+
+	\vskip 0.1cm
+	\textbf{Claim 1:}\;\; $\varphi \,:\, R \, \longrightarrow \, R/A_{1} \, \times \, R/A_{2}$\, is surjective.
+	\vskip 0.01cm
+	\noindent
+	Proof of Claim 1:\;\;
+	Now, let $(\,r_{1} + A_{1} \,,\, r_{2} + A_{2}\,)$ be an arbitrary element of $R/A_{1} \times R/A_{2}$.
+	Then,
+	\begin{eqnarray*}
+	\varphi(\,r_{2}a_{1} + r_{1}a_{2}\,)
+	& = &
+		\varphi(\,r_{2}\,) \cdot \varphi(\,a_{1}) \, + \, \varphi(\,r_{1}\,) \cdot \varphi(\,a_{2}\,)
+	\\
+	& = &
+		(\,r_{2} + A_{1} \,,\, r_{2} + A_{2} \,) \cdot (0,1)
+		\,+\,
+		(\,r_{1} + A_{1} \,,\, r_{1} + A_{2} \,) \cdot (1,0)
+	\\
+	& = &
+		(\, 0 \,,\, r_{2} + A_{2} \,) \,+\, (\,r_{1} + A_{1} \,,\, 0 \,)
+	\;\; = \;\;
+		(\,r_{1} + A_{1} \,,\, r_{2} + A_{2}\,)
+	\end{eqnarray*}
+	This proves Claim 1 (surjectivity of $\varphi$ for $k = 2$).
+
+	\vskip 0.3cm
+	\textbf{Claim 2:}\;\; $A_{1} \cap A_{2} \, = \, A_{1} \cdot A_{2}$.
+	\vskip 0.01cm
+	\noindent
+	Proof of Claim 2:\;\;
+	First, recall that we always have $A_{1} \cdot A_{2} \, \subset \, A_{1} \cap A_{2}$.
+	To prove the reverse inclusion, let $c \in A_{1} \cap A_{2}$.
+	Then, $c = c \cdot 1 = c \cdot (\,a_{1} + a_{2}\,) = c \cdot a_{1} + c \cdot a_{2} \in A_{1} \cdot A_{2}$,
+	which implies $A_{1} \cap A_{2} \subset A_{1} \cdot A_{2}$.
+	This proves Claim 2.
+
+	\vskip 0.3cm
+	\textbf{Claim 3:}\;\;
+	$R \,/\, (A_{1} \cdot A_{2})$
+	\,$=$\,
+		$R \,/\, (A_{1} \cap A_{2})$
+	\,$=$\,
+		$R \,/ \ker(\varphi)$
+	\,$\cong$\,
+		$R/A_{1} \,\times\, R/A_{2}$\,.
+	\vskip 0.01cm
+	\noindent
+	Proof of Claim 3:\;\;
+	Immediate by Claim 1 and Claim 2.
+	
+	\vskip 0.3cm
+	\noindent
+	This completes the proof of \eqref{surjectivityOfPhiProductEqualsIntersection}
+	for $k = 2$.
+
+	\vskip 0.5cm
+	\underline{Induction step}\quad
+	Suppose \eqref{surjectivityOfPhiProductEqualsIntersection} holds
+	for $i = 2, 3, \ldots, k$ (induction hypothesis).
+	We now show that it also holds for $k + 1$.
+	To this end, let $A_{1}, A_{2}, \ldots, A_{k}, A_{k+1}$ be pairwise comaximal ideals of $R$.
+
+	\vskip 0.3cm
+	\textbf{Claim 4:}\;\;
+	$(A_{1} \cdots A_{k})$ and $A_{k+1}$ are comaximal ideals of $R$.
+	\vskip 0.01cm
+	\noindent
+	Proof of Claim 4:\;\;
+	For each $i = 1, 2, \ldots, k$, there exist $x_{i} \in A_{i}$ and $y_{i} \in A_{k+1}$
+	such that $x_{i} + y_{i} = 1$, since $A_{i}$ and $A_{k+1}$ are comaximal ideals.
+	Observe that
+	\begin{equation*}
+		1
+		\, = \,
+			(\,1\,) \cdots (\,1\,)
+		\, = \,
+			(\,x_{1} + y_{1}\,) \cdots (\,x_{k} + y_{k}\,)
+	\;\;\Longrightarrow\;\;
+		1 + A_{k+1}
+		\, = \,
+			(\,x_{1} + y_{1}\,) \cdots (\,x_{k} + y_{k}\,) + A_{k+1}\,,
+	\end{equation*}
+	which in turn implies
+	\begin{eqnarray*}
+	1 + A_{k+1}
+	& = &
+		(\,x_{1} + y_{1} + A_{k+1}\,) \cdots (\,x_{k} + y_{k} + A_{k+1}\,)
+	\;\; = \;\;
+		(\,x_{1} + A_{k+1}\,) \cdots (\,x_{k} + A_{k+1}\,)
+	\\
+	& = &
+		(\,x_{1} \cdots x_{k}\,) + A_{k+1}
+	\end{eqnarray*}
+	We therefore see that $1 - (\,x_{1} \cdots x_{k}\,) = z_{k+1}$,
+	for some $z_{k+1} \in A_{k+1}$.
+	Thus, we have
+	\begin{equation*}
+	(\,x_{1} \cdots x_{k}\,) \, + \, z_{k+1} \; = \; 1\,,
+	\end{equation*}
+	where $(\,x_{1} \cdots x_{k}\,) \in A_{1} \cdots A_{k}$ and
+	$z_{k+1} \in A_{k+1}$.
+	This shows that $(A_{1} \cdots A_{k})$ and $A_{k+1}$
+	are indeed comaximal ideals of $R$, and completes the proof of Claim 4.
+	
+	\vskip 0.5cm
+	\noindent
+	By Claim 4 and the induction hypothesis, the map
+	\begin{equation*}
+	\psi : R \longrightarrow R / (A_{1} \cdots A_{k}) \times R/A_{k+1}
+	: r \longmapsto \left(\,r + (A_{1} \cdots A_{k}) \;\underset{{\color{white}.}}{,}\; r + A_{k+1}\,\right)
+	\end{equation*}
+	is a surjective ring homomorphism.
+	By the induction hypothesis, the map
+	\begin{equation*}
+	\phi : R / (A_{1} \cdots A_{k}) \longrightarrow R / A_{1} \times \cdots \times R/A_{k}
+	: r + (A_{1}\cdots A_{k}) \longmapsto
+	\left(\,r + A_{1} \;\underset{{\color{white}.}}{,}\; \ldots \;\underset{{\color{white}.}}{,}\; r + A_{k}\,\right)
+	\end{equation*}
+	is a ring isomorphism.
+	Hence, the map
+	\begin{equation*}
+	\varphi = \phi \circ \psi : R \longrightarrow R / A_{1} \times \cdots \times R/A_{k} \times R/A_{k+1}
+	: r \longmapsto \left(\,
+		r + A_{1}
+		\;\underset{{\color{white}.}}{,}\;
+			\ldots
+		\;\underset{{\color{white}.}}{,}\;
+			r + A_{k} \;\underset{{\color{white}.}}{,}\; r + A_{k+1}
+		\,\right)
+	\end{equation*}
+	is a surjective ring homomorphism.
+	Recall that $\ker(\varphi) = A_{1} \cap \cdots \cap A_{k} \cap A_{k+1}$.
+	On the other hand, we have also
+	\begin{eqnarray*}
+	(\,A_{1} \cdots A_{k+1}\,)
+	& = &
+		(\,A_{1} \cdots A_{k}\,) \cdot A_{k+1}\,,
+		\quad
+		\textnormal{by associativity}
+	\\
+	& = &
+		(\,A_{1} \cap \cdots \cap A_{k}\,) \cdot A_{k+1}\,,
+		\quad
+		\textnormal{by induction hypothesis}
+	\\
+	& = &
+		(\,A_{1} \cap \cdots \cap A_{k}\,) \cap A_{k+1}\,,
+		\quad
+		\textnormal{by induction hypothesis and Claim 4}
+	\\
+	& = &
+		A_{1} \cap \cdots \cap A_{k} \cap A_{k+1}
+	\end{eqnarray*}
+	We thus see that the induced map
+	\begin{equation*}
+	\widetilde{\varphi} \, : \,
+		R \,/\, (A_{1} \cdots A_{k+1})
+		\,=\,
+		R \,/\, (A_{1} \cap \cdots \cap A_{k+1})
+		\,=\,
+		R \,/ \ker(\varphi)
+		\; \longrightarrow \;
+		R / A_{1} \times \cdots \times R/A_{k} \times R/A_{k+1}
+	\end{equation*}
+	is a ring isomorphism. This completes the proof of the induction step.
+\end{enumerate}
+This completes the proof of the Chinese Remainder Theorem for Commutative Rings.
+\qed
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{corollary}[The Chinese Remainder Theorem for $\Z$]
+\mbox{}
+\vskip 0.2cm
+\noindent
+Suppose: $m_{1}, m_{2}, \ldots , m_{k} \in \N$.
+Then, the following statements hold:
+\begin{enumerate}
+\item
+	The map
+	\,$\varphi \;:\, \Z \,\longrightarrow\, \Z/m_{1}\Z \,\times\, \Z/m_{2}\Z \,\times\, \cdots \,\times\, \Z/m_{k}\Z$\,
+	defined by
+	\begin{equation*}
+	x \; \longmapsto \; \left(\, x+m_{1}\Z \,,\, x+m_{2}\Z \,,\, \cdots \,,\, x+m_{k}\Z\,\right)
+	\end{equation*}
+	is a ring homomorphism, with kernel \,$m_{1}\Z \,\cap\, m_{2}\Z \,\cap\, \cdots \,\cap \,m_{k}\Z$\,.
+\item
+	If the integers $m_{1}, m_{2}, \ldots, m_{k}$ are pairwise relatively prime, then
+	\begin{enumerate}
+	\item
+		the map $\varphi$ is surjective,
+	\item
+		$m_{1}\Z \,\cap\, m_{2}\Z \,\cap\, \cdots \,\cap \,m_{k}\Z \;\; = \;\; m_{1} \cdots m_{k} \cdot \Z$\,, and
+	\item
+		$\Z \,/\, (m_{1} \cdots m_{k} \cdot \Z)$
+		\,$\cong$\,
+			$\Z/m_{1}\Z \,\times\, R/m_{2}\Z \,\times\, \cdots \,\times\, R/m_{k}\Z$\,.
+	\end{enumerate}
+\end{enumerate}
+\end{corollary}
+\proof
+Note that, for $i \neq j$, we have:
+\begin{eqnarray*}
+&&
+	\textnormal{$m_{i}\Z$\, and \,$m_{j}\Z$\, are comaximal ideals of $Z$}
+\\
+& \Longleftrightarrow &
+	m_{i}\Z \, + \, m_{j}\Z \,=\, \Z
+\\
+& \Longleftrightarrow &
+	m_{i}\,x \, + \, m_{j}\,y \,=\, 1\,,
+	\quad
+	\textnormal{for some \,$x, y \in \Z$}
+\\
+& \Longleftrightarrow &
+	\gcd(\,m_{i}\,,\,m_{j}\,) \,=\, 1\,,
+	\;\;\textnormal{i.e. \,$m_{i}$\, and \,$m_{j}$\, are relatively prime}
+\end{eqnarray*}
+The Corollary now follows immediately from
+the Chinese Remainder Theorem for Commutative Rings.
+\qed
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

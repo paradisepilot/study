@@ -1,0 +1,264 @@
+
+\section{Algorithms for solving the Discrete Logarithm Problem}
+\setcounter{theorem}{0}
+\setcounter{equation}{0}
+
+\vskip 1.0cm
+\begin{center}
+\begin{minipage}{0.80\textwidth}
+	\begin{center}\textbf{The Discrete Logarithm Problem}\end{center}
+	\begin{itemize}
+	\item	Let $G$ be a finite cyclic group of order $N \geq 2$, and let $g \in G$ be a generator of $G$.
+	\item	Let $h \in G\,\backslash \{\,e\,\}$ be given.
+	\item	Find $x \in \N$, $1 \leq x < N$, such that $g^{x} = h$.
+	\end{itemize}
+\end{minipage}
+\end{center}
+\vskip 1.0cm
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Shank's Baby-Step-Giant-Step Algorithm}
+
+\noindent
+\textbf{Theory:}
+\begin{itemize}
+\item	Let $n := 1 + \lfloor\,\sqrt{N}\,\rfloor$, where $\lfloor\,\sqrt{N}\,\rfloor$ is the round-down of $\sqrt{N}$.
+		Note, trivially, that $n^{2} > N$.
+\item	Define:
+		\begin{eqnarray*}
+		\mathcal{S}_{1} & := & \left\{\,g^{i}\;\vert\;i = 0,1,2,\ldots,n\,\right\}\;\;=\;\;\left\{\;e, g, g^{2}, g^{3}, \ldots, g^{n}\;\right\} \\
+		\mathcal{S}_{2} & := & \left\{\,h\cdot(g^{-n})^{i}\;\vert\;i = 0,1,2,\ldots,n\,\right\}\;\;=\;\;\left\{\;h, h\cdot(g^{-n}), h\cdot(g^{-n})^{2}, h\cdot(g^{-n})^{3}, \ldots, h\cdot(g^{-n})^{n}\;\right\}
+		\end{eqnarray*}
+\item	Then, it turns out that $\mathcal{S}_{1}\cap\mathcal{S}_{2} \neq \varnothing$.
+		%Find $i, j \in \{\,0,1,2,\ldots,n\,\}$ such that $g^{i} = h\cdot(g^{-n})^{j} \in \mathcal{S}_{1}\cap\mathcal{S}_{2}$.
+\item	For any $i, j \in \{\,0,1,2,\ldots,n\,\}$ such that $g^{i} = h\cdot(g^{-n})^{j} \in \mathcal{S}_{1}\cap\mathcal{S}_{2}$,
+		the positive integer $x := i + jn \in \Z$ is a solution to the Discrete Logarithm Problem.
+\end{itemize}
+
+\noindent
+\textbf{Outline of proof:}
+\begin{itemize}
+\item	$h \in \langle\,g\,\rangle \backslash \{\,e\,\}$ $\Longrightarrow$ there exists $x \in \N$, $1 \leq x < N$, such that $g^{x} = h$.
+\item 	Then, $x = nq + r$, with $0 \leq r < n$ and $q \geq 0$. We claim that the quotient $q$ in fact satisfies: $q < n$.
+		Indeed, $x < N$ implies
+		\begin{equation*}
+		q = \dfrac{x - r}{n} \leq \dfrac{N}{n} < \dfrac{n^{2}}{n} = n.
+		\end{equation*}
+\item	Hence, $g^{x} = h$ can be rewritten as follows:
+		\begin{equation*}
+		g^{x} = h
+		\;\;\Longleftrightarrow\;\; g^{nq+r} = h
+		\;\;\Longleftrightarrow\;\; g^{r} = h\cdot(g^{-n})^{q} \in \mathcal{S}_{1}\cap\mathcal{S}_{2}\,,
+		\quad
+		\textnormal{for some $0\leq r,q < n$}
+		\end{equation*}
+\end{itemize}
+
+\noindent
+\textbf{Pseudocode:}
+\begin{enumerate}
+\item	Let $n := 1 + \lfloor\,\sqrt{N}\,\rfloor$, where $\lfloor\,\sqrt{N}\,\rfloor$ is the round-down of $\sqrt{N}$.
+\item	Generate $\mathcal{S}_{1} = \left\{\,g^{i}\;\vert\;i = 0,1,2,\ldots,n\,\right\}=\left\{\;e, g, g^{2}, g^{3}, \ldots, g^{n}\;\right\}$.
+\item	Form the hash table $\mathcal{T}$:
+		\begin{center}
+		\begin{tabular}{|c||c|c|c|c|c|c|}
+		\hline
+		key $g^{i}$ & $e$ & $g$ & $g^{2}$ & $g^{3}$ & $\cdots$ & $g^{n}$ \\
+		\hline
+		value $i$    & $0$ & $1$ & $2$ & $3$ & $\cdots$ & $n$ \\
+		\hline
+		\end{tabular}
+		\end{center}
+\item	\begin{verbatim}
+gn := g^{-n};
+temp := h;
+for j = 0, 1, 2, ...
+    if (T{temp} exists) {
+        i := T{temp};
+        return(i + n*j);
+    } else {
+        temp := temp * gn;
+    }
+end
+		\end{verbatim}
+\end{enumerate}
+
+\noindent
+\textbf{Complexity: $\mathcal{O}(\sqrt{N})$}
+\begin{itemize}
+\item	The generation of $\mathcal{S}_{1}$ takes approximately $n$ multiplications.
+\item	The generation of the hash table takes $\mathcal{O}(1)$ computation steps.
+\item	The loop takes $\mathcal{O}(n)$ computational steps.
+\item	Hence, the whole algorithm takes $\mathcal{O}(n+n+1) = \mathcal{O}(n) = \mathcal{O}(\sqrt{N})$ computational steps.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+\subsection{The Pohlig-Hellman Algorithm}
+
+\noindent
+\textbf{Summary:}
+\begin{itemize}
+\item	The Pohlig-Hellman Algorithm renders efficiently solvable the Discrete Logarithm Problem (DLP) in any
+		finite cyclic group $G$ whose order $\vert\,G\,\vert$ is a product of powers of small primes.
+\item	This is achieved with two results of Pohlig-Hellman:
+		\begin{itemize}
+		\item	The DLP in a finite cyclic group $G$ with
+				$\vert\,G\,\vert = N = p_{1}^{\alpha_{1}}\,p_{2}^{\alpha_{2}} \cdots p_{t}^{\alpha_{t}}$
+				can be ``converted" to $t$ distinct associated DLP's in groups of orders
+				$p_{1}^{\alpha_{1}}, \ldots, p_{t}^{\alpha_{t}}$, respectively.
+				Here, ``converted" means that the solutions of the associated DLP's can be ``combined",
+				via the Chinese Remainder Theorem, to give the solution of the original DLP.
+		\item	The DLP in a finite cyclic group of prime power order $p^{\alpha}$ can be ``converted" to
+				a series of DLP's, each in a group of power $p$.
+		\item	This last set of DLP's in groups of prime power must then be solved by methods other than
+				Pohlig-Hellman, for example, either by brute force, or by Shank's Baby-Step-Giant-Step method.
+				Thus, if each of the primer orders involved is relatively small
+				(\textit{e.g.}, efficiently solvable by brute force or Baby-Step-Giant-Step),
+				then the original DLP can be efficiently solved.
+		\end{itemize}
+\end{itemize}
+
+\noindent
+\textbf{Theory:}
+\begin{itemize}
+\item	The assumption that $h \in G = \langle\,g\,\rangle$ implies the solvability of $g^{x} = h$ for $x \in \{\,0,1,2,\ldots,N-1\,\}$.
+\item	Let $N = p_{1}^{\alpha_{1}}\,p_{2}^{\alpha_{2}}\,p_{3}^{\alpha_{3}}\,\cdots\,p_{t}^{\alpha_{t}}$ be the prime factorization of $N$.
+		Then, it turns out that the following associated discrete logarithm problems (in finite cyclic groups with prime power order):
+		\begin{equation*}
+		g_{i}^{y_{i}} \; = \; h_{i},
+		\quad\textnormal{where}\quad g_{i} \, := \, g^{N/p_{i}^{\alpha_{i}}},
+		\;\;
+		h_{i} \, := \, h^{N/p_{i}^{\alpha_{i}}}\,,
+		\;\;\textnormal{and}\;\;
+		i = 1,2,\ldots,t\,,
+		\end{equation*}
+		are also solvable for
+		\begin{equation*}
+		y_{i} \in \{\,0,1,2,\ldots,p_{i}^{\alpha_{i}}-1\,\}\,.
+		\end{equation*}
+		If we also have their solutions $y_{i}$,  then we can compute $x$ using the Chinese Remainder Theorem,
+		namely, by solving the following simultaneous congruences for $x \in \{\,0,1,2,\ldots,N-1\,\}$:
+		\begin{equation*}
+		x \equiv y_{i}\;\;\textnormal{mod}\;\;p_{i}^{\alpha_{i}}\,,
+		\quad\textnormal{for}\;\; i = 1,2,\ldots,t\,.
+		\end{equation*}
+		\underline{Outline of proof:}\vskip 0.1cm
+		\textit{The solvability of $g^{x} = h$ implies the solvability of the auxiliary discrete logarithm problems
+		$g_{i}^{y_{i}} = h_{i}$ for $y_{i} \in \{\,0,1,2,\ldots,p_{i}^{\alpha_{i}}-1\,\}$, for each $i = 1,2,\ldots,t$, since
+		\begin{equation*}
+		g^{x} = h
+		\;\;\Longrightarrow\;\; \left(\,g^{x}\,\right)^{N/p_{i}^{\alpha_{i}}} = \left(\,h\,\right)^{N/p_{i}^{\alpha_{i}}}
+		\;\;\Longrightarrow\;\; \left(\,g^{N/p_{i}^{\alpha_{i}}}\,\right)^{x} = \left(\,h\,\right)^{N/p_{i}^{\alpha_{i}}}
+		\;\;\Longrightarrow\;\; \left(\,g_{i}\,\right)^{x} = h_{i}
+		\;\;\Longrightarrow\;\; \left(\,g_{i}\,\right)^{y_{i}} = h_{i}\,,
+		\end{equation*}
+		where $y_{i} := x \; \textnormal{mod} \; p_{i}^{\alpha_{i}}$.
+		Here, note that $\ord(g_{i}) = p_{i}^{\alpha_{i}}$, for each $i = 1,2,\ldots,t$.
+		Next, observe that, for each $i = 1,2,\ldots,t$,
+		\begin{eqnarray*}
+		\left(g^{-x}\cdot h\right)^{N/p_{i}^{\alpha_{i}}}
+		&=& \left(g^{-x}\right)^{N/p_{i}^{\alpha_{i}}} \cdot \left(h\right)^{N/p_{i}^{\alpha_{i}}}
+		\;\;=\;\; \left(g^{N/p_{i}^{\alpha_{i}}}\right)^{-x} \cdot \left(h\right)^{N/p_{i}^{\alpha_{i}}} \\
+		&=& \left(g_{i}\right)^{-x} \cdot h_{i} \\
+		&=& \left(g_{i}\right)^{-y_{i}} \cdot h_{i}\,,
+			\;\;\textnormal{since}\;\; x \equiv y_{i}\;\;\textnormal{mod}\;\;p_{i}^{\alpha_{i}},
+			\;\textnormal{and}\;\;\ord(g_{i}) = p_{i}^{\alpha_{i}} \\
+		&=& 1_{G}\,,\;\;\textnormal{since}\;\;g_{i}^{y_{i}} = h_{i}\\
+		\end{eqnarray*}
+		Hence, $\ord(g^{-x}\cdot h)$ divides $\dfrac{N}{p_{i}^{\alpha_{i}}}$, for each $i = 1,2,\ldots,t$,
+		which in turn implies that
+		$\ord(g^{-x}\cdot h)$ divides $\gcd\left(\frac{N}{p_{1}^{\alpha_{1}}},\ldots,\frac{N}{p_{t}^{\alpha_{t}}}\right)$.
+		However, $\dfrac{N}{p_{1}^{\alpha_{1}}},\ldots,\dfrac{N}{p_{t}^{\alpha_{t}}}$ have no non-trivial common divisors,
+		and hence\\ $\gcd\left(\frac{N}{p_{1}^{\alpha_{1}}},\ldots,\frac{N}{p_{t}^{\alpha_{t}}}\right) = 1$.
+		Thus, $\ord\left(g^{x}\cdot h\right) = 1$; hence, $g^{x} = h$, as desired.
+		}
+\item	The discrete logarithm problem in a finite cyclic group of prime power order $p^{\alpha}$ can be ``converted" to a series of
+		discrete logarithm problems in finite cyclic groups, each of order $p$.
+		\vskip 0.1cm
+		\underline{Outline of proof:}\vskip 0.1cm
+		\textit{Let $G = \langle\,g\,\rangle$ be a finite cyclic group, with $\vert\,G\,\vert = p^{\alpha}$,
+		where $p \in \N$ is a prime number, $\alpha \in \N$, and $g \in G$ is a generator of $G$.
+		Given $h \in G$, we wish to find $x\in\{\,0,1,2,\ldots,p^{\alpha}-1\,\}$ such that $g^{x} = h$.
+		\vskip 0.1cm
+		\noindent
+		We make two key observations:
+		\begin{itemize}
+		\item	$\ord\!\left(\,g^{p^{\alpha-1}}\,\right) = p$, and
+		\item	we may express $x \in \{\,0,1,2,\ldots,p^{\alpha}-1\,\}$ as a linear combination of powers of $p$:
+				\begin{equation*}
+				x = x_{0} + x_{1}\,p + x_{2}\,p^{2} + x_{3}\,p^{3} + \cdots + x_{\alpha-1}\,p^{\alpha-1}\,,
+				\quad\textnormal{where}\;\;x_{i} \in \{\,0,1,2,\ldots,p-1\,\}\,.
+				\end{equation*}
+		\end{itemize}
+		Assuming we have an ``oracle" that can solve the discrete logarithm problem in a finite cyclic group
+		of order $p$, we can then sequentially solve for $x_{0}, x_{1}, x_{2},\ldots,x_{\alpha-1}$ as solutions
+		to discrete logarithm problems in groups of order $p$, starting with $x_{0}$.
+ 		\vskip 0.1cm
+		Raising both sides of $g^{x} = h$ to the power of $p^{\alpha-1}$ yields:
+		\begin{eqnarray*}
+		\left(\,g^{x_{0}+\sum_{i=1}^{t-1}x_{i}\,p^{i}}\,\right)^{p^{\alpha-1}}  = \left(\,h\,\right)^{p^{\alpha-1}}
+		&\Longrightarrow& \left(\,g^{x_{0}}\,\right)^{p^{\alpha-1}}
+				\cdot\left(\,g^{\sum_{i=1}^{t-1}x_{i}p^{i}}\,\right)^{p^{\alpha-1}}  = \left(\,h\,\right)^{p^{\alpha-1}} \\
+		&\Longrightarrow& \left(\,g^{p^{\alpha-1}}\,\right)^{x_{0}}
+				\cdot\left(\,g^{p^{\alpha}}\,\right)^{\sum_{i=1}^{t-1}x_{i}\,p^{i-1}}  = \left(\,h\,\right)^{p^{\alpha-1}} \\
+		&\Longrightarrow& \left(\,g^{p^{\alpha-1}}\,\right)^{x_{0}} = \left(\,h\,\right)^{p^{\alpha-1}}\,,
+			\quad\textnormal{since}\;\; g^{p^{\alpha}} = 1_{G}\,.
+		\end{eqnarray*}
+		Since $\ord\!\left(g^{p^{\alpha-1}}\right) = p$, we can use our oracle to obtain $x_{0} \in \{\,0,1,2,\ldots,p-1\,\}$.
+		\vskip 0.1cm
+		Assuming we have successfully solved for $x_{0} \in \{\,0,1,2,\ldots,p-1\,\}$, we raise both sides of $g^{x} = h$
+		to the power $p^{\alpha-2}$ and obtain:
+		\begin{eqnarray*}
+		\left(\,g^{x_{0}+x_{1}p+\sum_{i=2}^{t-1}x_{i}\,p^{i}}\,\right)^{p^{\alpha-2}}  = \left(\,h\,\right)^{p^{\alpha-2}}
+		&\Longrightarrow& \left(\,g^{x_{0}}\,\right)^{p^{\alpha-2}} \cdot \left(\,g^{x_{1}p}\,\right)^{p^{\alpha-2}}
+				\cdot\left(\,g^{\sum_{i=2}^{t-1}x_{i}\,p^{i}}\,\right)^{p^{\alpha-2}}  = \left(\,h\,\right)^{p^{\alpha-2}} \\
+		&\Longrightarrow& \left(\,g^{x_{0}}\,\right)^{p^{\alpha-2}} \cdot \left(\,g^{p^{\alpha-1}}\,\right)^{x_{1}}
+				\cdot\left(\,g^{p^{\alpha}}\,\right)^{\sum_{i=2}^{t-1}x_{i}\,p^{i-2}}  = \left(\,h\,\right)^{p^{\alpha-2}} \\
+		&\Longrightarrow& \left(\,g^{p^{\alpha-1}}\,\right)^{x_{1}} = \left(\,h\cdot g^{-x_{0}}\,\right)^{p^{\alpha-2}}\,,
+			\quad\textnormal{since}\;\; g^{p^{\alpha}} = 1_{G}\,.
+		\end{eqnarray*}
+		We can now use our oracle to obtain $x_{1} \in \{\,0,1,2,\ldots,p-1\,\}$.
+		\vskip 0.1cm
+		Assuming we have successfully solved for $x_{0},x_{1} \in \{\,0,1,2,\ldots,p-1\,\}$,
+		we raise both sides of $g^{x} = h$ to the power $p^{\alpha-3}$ and obtain:
+		\begin{eqnarray*}
+		&& \left(\,g^{\sum_{i=0}^{1}x_{i}\,p^{i}+x_{2}p^{2}+\sum_{i=3}^{t-1}x_{i}\,p^{i}}\,\right)^{p^{\alpha-3}}  = \left(\,h\,\right)^{p^{\alpha-3}} \\
+		&\Longrightarrow& \left(\,g^{\sum_{i=0}^{1}x_{i}\,p^{i}}\,\right)^{p^{\alpha-3}} \left(\,g^{x_{2}p^{2}}\,\right)^{p^{\alpha-3}}
+			\left(\,g^{\sum_{i=3}^{t-1}x_{i}\,p^{i}}\,\right)^{p^{\alpha-3}}  = \left(\,h\,\right)^{p^{\alpha-3}} \\
+		&\Longrightarrow& \left(\,g^{\sum_{i=0}^{1}x_{i}\,p^{i}}\,\right)^{p^{\alpha-3}} \left(\,g^{p^{\alpha-1}}\,\right)^{x_{2}}
+			\left(\,g^{p^{\alpha}}\,\right)^{\sum_{i=3}^{t-1}x_{i}\,p^{i-3}}  = \left(\,h\,\right)^{p^{\alpha-3}} \\
+		&\Longrightarrow& \left(\,g^{p^{\alpha-1}}\,\right)^{x_{2}} = \left(\,h\cdot g^{-\sum_{i=0}^{2-1}x_{i}\,p^{i}}\,\right)^{p^{\alpha-3}}\,,
+			\quad\textnormal{since}\;\; g^{p^{\alpha}} = 1_{G}\,.
+		\end{eqnarray*}
+		We can now use our oracle to obtain $x_{2} \in \{\,0,1,2,\ldots,p-1\,\}$.
+		\vskip 0.1cm
+		Assuming we have successfully solved for $x_{0},x_{1},\ldots,x_{k-1} \in \{\,0,1,2,\ldots,p-1\,\}$,
+		we raise both sides of $g^{x} = h$ to the power $p^{\alpha-k-1}$ and obtain:
+		\begin{eqnarray*}
+		&&\left(\,g^{\sum_{i=0}^{k-1}x_{i}\,p^{i}+x_{k}p^{k}+\sum_{i=k+1}^{t-1}x_{i}\,p^{i}}\,\right)^{p^{\alpha-k-1}}  = \left(\,h\,\right)^{p^{\alpha-k-1}}\\
+		&\Longrightarrow& \left(\,g^{\sum_{i=0}^{k-1}x_{i}\,p^{i}}\,\right)^{p^{\alpha-k-1}} \left(\,g^{x_{k}p^{k}}\,\right)^{p^{\alpha-k-1}}
+			\left(\,g^{\sum_{i=k+1}^{t-1}x_{i}\,p^{i}}\,\right)^{p^{\alpha-k-1}}  = \left(\,h\,\right)^{p^{\alpha-k-1}} \\
+		&\Longrightarrow& \left(\,g^{\sum_{i=0}^{k-1}x_{i}\,p^{i}}\,\right)^{p^{\alpha-k-1}} \left(\,g^{p^{\alpha-1}}\,\right)^{x_{k}}
+			\left(\,g^{p^{\alpha}}\,\right)^{\sum_{i=k+1}^{t-1}x_{i}\,p^{i-k-1}}  = \left(\,h\,\right)^{p^{\alpha-k-1}} \\
+		&\Longrightarrow& \left(\,g^{p^{\alpha-1}}\,\right)^{x_{k}} = \left(\,h\cdot g^{-\sum_{i=0}^{k-1}x_{i}\,p^{i}}\,\right)^{p^{\alpha-k-1}}\,,
+			\quad\textnormal{since}\;\; g^{p^{\alpha}} = 1_{G}\,.
+		\end{eqnarray*}
+		We can now use our oracle to obtain $x_{k} \in \{\,0,1,2,\ldots,p-1\,\}$.
+		}
+\item	The preceding two observations together imply that the original discrete logarithm problem in the group $G$,
+		with $\vert\,G\,\vert = N = p_{1}^{\alpha_{1}}p_{2}^{\alpha_{2}}\cdots p_{t}^{\alpha_{t}}$,
+		can be reduced to a number of associated DLP's in groups of order $p_{i}$, $i = 1,2,\ldots,t$.
+		If each of these associated DLP's can be solved sufficiently quickly in practice, then so can the original
+		DLP in $G$.  These associated DLP's in groups of order $p_{i}$ will be solved in practice by methods other
+		than Pohlig-Hellman, such as by brute force, or by Shank's Baby-Step-Giant-Step method
+		(\textit{i.e.} the ``oracle" mentioned above is either brute-force, or Baby-Step-Giant-Step, \textit{etc.}).
+		In particular, if each $p_{i}$ is ``small" (relative to the capacity of the brute-force or the Baby-Step-Giant-Step
+		methods), then the original DLP in $G$ can be solved.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{The Index Calculus Method}
+
+
+

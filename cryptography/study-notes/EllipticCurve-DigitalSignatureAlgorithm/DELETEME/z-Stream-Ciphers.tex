@@ -1,0 +1,42 @@
+
+\section{Stream Ciphers}
+\setcounter{theorem}{0}
+\setcounter{equation}{0}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{itemize}
+\item
+	Pseudorandom number generator:
+	\begin{equation*}
+	\sigma : \mathcal{K} \longrightarrow \mathcal{S}^{\infty}\,
+	\end{equation*}
+	In other words, $\sigma$ is a map from the primary key space $\mathcal{K}$
+	into the collection $\mathcal{S}^{\infty}$ of infinite sequences of
+	elements of the secondary key space $\mathcal{S}$.
+	An important required property of $\sigma$ is that each sequence
+	$\sigma(k) \in \mathcal{S}^{\infty}$, $k \in \mathcal{K}$,
+	is supposed to appear random.
+\item
+	Character-level encryption:
+	\begin{equation*}
+	\varepsilon : \Sigma \times \mathcal{S} \longrightarrow \Sigma
+	\end{equation*}
+	Here, for each fixed secondary key $s \in \mathcal{S}$,
+	the map $\varepsilon(\,\cdot\,;s)$ is a permutation of
+	the alphabet $\Sigma$.
+\item
+	Encryption map:
+	\begin{equation*}
+	E : \Sigma^{n} \times \mathcal{K} \longrightarrow \Sigma^{n}
+	\end{equation*}
+	\begin{equation*}
+	E(m_{1}\,m_{2}\,m_{3} \,\cdots\, m_{n}\,;\,k) \;\; = \;\;
+		\varepsilon(m_{1}\,;\sigma_{1}(k))
+		\cdot
+		\varepsilon(m_{2}\,;\sigma_{2}(k))
+		\,\cdots\,
+		\varepsilon(m_{n}\,;\sigma_{n}(k)) 
+	\end{equation*}
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

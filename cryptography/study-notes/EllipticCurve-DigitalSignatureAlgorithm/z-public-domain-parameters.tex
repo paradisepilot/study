@@ -1,0 +1,43 @@
+
+\section{Public Domain Parameters}
+\setcounter{theorem}{0}
+\setcounter{equation}{0}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{itemize}
+\item
+	$(E,\mathcal{O})$ an elliptic curve defined over $\Z_{p}$, where $p \in \N$ is a large prime number.
+	\begin{itemize}
+	\item
+		Recall: An \textbf{elliptic curve} is an ordered pair $(E,\mathcal{O})$,
+		where $E$ is nonsingular projective algebraic plane curve of genus one and
+		$\mathcal{O} \in E$ is a point on $E$.
+	\item
+		By the Riemann-Roch Theorem, we have
+		\begin{equation*}
+		g(E) \; = \; \textnormal{genus}(E) \; = \; \dfrac{(d-1)(d-2)}{2}\,,
+		\end{equation*}
+		where $d \in \N$ is the degree of $E$.
+		Hence, \,$g(E) = 1$\, $\Longrightarrow$ \,$d = 3$.\,
+	\end{itemize}
+\item
+	$G \in E$ is an element of $E$ of (large) prime order
+\item
+	$q \in \N$, the (large prime) order of $G \in E$
+\item
+	$H : \Sigma^{*} \longrightarrow \Sigma^{n} \cong \{0,1,2,\ldots,N\}$\,
+	is a cryptographic hash function,
+	\,$\Sigma$\, is its alphabet, and \,$N \geq q$.
+	\begin{itemize}
+	\item
+		For the Elliptic Curve Digital Signature Algorithm used for signing Bitcoin transactions,
+		$H$ is SHA-256, which outputs 256-bit strings.Thus, for Bitcoin signing,
+		\begin{equation*}
+		N \, = \, 2^{256} \, = \, \left(\,10^{\,\log_{10}2}\,\right)^{256}
+		\, \approx \, 10^{\,256 \times 0.301} \, \approx \, 10^{77.064}
+		\end{equation*}
+	\end{itemize}
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

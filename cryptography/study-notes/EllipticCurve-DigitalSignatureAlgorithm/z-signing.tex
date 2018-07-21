@@ -1,0 +1,65 @@
+
+\section{Signing}
+\setcounter{theorem}{0}
+\setcounter{equation}{0}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\vskip 0.2cm
+\noindent
+\textbf{Key Generation}
+\begin{itemize}
+\item
+	Generate a random private signing key $a \in \{1,2,\ldots,q-1\} \subset \N$.
+	Keep the private key \,$a$\, \textbf{\color{red}secret}.
+\item
+	Compute \,$A = a \cdot G \in E$.
+	\textbf{\color{red}Publish} \,$A \in E$\, as the public verification key .
+%\item
+%	Think of $a \in \{1,\ldots,q-1\}$ as the secret signing key, and
+%	$A = a\cdot G \in E$ as the public verification key. 
+\end{itemize}
+
+\vskip 0.3cm
+\noindent
+\textbf{Signing a message $m$}
+\vskip 0.3cm
+\noindent
+First, given the message \,$m \in \Sigma^{*}$,\,
+compute \,$e = H(m) \in \Sigma_{n} \cong \{0,1,2,\ldots,N\}$.
+\vskip 0.3cm
+\noindent
+Then, execute the following steps:
+\begin{itemize}
+\item
+	Generate a secret random ephemeral key $k \in \Z_{q}^{*} = \{1,2,\ldots,q-1\} \subset \N$.
+	\begin{itemize}
+	\item
+		Compute $R \, := \, k \cdot G \,=\, \left(\,x_{R}\,,\,y_{R}\,\right) \,\in\, \Z_{p} \times \Z_{p}$.
+	\item
+		Compute $r := x_{R} \!\mod q$.\; Note that $r \in \Z_{q}$.
+	\item
+		Repeat choosing $k \in \{1,2,\ldots,q-1\}$ until $r \in \Z_{q}$ is a non-zero element in $\Z_{q}$.
+	\end{itemize}
+\item
+	Compute $k^{-1} \in \Z_{q}^{*}$.
+\item
+	Compute $s \, := \, k^{-1}\left(\,e + a \cdot r\right) \, = \, k^{-1}\left(\,H(m) + a \cdot r\,\right)\!\!\mod q$.\;
+	Note that $s \,\in\, \Z_{q}$.
+	\begin{itemize}
+	\item
+		If $s = 0 \in \Z_{q}$, then go back to the first bullet and
+		repeat choosing $k \in \{1,2,\ldots,q-1\}$
+		until $s \in \Z_{q}$ is a non-zero element in $\Z_{q}$.
+	\end{itemize}
+\item
+	Output \,$(\,r,s\,) \,\in\, \Z_{q}^{*} \times \Z_{q}^{*}$\,
+	as the signature of the message $m$.
+\end{itemize}
+\vskip 0.3cm
+\noindent
+Send
+\,$\left(\,m \,\overset{{\color{white}.}}{;}\,(\,r,s\,)\,\right) \,\in\, \Sigma^{*} \times \Z_{q}^{*} \times \Z_{q}^{*}$\,
+as the signed message.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -1,0 +1,140 @@
+
+\section{The August 2013 Bitcoin Thefts}
+\setcounter{theorem}{0}
+\setcounter{equation}{0}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The attack underlying the Bitcoin thefts of August 2013 was based on the following:
+\begin{proposition}
+\mbox{}
+\vskip 0.1cm
+\noindent
+Suppose we are given an ECDSA (Elliptic Curve Digital Signature Algorithm) system:
+\begin{itemize}
+\item
+	$(E,\mathcal{O})$ is an elliptic curve over $\Z_{p}$, for some large prime $p$,
+	and $\mathcal{O} \in E$.
+\item
+	$G \in E$ is an element of large prime order $q \in \N$.
+\item
+	$H : \Sigma^{*} \longrightarrow \Sigma^{n} \cong \{0,1,2,\ldots,N\}$\,
+	is a cryptographic hash function,
+	\,$\Sigma$\, is its alphabet, and \,$N \geq q$.
+\end{itemize}
+Then, given two signed messages
+\begin{equation*}
+\left(\,m_{1}\,\overset{{\color{white}.}}{;}\,(r,s_{1})\,\right)
+\,,\,
+\left(\,m_{2}\,\overset{{\color{white}.}}{;}\,(r,s_{2})\,\right)
+\;\; \in \;\;
+	\Sigma^{*} \times \Z_{q}^{*} \times \Z_{q}^{*}
+\end{equation*}
+signed using the same
+private signing key $a \in \Z_{q}^{*}$ and the same (secret) ephemeral key $k \in \Z_{q}^{*}$,
+the private signing key $a \in \Z_{q}^{*}$ can be computed as follows:
+\begin{equation*}
+a
+\;\;=\;\;
+	- \left(\,H(m_{1}) \cdot s_{2} \, \overset{{\color{white}1}}{-} \, H(m_{2}) \cdot s_{1} \right)
+	\cdot
+	\left(\,r \overset{{\color{white}1}}{\cdot} \left(\, s_{2} \,-\, s_{1} \,\right)\right)^{-1}
+	 \mod q
+\end{equation*}
+\end{proposition}
+
+\proof
+
+\vskip 0.3cm
+\noindent
+Recall that, by definition, we have:
+\begin{equation*}
+s_{1} \;=\; k^{-1} \cdot \left(\,H(m_{1}) + a \cdot r \,\right) \!\!\!\mod q\,,
+\quad\quad\quad\quad
+s_{2} \;=\; k^{-1} \cdot \left(\,H(m_{2}) + a \cdot r \,\right) \!\!\!\mod q\,,
+\end{equation*}
+where \,$r \,:=\, x_{R} \!\mod q$\, and \,$k \cdot G = (\,x_{R}\,,\,y_{R}\,) \in \Z_{p} \times \Z_{p}$.\,
+Rearranging yields
+\begin{equation*}
+k \cdot s_{1} \;=\; H(m_{1}) \,+\, a \cdot r \!\mod q\,,
+\quad\quad\quad\quad
+k \cdot s_{2} \;=\; H(m_{2}) \,+\, a \cdot r \!\mod q
+\end{equation*}
+Multiplying both sides of the first equation with $s_{2}$ and
+both sides of the second with $s_{1}$ yields:
+\begin{equation*}
+k \cdot s_{1} \cdot s_{2} \;=\; H(m_{1}) \cdot s_{2} \,+\, a \cdot r \cdot s_{2} \!\mod q\,,
+\quad\quad\quad\quad
+k \cdot s_{2} \cdot s_{1} \;=\; H(m_{2}) \cdot s_{1} \,+\, a \cdot r \cdot s_{1} \!\mod q
+\end{equation*}
+Subtracting the second equation above from the first yields:
+\begin{equation*}
+- \, H(m_{1}) \cdot s_{2} \, + \, H(m_{2}) \cdot s_{1}
+\;\;=\;\;
+	a \cdot r \cdot s_{2} \,-\, a \cdot r \cdot s_{1}
+\;\;=\;\;
+	a \cdot r \cdot \left(\, s_{2} \,-\, s_{1} \,\right) \mod q
+\end{equation*}
+Isolating $a$ now yields:
+\begin{equation*}
+a
+\;\;=\;\;
+	- \left(\,H(m_{1}) \cdot s_{2} \, \overset{{\color{white}1}}{-} \, H(m_{2}) \cdot s_{1} \right)
+	\cdot
+	\left(\,r \overset{{\color{white}1}}{\cdot} \left(\, s_{2} \,-\, s_{1} \,\right)\right)^{-1}
+	 \mod q\,,
+\end{equation*}
+as desired.
+\qed
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{remark}
+\mbox{}
+\vskip 0.1cm
+\noindent
+By the above Proposition, an attacker will be able to recover the secret
+private signing key \,$a \in \Z_{q}^{*}$\, of a Bitcoin user, based only on
+publicly viewable information, whenever the attacker can find two
+Bitcoin transactions (signed messages):
+\begin{equation*}
+\left(\,m_{1}\,\overset{{\color{white}.}}{;}\,(r_{1},s_{1})\,\right)
+\,,\,
+\left(\,m_{2}\,\overset{{\color{white}.}}{;}\,(r_{2},s_{2})\,\right)
+\;\; \in \;\;
+	\Sigma^{*} \times \Z_{q}^{*} \times \Z_{q}^{*}
+\end{equation*}
+of the same Bitcoin user satisfying:
+\begin{itemize}
+\item
+	the two signed messages were generated
+	with the same (secret) ephemeral key $k \in \Z_{q}^{*}$\,,
+	%which will necessarily imply \,$r_{1} \,=\, r_{2}$\,,
+	and
+\item
+	the two signed messages also satisfy:
+	\begin{equation*}
+	s_{1} \,\neq\, s_{2}
+	\end{equation*}
+\end{itemize}
+Recall also that if the two signed messages were generated with the
+same ephemeral key \,$k \,\in\, \Z_{q}^{*}$\,, then we must have
+\,$r_{1} \,=\, r_{2}$.\,
+Therefore, operationally speaking, the attacker can proceed by
+searching for a pair of signed messages (Bitcoin transactions)
+whose $r$-values are equal and whose $s$-values are distinct,
+for each given Bitcoin user.
+Once such a pair of Bitcoin transactions have been found
+for a given Bitcoin user, the attacker can involve the
+Proposition to determine the private signing key of that Bitcoin user.
+\end{remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{remark}
+\mbox{}
+\vskip 0.1cm
+\noindent
+Bitcoin thefts based on the above vulnerability were indeed discovered/committed
+in August 2013.
+\end{remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

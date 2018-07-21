@@ -1,0 +1,40 @@
+
+\section{The ElGamal Public Key Cryptosystem}
+\setcounter{theorem}{0}
+\setcounter{equation}{0}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Mechanism}
+
+\textbf{Goal:} Bob wants to send Alice an encrypted message via an insecure channel.
+\begin{itemize}
+\item	Alice chooses and publishes a large prime $p$ and an integer $g$ with large prime order in $\F_{p}^{*}$.
+\item	Alice chooses a secret $a \in \Z$, with $1 \leq a \leq p - 1$, computes $A := g^{a} \mod p$, and
+		publishes $A \in\F_{p}^{*}$ as her public key.
+\item	Bob chooses a plaintext $m \in \F_{p}^{*}$, and a secret random ephemeral key $k \in \Z$, with $1 \leq k \leq p - 1$.
+		Bob computes $B_{1} := g^{k} \mod p$, and $B_{2} := m\cdot A^{k} \in\F_{p}^{*}$.
+		Bob's ciphertext is $(B_{1},B_{2})$ and Bob sends it to Alice via the insecure channel.
+\item	Alice decrypts Bob's ciphertext $(B_{1},B_{2})$ by computing $B_{2}\cdot(B_{1}^{a})^{-1} \in \F_{p}^{*}$.
+		Note that
+		\begin{equation*}
+		B_{2}\cdot(B_{1}^{a})^{-1}
+		\;\; \equiv \;\; (m\cdot A^{k}) \cdot (g^{ak})^{-1}
+		\;\; \equiv \;\; m\cdot (g^{a})^{k} \cdot(g^{ak})^{-1}
+		\;\; \equiv \;\; m\cdot (g^{ak}) \cdot(g^{ak})^{-1}
+		\;\; \equiv \;\; m \mod p
+		\end{equation*}
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Security of the ElGamal public key cryptosystem}
+
+\begin{itemize}
+\item	The ElGamal public key encryption system is at least as secure as the difficulty of Diffie-Hellman problem,
+		in the sense that en ElGamal oracle (efficient solver of the ElGamal cryptosystem problem) can be used
+		to efficiently solve the Diffie-Hellman problem.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
