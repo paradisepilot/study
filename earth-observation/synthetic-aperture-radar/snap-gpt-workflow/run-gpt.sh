@@ -16,7 +16,8 @@ cp -r ${codeDIR} ${outputDIR}
 cp    $0         ${outputDIR}/code
 
 ##################################################
-inputFileStem=S1A_IW_GRDH_1SDV_20210712T000200_20210712T000225_038737_049230_5E7B
+#inputFileStem=S1A_IW_GRDH_1SDV_20210712T000200_20210712T000225_038737_049230_5E7B
+ inputFileStem=S1A_IW_GRDH_1SDV_20210731T133415_20210731T133440_039022_049ABB_0DF6
 
 stdoutFile=${outputDIR}/stdout.gpt
 stderrFile=${outputDIR}/stderr.gpt
