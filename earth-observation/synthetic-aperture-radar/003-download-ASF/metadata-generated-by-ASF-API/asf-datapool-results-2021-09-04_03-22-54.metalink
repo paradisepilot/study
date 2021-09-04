@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<metalink xmlns="http://www.metalinker.org/" version="3.0">
+    <publisher><name>Alaska Satellite Facility</name><url>http://www.asf.alaska.edu/</url></publisher>
+    <files>
+        <file name="S1A_IW_GRDH_1SDV_20201227T230032_20201227T230108_035878_04338F_0873.zip"><resources><url type="http">https://datapool.asf.alaska.edu/GRD_HD/SA/S1A_IW_GRDH_1SDV_20201227T230032_20201227T230108_035878_04338F_0873.zip</url></resources><verification><hash type="md5">07f5709cd59bd8fadc0c9b89244ef00c</hash></verification><size>1293651935</size></file>
+        <file name="S1A_IW_GRDH_1SDV_20201222T225232_20201222T225257_035805_0430FC_950F.zip"><resources><url type="http">https://datapool.asf.alaska.edu/GRD_HD/SA/S1A_IW_GRDH_1SDV_20201222T225232_20201222T225257_035805_0430FC_950F.zip</url></resources><verification><hash type="md5">88f2492bf5c6b92d662c02882163f55b</hash></verification><size>933774146</size></file>
+        <file name="S1A_IW_GRDH_1SDV_20201215T230033_20201215T230108_035703_042D7B_42C5.zip"><resources><url type="http">https://datapool.asf.alaska.edu/GRD_HD/SA/S1A_IW_GRDH_1SDV_20201215T230033_20201215T230108_035703_042D7B_42C5.zip</url></resources><verification><hash type="md5">b85c4c55577960d5727ada273ed69d05</hash></verification><size>1281248917</size></file>
+        <file name="S1A_IW_GRDH_1SDV_20201210T225233_20201210T225257_035630_042AF5_6A3A.zip"><resources><url type="http">https://datapool.asf.alaska.edu/GRD_HD/SA/S1A_IW_GRDH_1SDV_20201210T225233_20201210T225257_035630_042AF5_6A3A.zip</url></resources><verification><hash type="md5">b201bdd997800823495e694f289a0356</hash></verification><size>1008202193</size></file>
+        <file name="S1A_IW_GRDH_1SDV_20201203T230033_20201203T230109_035528_04276B_FF88.zip"><resources><url type="http">https://datapool.asf.alaska.edu/GRD_HD/SA/S1A_IW_GRDH_1SDV_20201203T230033_20201203T230109_035528_04276B_FF88.zip</url></resources><verification><hash type="md5">129c377a0269260f1e11cf54c3029793</hash></verification><size>1440431691</size></file>
+        <file name="S1A_IW_GRDH_1SDV_20201128T225233_20201128T225258_035455_0424F1_1E8C.zip"><resources><url type="http">https://datapool.asf.alaska.edu/GRD_HD/SA/S1A_IW_GRDH_1SDV_20201128T225233_20201128T225258_035455_0424F1_1E8C.zip</url></resources><verification><hash type="md5">90ac94c33253c427059d64f6a20649ee</hash></verification><size>1037926581</size></file>
+    </files>
+</metalink>
