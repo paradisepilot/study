@@ -1,0 +1,46 @@
+<graph id="Graph">
+  <version>1.0</version>
+
+  <node id="ProductSet-Reader">
+    <operator>ProductSet-Reader</operator>
+    <sources/>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <fileList>${fileList}</fileList>
+    </parameters>
+  </node>
+
+  <node id="DEM-Assisted-Coregistration">
+    <operator>DEM-Assisted-Coregistration</operator>
+    <sources>
+      <sourceProduct.3 refid="ProductSet-Reader"/>
+    </sources>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <demName>${dem}</demName>
+      <demResamplingMethod>${demResampling}</demResamplingMethod>
+      <externalDEMFile/>
+      <externalDEMNoDataValue>0.0</externalDEMNoDataValue>
+      <resamplingType>${resamplingType}</resamplingType>
+      <tileExtensionPercent>${tileExtensionPercent}</tileExtensionPercent>
+      <maskOutAreaWithoutElevation>${maskOutAreaWithoutElevation}</maskOutAreaWithoutElevation>
+      <outputRangeAzimuthOffset>${outputRangeAzimuthOffset}</outputRangeAzimuthOffset>
+    </parameters>
+  </node>
+
+  <node id="Write">
+    <operator>Write</operator>
+    <sources>
+      <sourceProduct refid="DEM-Assisted-Coregistration"/>
+    </sources>
+    <parameters class="com.bc.ceres.binding.dom.XppDomElement">
+      <file>${output}</file>
+      <formatName>BEAM-DIMAP</formatName>
+    </parameters>
+  </node>
+
+  <applicationData id="Presentation">
+    <Description/>
+    <node id="ProductSet-Reader">          <displayPosition x="50.0"  y="127.0"/></node>
+    <node id="DEM-Assisted-Coregistration"><displayPosition x="204.0" y="129.0"/></node>
+    <node id="Write">                      <displayPosition x="427.0" y="132.0"/></node>
+  </applicationData>
+</graph>
