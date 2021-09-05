@@ -70,4 +70,15 @@ gpt ${codeDIR}/coregistration.xml \
     -Poutput=${outputDIR}/coregistered_stack.dim > ${stdoutFile} 2> ${stderrFile}
 
 ##################################################
+# save as GeoTIFF
+
+sleep 10
+stdoutFile=${outputDIR}/stdout.gpt.saveAsGeoTIFF
+stderrFile=${outputDIR}/stderr.gpt.saveAsGeoTIFF
+gpt ${codeDIR}/saveAsGeoTIFF.xml \
+    -Pinput=${outputDIR}/coregistered_stack.dim \
+    -PoutputFormat='GeoTIFF' \
+    -Poutput=${outputDIR}/coregistered_stack.tif > ${stdoutFile} 2> ${stderrFile}
+
+##################################################
 exit
