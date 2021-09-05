@@ -17,15 +17,23 @@ cp    $0         ${outputDIR}/code
 
 ##################################################
 inputFolder=ottawa
+
+# inputFileStems=( \
+#     "S1A_IW_GRDH_1SDV_20201128T225233_20201128T225258_035455_0424F1_1E8C" \
+#     "S1A_IW_GRDH_1SDV_20201203T230033_20201203T230109_035528_04276B_FF88" \
+#     "S1A_IW_GRDH_1SDV_20201210T225233_20201210T225257_035630_042AF5_6A3A" \
+#     "S1A_IW_GRDH_1SDV_20201215T230033_20201215T230108_035703_042D7B_42C5" \
+#     "S1A_IW_GRDH_1SDV_20201222T225232_20201222T225257_035805_0430FC_950F" \
+#     "S1A_IW_GRDH_1SDV_20201227T230032_20201227T230108_035878_04338F_0873"
+#     )
 inputFileStems=( \
     "S1A_IW_GRDH_1SDV_20201128T225233_20201128T225258_035455_0424F1_1E8C" \
-    "S1A_IW_GRDH_1SDV_20201203T230033_20201203T230109_035528_04276B_FF88" \
     "S1A_IW_GRDH_1SDV_20201210T225233_20201210T225257_035630_042AF5_6A3A" \
-    "S1A_IW_GRDH_1SDV_20201215T230033_20201215T230108_035703_042D7B_42C5" \
-    "S1A_IW_GRDH_1SDV_20201222T225232_20201222T225257_035805_0430FC_950F" \
-    "S1A_IW_GRDH_1SDV_20201227T230032_20201227T230108_035878_04338F_0873"
+    "S1A_IW_GRDH_1SDV_20201222T225232_20201222T225257_035805_0430FC_950F"
     )
- 
+
+##################################################
+# preprocessing
 PATH=/Applications/snap/bin:$PATH
 for inputFileStem in "${inputFileStems[@]}"
 do
@@ -41,8 +49,28 @@ do
         -Pinput=${dataDIR}/${inputFolder}/${inputFileStem}.ZIP \
         -Poutput=${outputDIR}/${inputFileStem}.dim > ${stdoutFile} 2> ${stderrFile}
 done
-echo
+
+##################################################
+# coregistration
+
+fileList=${outputDIR}/${inputFileStems[0]}.dim
+for inputFileStem in "${inputFileStems[@]:1}"
+do
+    fileList=${fileList},${outputDIR}/${inputFileStem}.dim
+done
+
+sleep 10
+stdoutFile=${outputDIR}/stdout.gpt.coregistration
+stderrFile=${outputDIR}/stderr.gpt.coregistration
+gpt ${codeDIR}/coregistration.xml \
+    -Pdem='SRTM 3Sec' \
+    -PdemResampling='BICUBIC_INTERPOLATION' \
+    -PresamplingType='BISINC_5_POINT_INTERPOLATION' \
+    -PtileExtensionPercent='50' \
+    -PmaskOutAreaWithoutElevation='true' \
+    -PoutputRangeAzimuthOffset='false' \
+    -PfileList=${fileList} \
+    -Poutput=${outputDIR}/coregistered_stack.dim > ${stdoutFile} 2> ${stderrFile}
 
 ##################################################
 exit
-
