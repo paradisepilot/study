@@ -63,12 +63,9 @@ sleep 10
 stdoutFile=${outputDIR}/stdout.gpt.coregistration
 stderrFile=${outputDIR}/stderr.gpt.coregistration
 gpt ${codeDIR}/coregistration.xml \
-    -Pdem='SRTM 3Sec' \
-    -PdemResampling='BICUBIC_INTERPOLATION' \
-    -PresamplingType='BISINC_5_POINT_INTERPOLATION' \
-    -PtileExtensionPercent='50' \
-    -PmaskOutAreaWithoutElevation='true' \
-    -PoutputRangeAzimuthOffset='false' \
+    -PresamplingType='NONE' \
+    -Pextent='Master' \
+    -PinitialOffsetMethod='Orbit' \
     -PfileList=${fileList} \
     -Poutput=${outputDIR}/coregistered_stack.dim > ${stdoutFile} 2> ${stderrFile}
 

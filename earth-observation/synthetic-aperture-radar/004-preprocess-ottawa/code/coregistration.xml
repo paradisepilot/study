@@ -9,27 +9,24 @@
     </parameters>
   </node>
 
-  <node id="DEM-Assisted-Coregistration">
-    <operator>DEM-Assisted-Coregistration</operator>
+  <node id="CreateStack">
+    <operator>CreateStack</operator>
     <sources>
       <sourceProduct.3 refid="ProductSet-Reader"/>
     </sources>
     <parameters class="com.bc.ceres.binding.dom.XppDomElement">
-      <demName>${dem}</demName>
-      <demResamplingMethod>${demResampling}</demResamplingMethod>
-      <externalDEMFile/>
-      <externalDEMNoDataValue>0.0</externalDEMNoDataValue>
+      <masterBands/>
+      <sourceBands/>
       <resamplingType>${resamplingType}</resamplingType>
-      <tileExtensionPercent>${tileExtensionPercent}</tileExtensionPercent>
-      <maskOutAreaWithoutElevation>${maskOutAreaWithoutElevation}</maskOutAreaWithoutElevation>
-      <outputRangeAzimuthOffset>${outputRangeAzimuthOffset}</outputRangeAzimuthOffset>
+      <extent>${extent}</extent>
+      <initialOffsetMethod>${initialOffsetMethod}</initialOffsetMethod>
     </parameters>
   </node>
 
   <node id="Write">
     <operator>Write</operator>
     <sources>
-      <sourceProduct refid="DEM-Assisted-Coregistration"/>
+      <sourceProduct refid="CreateStack"/>
     </sources>
     <parameters class="com.bc.ceres.binding.dom.XppDomElement">
       <file>${output}</file>
@@ -39,8 +36,8 @@
 
   <applicationData id="Presentation">
     <Description/>
-    <node id="ProductSet-Reader">          <displayPosition x="50.0"  y="127.0"/></node>
-    <node id="DEM-Assisted-Coregistration"><displayPosition x="204.0" y="129.0"/></node>
-    <node id="Write">                      <displayPosition x="427.0" y="132.0"/></node>
+    <node id="ProductSet-Reader"><displayPosition x="50.0"  y="130.0"/></node>
+    <node id="CreateStack">      <displayPosition x="200.0" y="130.0"/></node>
+    <node id="Write">            <displayPosition x="400.0" y="130.0"/></node>
   </applicationData>
 </graph>
