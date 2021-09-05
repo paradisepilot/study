@@ -145,7 +145,6 @@
       <sourceBands/>
       <region>0,0,0,0</region>
       <referenceBand/>
-      <!-- <geoRegion>POLYGON((-76.0006 45.2206,-75.3625 45.2206,-75.3625 45.5594,-76.0006 45.5594,-76.0006 45.2206))</geoRegion> -->
       <geoRegion>${georegion}</geoRegion>
       <subSamplingX>1</subSamplingX>
       <subSamplingY>1</subSamplingY>
