@@ -34,7 +34,14 @@ inputFileStems=( \
 
 ##################################################
 # preprocessing
-PATH=/Applications/snap/bin:$PATH
+
+if [ `uname` != Darwin ]
+then
+    PATH=/home/jovyan/data-vol-1/software/snap/bin:$PATH
+else
+    PATH=/Applications/snap/bin:$PATH
+fi
+
 for inputFileStem in "${inputFileStems[@]}"
 do
     stdoutFile=${outputDIR}/stdout.gpt.${inputFileStem}
@@ -82,3 +89,4 @@ gpt ${codeDIR}/saveAsGeoTIFF.xml \
 
 ##################################################
 exit
+
