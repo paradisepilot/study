@@ -53,7 +53,7 @@ do
         -Pdem='SRTM 3Sec' \
         -Pcrs='GEOGCS["WGS84(DD)", DATUM["WGS84", SPHEROID["WGS84", 6378137.0, 298.257223563]], PRIMEM["Greenwich", 0.0], UNIT["degree", 0.017453292519943295], AXIS["Geodetic longitude", EAST], AXIS["Geodetic latitude", NORTH]]' \
         -Pgeoregion='POLYGON((-76.0006 45.2206,-75.3625 45.2206,-75.3625 45.5594,-76.0006 45.5594,-76.0006 45.2206))' \
-        -Pinput=${dataDIR}/${inputFolder}/${inputFileStem}.ZIP \
+        -Pinput=${dataDIR}/${inputFolder}/${inputFileStem}.zip \
         -Poutput=${outputDIR}/${inputFileStem}.dim > ${stdoutFile} 2> ${stderrFile}
 done
 
