@@ -35,11 +35,14 @@ inputFileStems=( \
 ##################################################
 # preprocessing
 
-if [ `uname` != Darwin ]
+if [ `uname` == Darwin ]
+then
+    PATH=/Applications/snap/bin:$PATH
+elif [ `whoami` == jovyan ]
 then
     PATH=/home/jovyan/data-vol-1/software/snap/bin:$PATH
 else
-    PATH=/Applications/snap/bin:$PATH
+    PATH=~/Software/SNAP/SNAP_8.0.0/bin:$PATH
 fi
 
 for inputFileStem in "${inputFileStems[@]}"
