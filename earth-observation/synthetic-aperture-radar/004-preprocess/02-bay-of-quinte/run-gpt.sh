@@ -4,7 +4,8 @@ currentDIR=`pwd`
    codeDIR=${currentDIR}/code
  outputDIR=${currentDIR//github/gittmp}/output
 
-parentDIR=`dirname ${currentDIR}`
+ parentDIR=`dirname ${currentDIR}`
+ parentDIR=`dirname ${parentDIR}`
   dataDIR=${parentDIR}/000-data
 # dataDIR=./000-data
 
