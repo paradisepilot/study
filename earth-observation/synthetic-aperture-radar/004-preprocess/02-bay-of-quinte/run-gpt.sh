@@ -4,10 +4,9 @@ currentDIR=`pwd`
    codeDIR=${currentDIR}/code
  outputDIR=${currentDIR//github/gittmp}/output
 
- parentDIR=`dirname ${currentDIR}`
- parentDIR=`dirname ${parentDIR}`
+parentDIR=`dirname ${currentDIR}`
+parentDIR=`dirname ${parentDIR}`
   dataDIR=${parentDIR}/000-data
-# dataDIR=./000-data
 
 if [ ! -d ${outputDIR} ]; then
 	mkdir -p ${outputDIR}
