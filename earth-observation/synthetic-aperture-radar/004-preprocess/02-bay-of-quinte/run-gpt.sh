@@ -100,12 +100,23 @@ gpt ${codeDIR}/coregistration.xml \
 # save as GeoTIFF
 
 sleep 10
-stdoutFile=${outputDIR}/stdout.gpt.saveAsGeoTIFF
-stderrFile=${outputDIR}/stderr.gpt.saveAsGeoTIFF
-gpt ${codeDIR}/saveAsGeoTIFF.xml \
+stdoutFile=${outputDIR}/stdout.gpt.export.GeoTIFF
+stderrFile=${outputDIR}/stderr.gpt.export.GeoTIFF
+gpt ${codeDIR}/export.xml \
     -Pinput=${outputDIR}/coregistered_stack.dim \
     -PoutputFormat='GeoTIFF' \
-    -Poutput=${outputDIR}/coregistered_stack.tif > ${stdoutFile} 2> ${stderrFile}
+    -Poutput=${outputDIR}/coregistered_stack > ${stdoutFile} 2> ${stderrFile}
+
+##################################################
+# save as NetCDF4-BEAM
+
+sleep 10
+stdoutFile=${outputDIR}/stdout.gpt.export.NetCDF4-BEAM
+stderrFile=${outputDIR}/stderr.gpt.export.NetCDF4-BEAM
+gpt ${codeDIR}/export.xml \
+    -Pinput=${outputDIR}/coregistered_stack.dim \
+    -PoutputFormat='NetCDF4-BEAM' \
+    -Poutput=${outputDIR}/coregistered_stack > ${stdoutFile} 2> ${stderrFile}
 
 ##################################################
 exit
