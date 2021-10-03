@@ -83,8 +83,8 @@ gpt ${codeDIR}/coregistration.xml \
 # save as GeoTIFF
 
 sleep 10
-stdoutFile=${outputDIR}/stdout.gpt.saveAs.GeoTIFF
-stderrFile=${outputDIR}/stderr.gpt.saveAs.GeoTIFF
+stdoutFile=${outputDIR}/stdout.gpt.export.GeoTIFF
+stderrFile=${outputDIR}/stderr.gpt.export.GeoTIFF
 gpt ${codeDIR}/export.xml \
     -Pinput=${outputDIR}/coregistered_stack.dim \
     -PoutputFormat='GeoTIFF' \
@@ -94,8 +94,8 @@ gpt ${codeDIR}/export.xml \
 # save as NetCDF4-BEAM
 
 sleep 10
-stdoutFile=${outputDIR}/stdout.gpt.saveAs.NetCDF4-BEAM
-stderrFile=${outputDIR}/stderr.gpt.saveAs.NetCDF4-BEAM
+stdoutFile=${outputDIR}/stdout.gpt.export.NetCDF4-BEAM
+stderrFile=${outputDIR}/stderr.gpt.export.NetCDF4-BEAM
 gpt ${codeDIR}/export.xml \
     -Pinput=${outputDIR}/coregistered_stack.dim \
     -PoutputFormat='NetCDF4-BEAM' \
