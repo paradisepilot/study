@@ -66,7 +66,7 @@ getData_one.variable <- function(
         );
 
     date.string <- stringr::str_extract(string = varid, pattern="[0-9]{1,2}[A-Za-z]{3}[0-9]{4}");
-    DF.output[,'date'] <- date.string;
+    DF.output[,'date'] <- as.Date(x = date.string, format = "%d%B%Y");
     DF.output <- DF.output[,c('date','coord.1','coord.2','varname')];
 
     colnames(DF.output) <- gsub(
