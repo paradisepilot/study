@@ -108,14 +108,14 @@ gpt ${codeDIR}/export.xml \
     -Poutput=${outputDIR}/coregistered_stack > ${stdoutFile} 2> ${stderrFile}
 
 ##################################################
-# save as NetCDF4-BEAM
+# save as NetCDF4-CF
 
 sleep 10
-stdoutFile=${outputDIR}/stdout.gpt.export.NetCDF4-BEAM
-stderrFile=${outputDIR}/stderr.gpt.export.NetCDF4-BEAM
+stdoutFile=${outputDIR}/stdout.gpt.export.NetCDF4-CF
+stderrFile=${outputDIR}/stderr.gpt.export.NetCDF4-CF
 gpt ${codeDIR}/export.xml \
     -Pinput=${outputDIR}/coregistered_stack.dim \
-    -PoutputFormat='NetCDF4-BEAM' \
+    -PoutputFormat='NetCDF4-CF' \
     -Poutput=${outputDIR}/coregistered_stack > ${stdoutFile} 2> ${stderrFile}
 
 ##################################################
