@@ -29,6 +29,9 @@ for ( code.file in code.files ) {
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 set.seed(7654321);
 
+test_getData_one.variable_elongate();
+
+### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 temp.dir  <- gsub(x = output.directory, pattern = "005-fpca-analysis.+", replacement = "");
 temp.dir  <- file.path(temp.dir,"004-preprocess","02-bay-of-quinte","01-AAW/output.AAW.kc-512.2021-10-03.01");
 temp.file <- "coregistered_stack.nc";
