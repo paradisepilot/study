@@ -1,7 +1,7 @@
 
 getData <- function(
     input.file   = NULL,
-    RData.output = "data-ncdf4.RData"
+    RData.output = "list-arrays.RData"
     ) {
 
     thisFunctionName <- "getData";
@@ -12,33 +12,41 @@ getData <- function(
     if ( file.exists(RData.output) ) {
 
         # cat(paste0("\n# ",RData.output," already exists; loading this file ...\n"));
-        # list.data <- readRDS(file = RData.output);
+        # list.arrays <- readRDS(file = RData.output);
         # cat(paste0("\n# Loading complete: ",RData.output,"\n"));
 
     } else {
 
-        require(ncdf4);
-
         my.ncdf4.object <- ncdf4::nc_open(input.file);
         cat("\n# names(my.ncdf4.object[['var']])\n");
         print(   names(my.ncdf4.object[['var']])   );
+
+        list.arrays <- getData_all.variables(
+            ncdf4.object = my.ncdf4.object
+            );
 
         # list.nc.attributes <- ncdf4::ncatt_get(
         #     nc    = my.ncdf4.object,
         #     varid = 0
         #     );
 
-        temp.results <- getData_one.variable(
-            ncdf4.object = my.ncdf4.object,
-            varid        = "Sigma0_VH_db_mst_26Dec2019"
-            );
+        # temp.results <- getData_one.variable(
+        #     ncdf4.object = my.ncdf4.object,
+        #     varid        = "Sigma0_VH_db_mst_26Dec2019"
+        #     );
 
-        ncdf4::nc_open(temp.path);
+        ncdf4::nc_close(my.ncdf4.object);
 
         }
 
-    cat("\n# str(temp.results)\n");
-    print(   str(temp.results)   );
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    cat("\n# str(list.arrays)\n");
+    print(   str(list.arrays)   );
+
+    saveRDS(
+        file   = RData.output,
+        object = list.arrays
+        );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat(paste0("\n",thisFunctionName,"() quits."));
@@ -48,6 +56,72 @@ getData <- function(
     }
 
 ##################################################
+getData_all.variables <- function(
+    ncdf4.object = NULL
+    ) {
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    band.names <- names(ncdf4.object[['var']]);
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    date.suffixes <- unique(stringr::str_extract(string = band.names, pattern = "[0-9]{1,2}[A-Za-z]{3}[0-9]{4}"));
+    DF.dates <- data.frame(
+        date.suffix = date.suffixes,
+        date        = as.Date(x = date.suffixes, format = "%d%B%Y", tz = "UTC")
+        );
+    DF.dates <- DF.dates[order(DF.dates[,'date']),c('date.suffix','date')];
+    DF.dates[,'date.integer'] <- as.integer(DF.dates[,'date'] - as.Date("1970-01-01", tz = "UTC"));
+    rownames(DF.dates) <- seq(1,nrow(DF.dates));
+
+    n.dates <- nrow(DF.dates);
+
+    cat("\nDF.dates\n");
+    print( DF.dates   );
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    ncdf4.object.dim <- ncdf4.object[['dim']];
+
+    n.lat <- ncdf4.object[['dim']][['lat']][['len']];
+    n.lon <- ncdf4.object[['dim']][['lon']][['len']];
+
+    cat("\nn.lat = ",n.lat);
+    cat("\nn.lon = ",n.lon);
+    cat("\n");
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    var.names <- band.names;
+    var.names <- unique(gsub(x = var.names, pattern = "_{1,}[0-9]{1,2}[A-Za-z]{3}[0-9]{4}", replacement = ""));
+    var.names <- unique(gsub(x = var.names, pattern = "_{1,}(mst|slv[0-9]{1,})",            replacement = ""));
+
+    cat("\nvar.names\n");
+    print( var.names   );
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    list.arrays <- list();
+    for ( var.name in var.names ) {
+        list.arrays[[var.name]] <- base::array(dim = c(n.dates,n.lat,n.lon));
+        }
+
+    for (  date.index in base::seq(1,nrow(DF.dates)) ) {
+        date.suffix <- DF.dates[date.index,'date.suffix'];
+        for ( var.name in var.names ) {
+            band.name <- base::grep(x = band.names, pattern = base::paste0(var.name,".+",date.suffix), value = TRUE);
+            DF.band   <- ncdf4::ncvar_get(nc = ncdf4.object, varid = band.name);
+            if ( all(dim(DF.band) == c(n.lat,n.lon)) ) {
+                list.arrays[[var.name]][date.index,,] <- DF.band;
+            } else {
+                list.arrays[[var.name]][date.index,,] <- base::t(DF.band);
+                }
+            cat("\n(date.suffix, var.name, band.name, dim(DF.band)) = (",date.suffix,",",var.name,",",band.name,",",base::paste(dim(DF.band),collapse=" x "),")");
+            cat("\n")
+            }
+        }
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    return( list.arrays );
+
+    }
+
 getData_one.variable <- function(
     ncdf4.object = NULL,
     varid        = NULL

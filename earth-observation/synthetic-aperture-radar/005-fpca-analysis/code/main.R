@@ -16,6 +16,9 @@ start.proc.time <- proc.time();
 setwd( output.directory );
 
 ##################################################
+require(ncdf4);
+require(stringr);
+
 # source supporting R code
 code.files <- c(
     "getData.R"
@@ -33,13 +36,13 @@ test_getData_one.variable_elongate();
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 temp.dir  <- gsub(x = output.directory, pattern = "005-fpca-analysis.+", replacement = "");
-temp.dir  <- file.path(temp.dir,"004-preprocess","02-bay-of-quinte","01-AAW/output.AAW.kc-512.2021-10-03.01");
+temp.dir  <- file.path(temp.dir,"004-preprocess","02-bay-of-quinte","01-AAW/output.AAW.kc-512.2021-10-03.01a");
 temp.file <- "coregistered_stack.nc";
 temp.path <- file.path(temp.dir,temp.file)
 
 getData(
     input.file   = temp.path,
-    RData.output = "data-ncdf4.RData"
+    RData.output = "list-arrays.RData"
     );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
