@@ -1,19 +1,21 @@
 
-getData <- function(
-    input.file   = NULL,
-    RData.output = "list-arrays.RData"
+nc_convert.spatiotemporal <- function(
+    input.file     = NULL,
+    date.reference = as.Date("1970-01-01", tz = "UTC"),
+    ncdf4.output   = 'data-input-spatiotemporal.nc'
     ) {
 
-    thisFunctionName <- "getData";
+    thisFunctionName <- "nc_convert.spatiotemporal";
     cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###");
     cat(paste0("\n",thisFunctionName,"() starts.\n\n"));
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    if ( file.exists(RData.output) ) {
+    if ( file.exists(ncdf4.output) ) {
 
-        # cat(paste0("\n# ",RData.output," already exists; loading this file ...\n"));
-        # list.arrays <- readRDS(file = RData.output);
-        # cat(paste0("\n# Loading complete: ",RData.output,"\n"));
+        # cat(paste0("\n# ",ncdf4.output," already exists; loading this file ...\n"));
+        # list.arrays <- readRDS(file = ncdf4.output);
+        # cat(paste0("\n# Loading complete: ",ncdf4.output,"\n"));
+        cat(paste0("\n# ",ncdf4.output," already exists; do nothing ...\n"));
 
     } else {
 
@@ -21,32 +23,23 @@ getData <- function(
         cat("\n# names(my.ncdf4.object[['var']])\n");
         print(   names(my.ncdf4.object[['var']])   );
 
-        list.arrays <- getData_all.variables(
-            ncdf4.object = my.ncdf4.object
+        list.data <- nc_convert.spatiotemporal_list.data(
+            ncdf4.object   = my.ncdf4.object,
+            date.reference = date.reference
             );
+        cat("\n# str(list.data)\n");
+        print(   str(list.data)   );
 
-        # list.nc.attributes <- ncdf4::ncatt_get(
-        #     nc    = my.ncdf4.object,
-        #     varid = 0
-        #     );
-
-        # temp.results <- getData_one.variable(
-        #     ncdf4.object = my.ncdf4.object,
-        #     varid        = "Sigma0_VH_db_mst_26Dec2019"
-        #     );
+        nc_convert.spatiotemporal_ncdf4(
+            ncdf4.object   = my.ncdf4.object,
+            list.data      = list.data,
+            date.reference = date.reference,
+            ncdf4.output   = ncdf4.output
+            );
 
         ncdf4::nc_close(my.ncdf4.object);
 
         }
-
-    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    cat("\n# str(list.arrays)\n");
-    print(   str(list.arrays)   );
-
-    saveRDS(
-        file   = RData.output,
-        object = list.arrays
-        );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat(paste0("\n",thisFunctionName,"() quits."));
@@ -56,8 +49,75 @@ getData <- function(
     }
 
 ##################################################
-getData_all.variables <- function(
-    ncdf4.object = NULL
+nc_convert.spatiotemporal_ncdf4 <- function(
+    ncdf4.object   = NULL,
+    list.data      = NULL,
+    date.reference = NULL,
+    ncdf4.output   = NULL
+    ) {
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    dimension.time <- ncdf4::ncdim_def(
+        name  = "time",
+        units = paste("days since",date.reference,"UTC"),
+        vals  = list.data[['dates']][,'date.integer']
+        );
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    list.vars <- list();
+    for ( var.name in names(list.data[['variables']]) ) {
+        list.vars[[var.name]] <- ncdf4::ncvar_def(
+            name  = var.name,
+            units = "intensity_db",
+            dim   = list(
+                time = dimension.time,
+                lat  = ncdf4.object[['dim']][['lat']],
+                lon  = ncdf4.object[['dim']][['lon']]
+                )
+            );
+        }
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    output.object <- ncdf4::nc_create(
+        filename = ncdf4.output,
+        vars     = list.vars
+        );
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    global.attributes <- ncatt_get(nc = ncdf4.object, varid = 0);
+    retained.attributes <- c('Conventions','TileSize','title');
+    for ( retained.attribute in retained.attributes ) {
+        if ( retained.attribute %in% names(global.attributes) ) {
+            ncdf4::ncatt_put(
+                nc         = output.object,
+                varid      = 0,
+                attname    = retained.attribute,
+                attval     = global.attributes[[retained.attribute]],
+                prec       = NA,
+                verbose    = FALSE,
+                definemode = FALSE
+                );
+            }
+        }
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    for ( var.name in names(list.data[['variables']]) ) {
+        ncdf4::ncvar_put(
+            nc    = output.object,
+            varid = var.name,
+            vals  = list.data[['variables']][[var.name]]
+            );
+        }
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    ncdf4::nc_close(output.object);
+    return( NULL );
+
+    }
+
+nc_convert.spatiotemporal_list.data <- function(
+    ncdf4.object   = NULL,
+    date.reference = NULL
     ) {
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
@@ -70,7 +130,7 @@ getData_all.variables <- function(
         date        = as.Date(x = date.suffixes, format = "%d%B%Y", tz = "UTC")
         );
     DF.dates <- DF.dates[order(DF.dates[,'date']),c('date.suffix','date')];
-    DF.dates[,'date.integer'] <- as.integer(DF.dates[,'date'] - as.Date("1970-01-01", tz = "UTC"));
+    DF.dates[,'date.integer'] <- as.integer(DF.dates[,'date'] - date.reference);
     rownames(DF.dates) <- seq(1,nrow(DF.dates));
 
     n.dates <- nrow(DF.dates);
@@ -97,9 +157,9 @@ getData_all.variables <- function(
     print( var.names   );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    list.arrays <- list();
+    list.variables <- list();
     for ( var.name in var.names ) {
-        list.arrays[[var.name]] <- base::array(dim = c(n.dates,n.lat,n.lon));
+        list.variables[[var.name]] <- base::array(dim = c(n.dates,n.lat,n.lon));
         }
 
     for (  date.index in base::seq(1,nrow(DF.dates)) ) {
@@ -108,9 +168,9 @@ getData_all.variables <- function(
             band.name <- base::grep(x = band.names, pattern = base::paste0(var.name,".+",date.suffix), value = TRUE);
             DF.band   <- ncdf4::ncvar_get(nc = ncdf4.object, varid = band.name);
             if ( all(dim(DF.band) == c(n.lat,n.lon)) ) {
-                list.arrays[[var.name]][date.index,,] <- DF.band;
+                list.variables[[var.name]][date.index,,] <- DF.band;
             } else {
-                list.arrays[[var.name]][date.index,,] <- base::t(DF.band);
+                list.variables[[var.name]][date.index,,] <- base::t(DF.band);
                 }
             cat("\n(date.suffix, var.name, band.name, dim(DF.band)) = (",date.suffix,",",var.name,",",band.name,",",base::paste(dim(DF.band),collapse=" x "),")");
             cat("\n")
@@ -118,110 +178,12 @@ getData_all.variables <- function(
         }
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    return( list.arrays );
-
-    }
-
-getData_one.variable <- function(
-    ncdf4.object = NULL,
-    varid        = NULL
-    ) {
-
-    coords.1 <- ncdf4.object[['var']][[varid]][['dim']][[1]][['vals']];
-    coords.2 <- ncdf4.object[['var']][[varid]][['dim']][[2]][['vals']];
-
-    DF.data <- ncdf4::ncvar_get(nc = ncdf4.object, varid = varid);
-
-    DF.output <- getData_one.variable_elongate(
-        varid    = varid,
-        coords.1 = coords.1,
-        coords.2 = coords.2,
-        DF.data  = DF.data
+    list.output <- list(
+        dates     = DF.dates,
+        variables = list.variables
         );
-
-    date.string <- stringr::str_extract(string = varid, pattern="[0-9]{1,2}[A-Za-z]{3}[0-9]{4}");
-    DF.output[,'date'] <- as.Date(x = date.string, format = "%d%B%Y");
-    DF.output <- DF.output[,c('date','coord.1','coord.2','varname')];
-
-    colnames(DF.output) <- gsub(
-        x           = colnames(DF.output),
-        pattern     = "coord.1",
-        replacement = ncdf4.object[['var']][[varid]][['dim']][[1]][['name']]
-        );
-
-    colnames(DF.output) <- gsub(
-        x           = colnames(DF.output),
-        pattern     = "coord.2",
-        replacement = ncdf4.object[['var']][[varid]][['dim']][[2]][['name']]
-        );
-
-    colnames(DF.output) <- gsub(
-        x           = colnames(DF.output),
-        pattern     = "varname",
-        replacement = varid
-        );
-
-    return( DF.output );
-
-    }
-
-getData_one.variable_elongate <- function(
-    varid    = NULL,
-    coords.1 = NULL,
-    coords.2 = NULL,
-    DF.data  = NULL
-    ) {
-
-    byrow.1 <- ifelse(base::length(coords.1) == base::ncol(DF.data),TRUE,FALSE);
-    byrow.2 <- ifelse(base::length(coords.2) == base::ncol(DF.data),TRUE,FALSE);
-
-    DF.coords.1 <- matrix(data = coords.1, byrow = byrow.1, nrow = base::nrow(DF.data), ncol = base::ncol(DF.data));
-    DF.coords.2 <- matrix(data = coords.2, byrow = byrow.2, nrow = base::nrow(DF.data), ncol = base::ncol(DF.data));
-
-    DF.output <- base::data.frame(
-        coord.1 = base::as.vector(DF.coords.1),
-        coord.2 = base::as.vector(DF.coords.2),
-        varname = base::as.vector(DF.data)
-        );
-
-    return( DF.output );
-
-    }
-
-test_getData_one.variable_elongate <- function() {
-
-    thisFunctionName <- "test_getData_one.variable_elongate";
-    cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###");
-    cat(paste0("\n",thisFunctionName,"() starts.\n\n"));
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    m <- 5;
-    n <- 3;
-
-    coords.1 <- seq(1,m);
-    coords.2 <- seq(1,n);
-
-    DF.rows <- matrix(data = coords.1, nrow = m, ncol = n);
-    DF.cols <- matrix(data = coords.2, nrow = m, ncol = n, byrow = TRUE);
-
-    DF.input <- 10 * DF.rows + DF.cols;
-
-    cat("\n# DF.input\n");
-    print(   DF.input   );
-
-    DF.output <- getData_one.variable_elongate(
-        varid    = varid,
-        coords.1 = coords.1,
-        coords.2 = coords.2,
-        DF.data  = DF.input
-        );
-
-    cat("\n# DF.output\n");
-    print(   DF.output   );
-
-    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    cat(paste0("\n",thisFunctionName,"() quits."));
-    cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###\n");
-    return( NULL );
+    return( list.output );
 
     }
