@@ -85,6 +85,9 @@ verify.nc_convert.spatiotemporal <- function(
     cat("\nDF.output\n");
     print( DF.output   );
 
+    cat("\nmax(DF.output[,'max.ab.diff'])\n");
+    print( max(DF.output[,'max.ab.diff'])   );
+
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat(paste0("\n",thisFunctionName,"() quits."));
     cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###\n");
