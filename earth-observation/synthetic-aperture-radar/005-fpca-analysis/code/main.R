@@ -24,6 +24,7 @@ require(stringr);
 code.files <- c(
     "getData.R",
     "nc-convert-spatiotemporal.R",
+    "test-raster.R",
     "verify-nc-convert-spatiotemporal.R"
     );
 
@@ -52,14 +53,18 @@ nc_convert.spatiotemporal(
     ncdf4.output = ncdf4.spatiotemporal
     );
 
-verify.nc_convert.spatiotemporal(
-    ncdf4.spatiotemporal = ncdf4.spatiotemporal,
-    ncdf4.snap           = ncdf4.snap
-    );
+# verify.nc_convert.spatiotemporal(
+#     ncdf4.spatiotemporal = ncdf4.spatiotemporal,
+#     ncdf4.snap           = ncdf4.snap
+#     );
+#
+# DF.data <- getData(
+#     ncdf4.input  = ncdf4.spatiotemporal,
+#     RData.output = RData.output
+#     );
 
-DF.data <- getData(
-    ncdf4.input  = ncdf4.spatiotemporal,
-    RData.output = RData.output
+test.raster(
+    ncdf4.spatiotemporal = ncdf4.spatiotemporal
     );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
