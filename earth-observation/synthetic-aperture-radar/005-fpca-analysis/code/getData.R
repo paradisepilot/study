@@ -12,20 +12,16 @@ getData <- function(
     if ( file.exists(RData.output) ) {
 
         cat(paste0("\n# ",RData.output," already exists; loading this file ...\n"));
-        list.arrays <- readRDS(file = RData.output);
+        DF.output <- readRDS(file = RData.output);
         cat(paste0("\n# Loading complete: ",RData.output,"\n"));
 
     } else {
 
-        # list.nc.attributes <- ncdf4::ncatt_get(
-        #     nc    = my.ncdf4.object,
-        #     varid = 0
-        #     );
-
-        # temp.results <- getData_one.variable(
-        #     ncdf4.object = my.ncdf4.object,
-        #     varid        = "Sigma0_VH_db_mst_26Dec2019"
-        #     );
+        ncdf4.object <- ncdf4::nc_open(ncdf4.input);
+        getData_all.variables(
+            ncdf4.object = ncdf4.object
+            );
+        ncdf4::nc_close(ncdf4.object);
 
         }
 
@@ -37,26 +33,66 @@ getData <- function(
     }
 
 ##################################################
+getData_all.variables <- function(
+    ncdf4.object = NULL
+    ) {
+
+    var.names <- names(ncdf4.object[['var']]);
+
+    reference.date <- as.Date(stringr::str_extract(
+        string  = ncdf4.object[['dim']][['time']][['units']],
+        pattern = "[0-9]{4}-[0-9]{2}-[0-9]{2}.+"
+        ));
+
+    for ( var.index in seq(1,length(var.names)) ) {
+
+        var.name <- var.names[var.index];
+
+        DF.temp <- getData_one.variable(
+            ncdf4.object = ncdf4.object,
+            varid        = var.name
+            );
+
+        colnames(DF.temp) <- gsub(
+            x           = colnames(DF.temp),
+            pattern     = "time",
+            replacement = "date"
+            );
+
+        DF.temp[,'date'] <- reference.date + DF.temp[,'date'];
+
+        cat("\nstr(DF.temp)\n");
+        print( str(DF.temp)   );
+
+        saveRDS(
+            file   = paste0(var.name,".RData"),
+            object = DF.temp
+            );
+
+        }
+
+    return( NULL );
+
+    }
+
 getData_one.variable <- function(
     ncdf4.object = NULL,
     varid        = NULL
     ) {
 
-    coords.1 <- ncdf4.object[['var']][[varid]][['dim']][[1]][['vals']];
-    coords.2 <- ncdf4.object[['var']][[varid]][['dim']][[2]][['vals']];
-
-    DF.data <- ncdf4::ncvar_get(nc = ncdf4.object, varid = varid);
+    data.array <- ncdf4::ncvar_get(nc = ncdf4.object, varid = varid);
 
     DF.output <- getData_one.variable_elongate(
-        varid    = varid,
-        coords.1 = coords.1,
-        coords.2 = coords.2,
-        DF.data  = DF.data
+        varid      = varid,
+        coords.1   = ncdf4.object[['var']][[varid]][['dim']][[1]][['vals']],
+        coords.2   = ncdf4.object[['var']][[varid]][['dim']][[2]][['vals']],
+        coords.3   = ncdf4.object[['var']][[varid]][['dim']][[3]][['vals']],
+        data.array = data.array
         );
 
     date.string <- stringr::str_extract(string = varid, pattern="[0-9]{1,2}[A-Za-z]{3}[0-9]{4}");
     DF.output[,'date'] <- as.Date(x = date.string, format = "%d%B%Y");
-    DF.output <- DF.output[,c('date','coord.1','coord.2','varname')];
+    DF.output <- DF.output[,c('coord.1','coord.2','coord.3','varname')];
 
     colnames(DF.output) <- gsub(
         x           = colnames(DF.output),
@@ -72,6 +108,12 @@ getData_one.variable <- function(
 
     colnames(DF.output) <- gsub(
         x           = colnames(DF.output),
+        pattern     = "coord.3",
+        replacement = ncdf4.object[['var']][[varid]][['dim']][[3]][['name']]
+        );
+
+    colnames(DF.output) <- gsub(
+        x           = colnames(DF.output),
         pattern     = "varname",
         replacement = varid
         );
@@ -81,22 +123,18 @@ getData_one.variable <- function(
     }
 
 getData_one.variable_elongate <- function(
-    varid    = NULL,
-    coords.1 = NULL,
-    coords.2 = NULL,
-    DF.data  = NULL
+    varid      = NULL,
+    coords.1   = NULL,
+    coords.2   = NULL,
+    coords.3   = NULL,
+    data.array = NULL
     ) {
 
-    byrow.1 <- ifelse(base::length(coords.1) == base::ncol(DF.data),TRUE,FALSE);
-    byrow.2 <- ifelse(base::length(coords.2) == base::ncol(DF.data),TRUE,FALSE);
-
-    DF.coords.1 <- matrix(data = coords.1, byrow = byrow.1, nrow = base::nrow(DF.data), ncol = base::ncol(DF.data));
-    DF.coords.2 <- matrix(data = coords.2, byrow = byrow.2, nrow = base::nrow(DF.data), ncol = base::ncol(DF.data));
-
     DF.output <- base::data.frame(
-        coord.1 = base::as.vector(DF.coords.1),
-        coord.2 = base::as.vector(DF.coords.2),
-        varname = base::as.vector(DF.data)
+        coord.1 = base::rep(x = coords.1, times = base::length(coords.2) * base::length(coords.3)),
+        coord.2 = base::rep(x = base::rep(x = coords.2, each = base::length(coords.1)), times = base::length(coords.3)),
+        coord.3 = base::rep(x = coords.3, each  = base::length(coords.1) * base::length(coords.2)),
+        varname = base::as.vector(data.array)
         );
 
     return( DF.output );
@@ -110,29 +148,47 @@ test_getData_one.variable_elongate <- function() {
     cat(paste0("\n",thisFunctionName,"() starts.\n\n"));
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    m <- 5;
-    n <- 3;
+    n.x1 <- 7;
+    n.x2 <- 5;
+    n.x3 <- 3;
 
-    coords.1 <- seq(1,m);
-    coords.2 <- seq(1,n);
+    VC.x1 <- seq(1,n.x1);
+    VC.x2 <- seq(1,n.x2);
+    VC.x3 <- seq(1,n.x3);
 
-    DF.rows <- matrix(data = coords.1, nrow = m, ncol = n);
-    DF.cols <- matrix(data = coords.2, nrow = m, ncol = n, byrow = TRUE);
+    my.dimnames <- list(
+        'x1' = as.character(VC.x1),
+        'x2' = as.character(VC.x2),
+        'x3' = as.character(VC.x3)
+        );
 
-    DF.input <- 10 * DF.rows + DF.cols;
+    DF.x2 <- matrix(data = VC.x2, nrow = n.x2, ncol = n.x3);
+    DF.x3 <- matrix(data = VC.x3, nrow = n.x2, ncol = n.x3, byrow = TRUE);
 
-    cat("\n# DF.input\n");
-    print(   DF.input   );
+    DF.x2.x3 <- 10 * DF.x2 + DF.x3;
+
+    AR.input <- array(dim = c(n.x1,n.x2,n.x3), dimnames = my.dimnames);
+    for ( k in seq(1,n.x1,1) ) {
+        AR.input [k,,] <- 100 * VC.x1[k] + DF.x2.x3;
+        cat("\n# AR.input[",k,",,]\n");
+        print(   AR.input[k,,]   );
+        }
 
     DF.output <- getData_one.variable_elongate(
-        varid    = varid,
-        coords.1 = coords.1,
-        coords.2 = coords.2,
-        DF.data  = DF.input
+        varid      = varid,
+        coords.1   = VC.x1,
+        coords.2   = VC.x2,
+        coords.3   = VC.x3,
+        data.array = AR.input
         );
+    DF.output[,'100_x1_10_x2_x3'] <- 100 * DF.output[,'coord.1'] + 10 * DF.output[,'coord.2'] + DF.output[,'coord.3'];
+    DF.output[,'check'] <- abs(DF.output[,'varname'] - DF.output['100_x1_10_x2_x3'])
 
     cat("\n# DF.output\n");
     print(   DF.output   );
+
+    cat("\n# max(DF.output[,'check'])\n");
+    print(   max(DF.output[,'check'])   );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat(paste0("\n",thisFunctionName,"() quits."));
