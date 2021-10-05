@@ -70,6 +70,16 @@ test.raster <- function(
     cat("\nsummary(as.vector(vv.matrix))\n");
     print( summary(as.vector(vv.matrix))   );
 
+    my.ggplot <- ggplot2::qplot(
+      x        = as.vector(vv.matrix),
+      geom     = "histogram",
+      binwidth = 0.1
+      );
+    ggplot2::ggsave(
+        filename = "plot-histogram-vv.png",
+        plot     = my.ggplot
+        );
+
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     vh.layer <- raster::raster(
         nrows = n.rows,
@@ -90,6 +100,16 @@ test.raster <- function(
     cat("\nsummary(as.vector(vh.matrix))\n");
     print( summary(as.vector(vh.matrix))   );
 
+    my.ggplot <- ggplot2::qplot(
+      x        = as.vector(vh.matrix),
+      geom     = "histogram",
+      binwidth = 0.1
+      );
+    ggplot2::ggsave(
+        filename = "plot-histogram-vh.png",
+        plot     = my.ggplot
+        );
+
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     vv.vh.layer <- raster::raster(
         nrows = n.rows,
@@ -108,6 +128,17 @@ test.raster <- function(
 
     cat("\nsummary(as.vector(vv.vh.matrix))\n");
     print( summary(as.vector(vv.vh.matrix))   );
+
+    my.ggplot <- ggplot2::qplot(
+      x        = as.vector(vv.vh.matrix),
+      geom     = "histogram",
+      binwidth = 0.005,
+      xlim     = c(0,1.5)
+      );
+    ggplot2::ggsave(
+        filename = "plot-histogram-vv-vh.png",
+        plot     = my.ggplot
+        );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     my.stack <- raster::stack(
@@ -139,5 +170,6 @@ test.raster <- function(
 rgb.transform <- function(x,xmin,xmax) {
     temp <- 255 * (x - xmin) / (xmax - xmin) ;
     temp <- sapply(temp, FUN = function(z) {max(0,min(255,z))} );
+    temp <- matrix(temp,nrow = nrow(x), ncol = ncol(x));
     return(temp);
     }

@@ -53,15 +53,15 @@ nc_convert.spatiotemporal(
     ncdf4.output = ncdf4.spatiotemporal
     );
 
-# verify.nc_convert.spatiotemporal(
-#     ncdf4.spatiotemporal = ncdf4.spatiotemporal,
-#     ncdf4.snap           = ncdf4.snap
-#     );
-#
-# DF.data <- getData(
-#     ncdf4.input  = ncdf4.spatiotemporal,
-#     RData.output = RData.output
-#     );
+verify.nc_convert.spatiotemporal(
+    ncdf4.spatiotemporal = ncdf4.spatiotemporal,
+    ncdf4.snap           = ncdf4.snap
+    );
+
+DF.data <- getData(
+    ncdf4.input  = ncdf4.spatiotemporal,
+    RData.output = RData.output
+    );
 
 test.raster(
     ncdf4.spatiotemporal = ncdf4.spatiotemporal
