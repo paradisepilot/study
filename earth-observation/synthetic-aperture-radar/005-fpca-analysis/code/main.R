@@ -23,7 +23,8 @@ require(stringr);
 # source supporting R code
 code.files <- c(
     "getData.R",
-    "nc-convert-spatiotemporal.R"
+    "nc-convert-spatiotemporal.R",
+    "verify-nc-convert-spatiotemporal.R"
     );
 
 for ( code.file in code.files ) {
@@ -40,14 +41,20 @@ RData.output         <- 'data-long.RData';
 test_getData_one.variable_elongate();
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-temp.dir  <- gsub(x = output.directory, pattern = "005-fpca-analysis.+", replacement = "");
-temp.dir  <- file.path(temp.dir,"004-preprocess","02-bay-of-quinte","01-AAW/output.AAW.kc-512.2021-10-04.01");
-temp.file <- "coregistered_stack.nc";
-temp.path <- file.path(temp.dir,temp.file)
+temp.dir   <- gsub(x = output.directory, pattern = "005-fpca-analysis.+", replacement = "");
+temp.dir   <- file.path(temp.dir,"004-preprocess","02-bay-of-quinte","01-AAW/output.AAW.kc-512.2021-10-04.01");
+temp.file  <- "coregistered_stack.nc";
+ncdf4.snap <- file.path(temp.dir,temp.file)
 
+### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 nc_convert.spatiotemporal(
-    input.file   = temp.path,
+    input.file   = ncdf4.snap,
     ncdf4.output = ncdf4.spatiotemporal
+    );
+
+verify.nc_convert.spatiotemporal(
+    ncdf4.spatiotemporal = ncdf4.spatiotemporal,
+    ncdf4.snap           = ncdf4.snap
     );
 
 DF.data <- getData(
