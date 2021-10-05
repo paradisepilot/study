@@ -16,6 +16,7 @@ start.proc.time <- proc.time();
 setwd( output.directory );
 
 ##################################################
+require(arrow);
 require(ncdf4);
 require(stringr);
 

@@ -64,10 +64,15 @@ getData_all.variables <- function(
         cat("\nstr(DF.temp)\n");
         print( str(DF.temp)   );
 
-        saveRDS(
-            file   = paste0(var.name,".RData"),
-            object = DF.temp
+        arrow::write_parquet(
+            x    = DF.temp,
+            sink = paste0(var.name,".parquet")
             );
+
+        # saveRDS(
+        #     file   = paste0(var.name,".RData"),
+        #     object = DF.temp
+        #     );
 
         }
 
