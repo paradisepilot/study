@@ -60,12 +60,12 @@ test.raster <- function(
         # ymx   = y.max
         );
     vv.matrix <- vv.values[time.index,,];
-    raster::values(vv.layer) <- vv.matrix;
-    # raster::values(vv.layer) <- rgb.transform(
-    #     x    = vv.matrix,
-    #     xmin = vv.min,
-    #     xmax = vv.max
-    #     );
+    # raster::values(vv.layer) <- vv.matrix;
+    raster::values(vv.layer) <- rgb.transform(
+        x    = vv.matrix,
+        xmin = -24.26, # vv.min,
+        xmax =  -7.88  # vv.max
+        );
 
     cat("\nsummary(as.vector(vv.matrix))\n");
     print( summary(as.vector(vv.matrix))   );
@@ -80,12 +80,12 @@ test.raster <- function(
         # ymx   = y.max
         );
     vh.matrix <- vh.values[time.index,,];
-    raster::values(vh.layer) <- vh.matrix;
-    # raster::values(vh.layer) <- rgb.transform(
-    #     x    = vh.matrix,
-    #     xmin = vh.min,
-    #     xmax = vh.max
-    #     );
+    # raster::values(vh.layer) <- vh.matrix;
+    raster::values(vh.layer) <- rgb.transform(
+        x    = vh.matrix,
+        xmin = -30.88, # vh.min,
+        xmax = -13.58  # vh.max
+        );
 
     cat("\nsummary(as.vector(vh.matrix))\n");
     print( summary(as.vector(vh.matrix))   );
@@ -102,8 +102,8 @@ test.raster <- function(
     vv.vh.matrix <- vv.matrix / vh.matrix;
     raster::values(vv.vh.layer) <- rgb.transform(
         x    = vv.vh.matrix,
-        xmin = 0.5, # min(vv.vh.matrix),
-        xmax = 1.0  # max(vv.vh.matrix)
+        xmin = 0.43, # min(vv.vh.matrix),
+        xmax = 0.85  # max(vv.vh.matrix)
         );
 
     cat("\nsummary(as.vector(vv.vh.matrix))\n");
@@ -124,9 +124,9 @@ test.raster <- function(
     writeRaster(x = vh.layer, filename = "plot-vh.tif");
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    # png("plot-vv.png");    raster::plot(vv.layer);    dev.off();
-    # png("plot-vh.png");    raster::plot(vh.layer);    dev.off();
-    # png("plot-stack.png"); raster::plotRGB(my.stack); dev.off();
+    png("plot-vv.png");    raster::plot(vv.layer);    dev.off();
+    png("plot-vh.png");    raster::plot(vh.layer);    dev.off();
+    png("plot-stack.png"); raster::plotRGB(my.stack); dev.off();
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat(paste0("\n",thisFunctionName,"() quits."));
@@ -139,5 +139,5 @@ test.raster <- function(
 rgb.transform <- function(x,xmin,xmax) {
     temp <- 255 * (x - xmin) / (xmax - xmin) ;
     temp <- sapply(temp, FUN = function(z) {max(0,min(255,z))} );
-    return(temp)
+    return(temp);
     }
