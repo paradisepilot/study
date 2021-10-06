@@ -38,6 +38,8 @@ test.terrainr <- function(
            DF.input     = DF.date
            );
 
+        remove(list = c('DF.date'));
+
         }
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
@@ -92,6 +94,8 @@ test.terrainr_plot <- function(
         units    = "in",
         dpi      = 300
         );
+
+    remove(list = c('DF.temp','my.ggplot','range.lat','range.lon','file.png'));
 
     return( NULL );
 
