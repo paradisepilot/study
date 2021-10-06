@@ -18,6 +18,8 @@ setwd( output.directory );
 ##################################################
 require(arrow);
 require(ncdf4);
+require(raster);
+require(terrainr);
 require(stringr);
 
 # source supporting R code
@@ -25,6 +27,8 @@ code.files <- c(
     "getData.R",
     "nc-convert-spatiotemporal.R",
     "test-raster.R",
+    "test-terrainr.R",
+    "utils-rgb.R",
     "verify-nc-convert-spatiotemporal.R"
     );
 
@@ -39,7 +43,7 @@ set.seed(7654321);
 ncdf4.spatiotemporal <- 'data-input-spatiotemporal.nc';
 RData.output         <- 'data-long.RData';
 
-test_getData_one.variable_elongate();
+# test_getData_one.variable_elongate();
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 temp.dir   <- gsub(x = output.directory, pattern = "005-fpca-analysis.+", replacement = "");
@@ -53,18 +57,22 @@ nc_convert.spatiotemporal(
     ncdf4.output = ncdf4.spatiotemporal
     );
 
-verify.nc_convert.spatiotemporal(
-    ncdf4.spatiotemporal = ncdf4.spatiotemporal,
-    ncdf4.snap           = ncdf4.snap
-    );
+# verify.nc_convert.spatiotemporal(
+#     ncdf4.spatiotemporal = ncdf4.spatiotemporal,
+#     ncdf4.snap           = ncdf4.snap
+#     );
 
-DF.data <- getData(
+list.data.frames <- getData(
     ncdf4.input  = ncdf4.spatiotemporal,
     RData.output = RData.output
     );
 
-test.raster(
-    ncdf4.spatiotemporal = ncdf4.spatiotemporal
+# test.raster(
+#     ncdf4.spatiotemporal = ncdf4.spatiotemporal
+#     );
+
+test.terrainr(
+    list.data.frames = list.data.frames
     );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
