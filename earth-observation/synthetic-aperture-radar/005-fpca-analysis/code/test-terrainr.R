@@ -33,6 +33,11 @@ test.terrainr <- function(
         cat("\nstr(DF.date)\n");
         print( str(DF.date)   );
 
+        test.terrainr_plot(
+           current.date = temp.date,
+           DF.input     = DF.date
+           );
+
         }
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
@@ -45,6 +50,42 @@ test.terrainr <- function(
     }
 
 ##################################################
+test.terrainr_plot <- function(
+    current.date = NULL,
+    DF.input   = NULL
+    ) {
+
+    require(ggplot2);
+
+    DF.temp <- DF.input;
+    colnames(DF.temp) <- gsub(x = colnames(DF.temp), pattern = "Sigma0_", replacement = "");
+    colnames(DF.temp) <- gsub(x = colnames(DF.temp), pattern = "_db",     replacement = "");
+
+    DF.temp[,'VV.over.VH'] <- DF.temp[,'VV'] / DF.temp[,'VH'];
+
+    for ( temp.colname in c('VV','VH','VV.over.VH') ) {
+        DF.temp[,temp.colname] <- rgb.transform(x = DF.temp[,temp.colname]);
+        }
+
+    my.ggplot <- ggplot2::ggplot(data = NULL) + ggplot2::theme_bw();
+    my.ggplot <- my.ggplot + terrainr::geom_spatial_rgb(
+        data    = DF.temp,
+        mapping = ggplot2::aes(
+            x = lon,
+            y = lat,
+            r = VV,
+            g = VH,
+            b = VV.over.VH
+            )
+        );
+
+    file.png <- paste0("plot-",format(current.date,"%Y-%m-%d"),".png");
+    ggplot2::ggsave(filename = file.png, plot = my.ggplot);
+
+    return( NULL );
+
+   }
+
 test.terrainr_get.DF.date <- function(
     list.data.frames = NULL,
     current.date     = NULL,

@@ -17,6 +17,7 @@ setwd( output.directory );
 
 ##################################################
 require(arrow);
+require(ggplot2);
 require(ncdf4);
 require(raster);
 require(terrainr);
@@ -43,7 +44,7 @@ set.seed(7654321);
 ncdf4.spatiotemporal <- 'data-input-spatiotemporal.nc';
 RData.output         <- 'data-long.RData';
 
-test_getData_one.variable_elongate();
+# test_getData_one.variable_elongate();
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 temp.dir   <- gsub(x = output.directory, pattern = "005-fpca-analysis.+", replacement = "");
@@ -52,24 +53,24 @@ temp.file  <- "coregistered_stack.nc";
 ncdf4.snap <- file.path(temp.dir,temp.file)
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-nc_convert.spatiotemporal(
-    input.file   = ncdf4.snap,
-    ncdf4.output = ncdf4.spatiotemporal
-    );
+# nc_convert.spatiotemporal(
+#     input.file   = ncdf4.snap,
+#     ncdf4.output = ncdf4.spatiotemporal
+#     );
 
-verify.nc_convert.spatiotemporal(
-    ncdf4.spatiotemporal = ncdf4.spatiotemporal,
-    ncdf4.snap           = ncdf4.snap
-    );
+# verify.nc_convert.spatiotemporal(
+#     ncdf4.spatiotemporal = ncdf4.spatiotemporal,
+#     ncdf4.snap           = ncdf4.snap
+#     );
 
 list.data.frames <- getData(
     ncdf4.input  = ncdf4.spatiotemporal,
     RData.output = RData.output
     );
 
-test.raster(
-    ncdf4.spatiotemporal = ncdf4.spatiotemporal
-    );
+# test.raster(
+#     ncdf4.spatiotemporal = ncdf4.spatiotemporal
+#     );
 
 test.terrainr(
     list.data.frames = list.data.frames
