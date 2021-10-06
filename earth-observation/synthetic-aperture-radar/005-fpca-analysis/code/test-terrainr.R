@@ -20,8 +20,8 @@ test.terrainr <- function(
     print(   dates   );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    # for ( date.index in seq(1,length(dates)) ) {
-    for ( date.index in seq(15,15) ) {
+    # for ( date.index in seq(15,15) ) {
+    for ( date.index in seq(1,length(dates)) ) {
 
         temp.date <- dates[date.index];
         cat("\n# temp.date: ",format(temp.date,"%Y-%m-%d"),"\n",sep="");
