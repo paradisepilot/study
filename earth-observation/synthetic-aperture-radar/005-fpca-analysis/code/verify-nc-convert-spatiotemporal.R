@@ -89,6 +89,8 @@ verify.nc_convert.spatiotemporal <- function(
     print( max(DF.output[,'max.ab.diff'])   );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    remove(list = c('DF.output','DF.sptmpl','DF.snap','list.sptml.vars','reference.date','date.integers'));
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat(paste0("\n",thisFunctionName,"() quits."));
     cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###\n");
     return( NULL );
@@ -116,4 +118,3 @@ verify.nc_convert.spatiotemporal_extract.variable <- function(
         );
     return(output.string);
     }
-
