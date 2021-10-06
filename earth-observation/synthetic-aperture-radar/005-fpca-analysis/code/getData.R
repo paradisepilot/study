@@ -76,6 +76,7 @@ getData_all.variables <- function(
 
         }
 
+    remove(list = c('DF.temp','reference.date','var.name','file.parquet'));
     return( list.data.frames );
 
     }

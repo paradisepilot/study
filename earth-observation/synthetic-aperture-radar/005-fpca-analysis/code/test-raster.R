@@ -160,6 +160,13 @@ test.raster <- function(
     png("plot-stack.png"); raster::plotRGB(my.stack); dev.off();
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    remove(list = c(
+        'vv.values','vh.values',
+        'vv.layer', 'vh.layer',
+        'vv.vh.layer',
+        'my.stack','my.ggplot'
+        ));
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat(paste0("\n",thisFunctionName,"() quits."));
     cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###\n");
     return( NULL );
