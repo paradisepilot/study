@@ -52,7 +52,7 @@ test.terrainr <- function(
 ##################################################
 test.terrainr_plot <- function(
     current.date = NULL,
-    DF.input   = NULL
+    DF.input     = NULL
     ) {
 
     require(ggplot2);
@@ -79,8 +79,19 @@ test.terrainr_plot <- function(
             )
         );
 
+    range.lat <- sum(range(DF.temp[,'lat']) * c(-1,1));
+    range.lon <- sum(range(DF.temp[,'lon']) * c(-1,1));
+
     file.png <- paste0("plot-",format(current.date,"%Y-%m-%d"),".png");
-    ggplot2::ggsave(filename = file.png, plot = my.ggplot);
+    ggplot2::ggsave(
+        filename = file.png,
+        plot     = my.ggplot,
+        # scale  = 1,
+        width    = 16,
+        height   = 16 * (range.lat/range.lon),
+        units    = "in",
+        dpi      = 300
+        );
 
     return( NULL );
 
