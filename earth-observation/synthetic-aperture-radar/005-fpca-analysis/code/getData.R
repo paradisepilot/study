@@ -18,7 +18,7 @@ getData <- function(
     } else {
 
         ncdf4.object <- ncdf4::nc_open(ncdf4.input);
-        getData_all.variables(
+        list.data.frames <- getData_all.variables(
             ncdf4.object = ncdf4.object
             );
         ncdf4::nc_close(ncdf4.object);
@@ -28,7 +28,7 @@ getData <- function(
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat(paste0("\n",thisFunctionName,"() quits."));
     cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###\n");
-    return( NULL );
+    return( list.data.frames );
 
     }
 
@@ -44,39 +44,39 @@ getData_all.variables <- function(
         pattern = "[0-9]{4}-[0-9]{2}-[0-9]{2}.+"
         ));
 
+    list.data.frames <- list();
     for ( var.index in seq(1,length(var.names)) ) {
 
-        var.name <- var.names[var.index];
+        var.name     <- var.names[var.index];
+        file.parquet <- paste0("data-",var.name,".parquet");
 
-        DF.temp <- getData_one.variable(
-            ncdf4.object = ncdf4.object,
-            varid        = var.name
-            );
+        if ( file.exists(file.parquet) ) {
+            DF.temp <- arrow::read_parquet(file = file.parquet);
+        } else {
+            DF.temp <- getData_one.variable(
+                ncdf4.object = ncdf4.object,
+                varid        = var.name
+                );
+            colnames(DF.temp) <- gsub(
+                x           = colnames(DF.temp),
+                pattern     = "time",
+                replacement = "date"
+                );
+            DF.temp[,'date'] <- reference.date + DF.temp[,'date'];
+            arrow::write_parquet(
+                x    = DF.temp,
+                sink = file.parquet
+                );
+            }
 
-        colnames(DF.temp) <- gsub(
-            x           = colnames(DF.temp),
-            pattern     = "time",
-            replacement = "date"
-            );
+        cat("\nstr(DF.",var.name,")\n",sep="");
+        print( str(DF.temp) );
 
-        DF.temp[,'date'] <- reference.date + DF.temp[,'date'];
-
-        cat("\nstr(DF.temp)\n");
-        print( str(DF.temp)   );
-
-        arrow::write_parquet(
-            x    = DF.temp,
-            sink = paste0(var.name,".parquet")
-            );
-
-        # saveRDS(
-        #     file   = paste0(var.name,".RData"),
-        #     object = DF.temp
-        #     );
+        list.data.frames[[var.name]] <- DF.temp;
 
         }
 
-    return( NULL );
+    return( list.data.frames );
 
     }
 
