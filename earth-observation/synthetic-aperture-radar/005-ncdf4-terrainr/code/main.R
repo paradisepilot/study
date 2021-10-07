@@ -44,7 +44,7 @@ set.seed(7654321);
 ncdf4.spatiotemporal <- 'data-input-spatiotemporal.nc';
 RData.output         <- 'data-long.RData';
 
-# test_getData_one.variable_elongate();
+test_getData_one.variable_elongate();
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 temp.dir   <- gsub(x = output.directory, pattern = "005-fpca-analysis.+", replacement = "");
