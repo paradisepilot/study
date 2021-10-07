@@ -26,7 +26,10 @@ require(stringr);
 # source supporting R code
 code.files <- c(
     "getData.R",
+    "getData-labelled.R",
+    "getData-labelled-helper.R",
     "nc-convert-spatiotemporal.R",
+    "reshapeData.R",
     "test-raster.R",
     "test-terrainr.R",
     "utils-rgb.R",
@@ -44,7 +47,7 @@ set.seed(7654321);
 ncdf4.spatiotemporal <- 'data-input-spatiotemporal.nc';
 RData.output         <- 'data-long.RData';
 
-test_getData_one.variable_elongate();
+# test_getData_one.variable_elongate();
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 temp.dir   <- gsub(x = output.directory, pattern = "005-fpca-analysis.+", replacement = "");
@@ -53,28 +56,51 @@ temp.file  <- "coregistered_stack.nc";
 ncdf4.snap <- file.path(temp.dir,temp.file)
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-nc_convert.spatiotemporal(
-    input.file   = ncdf4.snap,
-    ncdf4.output = ncdf4.spatiotemporal
+# nc_convert.spatiotemporal(
+#     input.file   = ncdf4.snap,
+#     ncdf4.output = ncdf4.spatiotemporal
+#     );
+#
+# verify.nc_convert.spatiotemporal(
+#     ncdf4.spatiotemporal = ncdf4.spatiotemporal,
+#     ncdf4.snap           = ncdf4.snap
+#     );
+#
+# list.data.frames <- getData(
+#     ncdf4.input  = ncdf4.spatiotemporal,
+#     RData.output = RData.output
+#     );
+#
+# test.raster(
+#     ncdf4.spatiotemporal = ncdf4.spatiotemporal
+#     );
+#
+# test.terrainr(
+#     list.data.frames = list.data.frames
+#     );
+
+### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+DF.colour.scheme <- data.frame(
+    land_cover = c("marsh",  "swamp",  "water",  "forest", "ag",     "shallow"),
+    colour     = c("#000000","#E69F00","#56B4E9","#009E73","#F0E442","red"    )
+    );
+rownames(DF.colour.scheme) <- DF.colour.scheme[,"land_cover"];
+
+labelled.data.snapshot  <- "2020-12-30.01";
+labelled.data.directory <- file.path(data.directory,"bay-of-quinte-labelled",labelled.data.snapshot,"micro-mission-1","Sentinel1","IW","4");
+
+list.files(labelled.data.directory);
+
+colname.pattern <- "V";
+
+DF.labelled <- getData.labelled(
+    data.directory  = labelled.data.directory,
+    colname.pattern = colname.pattern,
+    land.cover      = DF.colour.scheme[,'land_cover'],
+    RData.output    = paste0("data-labelled.RData")
     );
 
-verify.nc_convert.spatiotemporal(
-    ncdf4.spatiotemporal = ncdf4.spatiotemporal,
-    ncdf4.snap           = ncdf4.snap
-    );
-
-list.data.frames <- getData(
-    ncdf4.input  = ncdf4.spatiotemporal,
-    RData.output = RData.output
-    );
-
-test.raster(
-    ncdf4.spatiotemporal = ncdf4.spatiotemporal
-    );
-
-test.terrainr(
-    list.data.frames = list.data.frames
-    );
+print( str(DF.labelled) );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 
