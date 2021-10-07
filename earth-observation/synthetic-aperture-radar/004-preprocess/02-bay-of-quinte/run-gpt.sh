@@ -72,7 +72,7 @@ do
         -Pfilter='Refined Lee' \
         -Pdem='SRTM 3Sec' \
         -Pcrs='GEOGCS["WGS84(DD)", DATUM["WGS84", SPHEROID["WGS84", 6378137.0, 298.257223563]], PRIMEM["Greenwich", 0.0], UNIT["degree", 0.017453292519943295], AXIS["Geodetic longitude", EAST], AXIS["Geodetic latitude", NORTH]]' \
-        -Pgeoregion='POLYGON((-77.4181 43.9969,-77.1058 43.9969,-77.1058 44.15,-77.4181 44.15,-77.4181 43.9969))' \
+        -Pgeoregion='POLYGON(( -77.43 43.86 , -77.00 43.86 , -77.00 44.15 , -77.43 44.15 , -77.43 43.86 ))' \
         -Pinput=${dataDIR}/${inputFolder}/${inputFileStem}.zip \
         -Poutput=${outputDIR}/${inputFileStem}.dim > ${stdoutFile} 2> ${stderrFile}
 done
