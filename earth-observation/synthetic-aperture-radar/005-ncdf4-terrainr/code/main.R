@@ -68,9 +68,9 @@ list.data.frames <- getData(
     RData.output = RData.output
     );
 
-test.raster(
-    ncdf4.spatiotemporal = ncdf4.spatiotemporal
-    );
+# test.raster(
+#     ncdf4.spatiotemporal = ncdf4.spatiotemporal
+#     );
 
 test.terrainr(
     list.data.frames = list.data.frames
