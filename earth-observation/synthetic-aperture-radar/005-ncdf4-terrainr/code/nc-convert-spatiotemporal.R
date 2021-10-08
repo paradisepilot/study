@@ -1,8 +1,8 @@
 
 nc_convert.spatiotemporal <- function(
-    input.file     = NULL,
-    date.reference = as.Date("1970-01-01", tz = "UTC"),
-    ncdf4.output   = 'data-input-spatiotemporal.nc'
+    ncdf4.file.input  = NULL,
+    ncdf4.file.output = 'data-input-spatiotemporal.nc',
+    date.reference    = as.Date("1970-01-01", tz = "UTC")
     ) {
 
     thisFunctionName <- "nc_convert.spatiotemporal";
@@ -10,35 +10,27 @@ nc_convert.spatiotemporal <- function(
     cat(paste0("\n",thisFunctionName,"() starts.\n\n"));
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    if ( file.exists(ncdf4.output) ) {
+    if ( file.exists(ncdf4.file.output) ) {
 
         # cat(paste0("\n# ",ncdf4.output," already exists; loading this file ...\n"));
         # list.arrays <- readRDS(file = ncdf4.output);
         # cat(paste0("\n# Loading complete: ",ncdf4.output,"\n"));
-        cat(paste0("\n# ",ncdf4.output," already exists; do nothing ...\n"));
+        cat(paste0("\n# ",ncdf4.file.output," already exists; do nothing ...\n"));
 
     } else {
 
-        my.ncdf4.object <- ncdf4::nc_open(input.file);
-        cat("\n# names(my.ncdf4.object[['var']])\n");
-        print(   names(my.ncdf4.object[['var']])   );
+        ncdf4.object.input <- ncdf4::nc_open(ncdf4.file.input);
+        cat("\n# names(ncdf4.object.input[['var']])\n");
+        print(   names(ncdf4.object.input[['var']])   );
 
-        list.data <- nc_convert.spatiotemporal_list.data(
-            ncdf4.object   = my.ncdf4.object,
-            date.reference = date.reference
-            );
-        cat("\n# str(list.data)\n");
-        print(   str(list.data)   );
-
-        nc_convert.spatiotemporal_ncdf4(
-            ncdf4.object   = my.ncdf4.object,
-            list.data      = list.data,
-            date.reference = date.reference,
-            ncdf4.output   = ncdf4.output
+        nc_convert.spatiotemporal_inner(
+            ncdf4.object.input = ncdf4.object.input,
+            ncdf4.file.output  = ncdf4.file.output,
+            date.reference     = date.reference
             );
 
-        ncdf4::nc_close(my.ncdf4.object);
-        remove(list = c('list.data','my.ncdf4.object'));
+        ncdf4::nc_close(ncdf4.object.input);
+        remove(list = c('list.data','ncdf4.object.input'));
         gc();
 
         }
@@ -51,82 +43,14 @@ nc_convert.spatiotemporal <- function(
     }
 
 ##################################################
-nc_convert.spatiotemporal_ncdf4 <- function(
-    ncdf4.object   = NULL,
-    list.data      = NULL,
-    date.reference = NULL,
-    ncdf4.output   = NULL
+nc_convert.spatiotemporal_inner <- function(
+    ncdf4.object.input = NULL,
+    ncdf4.file.output  = NULL,
+    date.reference     = NULL
     ) {
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    dimension.time <- ncdf4::ncdim_def(
-        name  = "time",
-        units = paste("days since",date.reference,"UTC"),
-        vals  = list.data[['dates']][,'date.integer']
-        );
-
-    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    list.vars <- list();
-    for ( var.name in names(list.data[['variables']]) ) {
-        list.vars[[var.name]] <- ncdf4::ncvar_def(
-            name  = var.name,
-            units = "intensity_db",
-            dim   = list(
-                time = dimension.time,
-                lat  = ncdf4.object[['dim']][['lat']],
-                lon  = ncdf4.object[['dim']][['lon']]
-                )
-            );
-        }
-
-    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    output.object <- ncdf4::nc_create(
-        filename = ncdf4.output,
-        vars     = list.vars
-        );
-
-    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    global.attributes <- ncatt_get(nc = ncdf4.object, varid = 0);
-    retained.attributes <- c('Conventions','TileSize','title');
-    for ( retained.attribute in retained.attributes ) {
-        if ( retained.attribute %in% names(global.attributes) ) {
-            ncdf4::ncatt_put(
-                nc         = output.object,
-                varid      = 0,
-                attname    = retained.attribute,
-                attval     = global.attributes[[retained.attribute]],
-                prec       = NA,
-                verbose    = FALSE,
-                definemode = FALSE
-                );
-            }
-        }
-
-    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    for ( var.name in names(list.data[['variables']]) ) {
-        ncdf4::ncvar_put(
-            nc    = output.object,
-            varid = var.name,
-            vals  = list.data[['variables']][[var.name]]
-            );
-        }
-
-    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    ncdf4::nc_close(output.object);
-    remove(list = c('output.object','list.vars','dimension.time'));
-    gc();
-    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    return( NULL );
-
-    }
-
-nc_convert.spatiotemporal_list.data <- function(
-    ncdf4.object   = NULL,
-    date.reference = NULL
-    ) {
-
-    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    band.names <- names(ncdf4.object[['var']]);
+    band.names <- names(ncdf4.object.input[['var']]);
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     date.suffixes <- unique(stringr::str_extract(string = band.names, pattern = "[0-9]{1,2}[A-Za-z]{3}[0-9]{4}"));
@@ -138,20 +62,16 @@ nc_convert.spatiotemporal_list.data <- function(
     DF.dates[,'date.integer'] <- as.integer(DF.dates[,'date'] - date.reference);
     rownames(DF.dates) <- seq(1,nrow(DF.dates));
 
-    n.dates <- nrow(DF.dates);
-
     cat("\nDF.dates\n");
     print( DF.dates   );
 
-    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    ncdf4.object.dim <- ncdf4.object[['dim']];
+    dimension.time <- ncdf4::ncdim_def(
+        name  = "time",
+        units = paste("days since",date.reference,"UTC"),
+        vals  = DF.dates[,'date.integer']
+        );
 
-    n.lat <- ncdf4.object[['dim']][['lat']][['len']];
-    n.lon <- ncdf4.object[['dim']][['lon']][['len']];
-
-    cat("\nn.lat = ",n.lat);
-    cat("\nn.lon = ",n.lon);
-    cat("\n");
+    remove(list = c("date.suffixes"));
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     var.names <- band.names;
@@ -161,41 +81,82 @@ nc_convert.spatiotemporal_list.data <- function(
     cat("\nvar.names\n");
     print( var.names   );
 
-    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    list.variables <- list();
+    list.vars <- list();
     for ( var.name in var.names ) {
-        list.variables[[var.name]] <- base::array(dim = c(n.dates,n.lat,n.lon));
+        list.vars[[var.name]] <- ncdf4::ncvar_def(
+            name  = var.name,
+            units = ncdf4.object.input[['var']][[1]][['units']],
+            dim   = list(
+                time = dimension.time,
+                lat  = ncdf4.object.input[['dim']][['lat']],
+                lon  = ncdf4.object.input[['dim']][['lon']]
+                )
+            );
         }
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    ncdf4.object.output <- ncdf4::nc_create(
+        filename = ncdf4.file.output,
+        vars     = list.vars
+        );
+    remove(list = c("dimension.time","list.vars"));
+    gc();
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    global.attributes   <- ncdf4::ncatt_get(nc = ncdf4.object.input, varid = 0);
+    retained.attributes <- c('Conventions','TileSize','title');
+    for ( retained.attribute in retained.attributes ) {
+        if ( retained.attribute %in% names(global.attributes) ) {
+            ncdf4::ncatt_put(
+                nc         = ncdf4.object.output,
+                varid      = 0,
+                attname    = retained.attribute,
+                attval     = global.attributes[[retained.attribute]],
+                prec       = NA,
+                verbose    = FALSE,
+                definemode = FALSE
+                );
+            }
+        }
+    remove(list = c("global.attributes","retained.attributes"));
+    gc();
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    n.lats <- ncdf4.object.input[['dim']][['lat']][['len']];
+    n.lons <- ncdf4.object.input[['dim']][['lon']][['len']];
 
     for (  date.index in base::seq(1,nrow(DF.dates)) ) {
         date.suffix <- DF.dates[date.index,'date.suffix'];
         for ( var.name in var.names ) {
             band.name <- base::grep(x = band.names, pattern = base::paste0(var.name,".+",date.suffix), value = TRUE);
-            DF.band   <- ncdf4::ncvar_get(nc = ncdf4.object, varid = band.name);
-            if ( all(dim(DF.band) == c(n.lat,n.lon)) ) {
-                list.variables[[var.name]][date.index,,] <- DF.band;
+            DF.band   <- ncdf4::ncvar_get(nc = ncdf4.object.input, varid = band.name);
+            if ( all(dim(DF.band) == c(n.lats,n.lons)) ) {
+                ncdf4::ncvar_put(
+                    nc    = ncdf4.object.output,
+                    varid = var.name,
+                    vals  = DF.band,
+                    start = c(date.index,1,1),
+                    count = c(1,n.lats,n.lons)
+                    );
             } else {
-                list.variables[[var.name]][date.index,,] <- base::t(DF.band);
+                ncdf4::ncvar_put(
+                    nc    = ncdf4.object.output,
+                    varid = var.name,
+                    vals  = base::t(DF.band),
+                    start = c(date.index,1,1),
+                    count = c(1,n.lats,n.lons)
+                    );
                 }
-            cat("\n(",date.suffix,",",var.name,",",band.name,")");
-            cat("\ndim(DF.band) = ",base::paste(dim(DF.band),collapse = " x "));
-            cat("\nsum(sapply(DF.band, FUN = is.nan)): ",sum(sapply(DF.band, FUN = is.nan)));
-            cat("\nsum(sapply(list.variables[[var.name]][date.index,,], FUN = is.nan)): ",sum(sapply(list.variables[[var.name]][date.index,,], FUN = is.nan)));
-            cat("\n");
+            cat("\n(",date.suffix,",",var.name,",",band.name,"): dim(DF.band) =",base::paste(dim(DF.band),collapse = " x "),"\n");
             remove(list = c('DF.band'));
             }
         }
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    list.output <- list(
-        dates     = DF.dates,
-        variables = list.variables
-        );
-
-    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    remove(list = c('DF.dates','list.variables'));
+    ncdf4::nc_close(ncdf4.object.output);
+    remove(list = c('DF.dates','ncdf4.object.output','n.lats','n.lons'));
     gc();
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    return( list.output );
+    return( NULL );
 
     }

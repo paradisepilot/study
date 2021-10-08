@@ -52,8 +52,8 @@ ncdf4.snap <- file.path(temp.dir,temp.file)
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 nc_convert.spatiotemporal(
-    input.file   = ncdf4.snap,
-    ncdf4.output = ncdf4.spatiotemporal
+    ncdf4.file.input  = ncdf4.snap,
+    ncdf4.file.output = ncdf4.spatiotemporal
     );
 gc();
 
