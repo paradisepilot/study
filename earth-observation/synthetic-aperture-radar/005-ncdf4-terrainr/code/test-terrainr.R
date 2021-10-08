@@ -113,11 +113,19 @@ test.terrainr_get.DF.date <- function(
     if ( file.exists(parquet.file) ) {
         DF.output <- arrow::read_parquet(file = parquet.file);
     } else {
-        is.selected <- (list.data.frames[[1]][,'date'] == current.date);
-        DF.output <- list.data.frames[[1]][is.selected,];
-        for ( temp.var in names(list.data.frames)[seq(2,length(list.data.frames))] ) {
-            is.selected <- (list.data.frames[[temp.var]][,'date'] == current.date);
-            DF.temp <- list.data.frames[[temp.var]][is.selected,];
+
+        DF.all.dates <- arrow::read_parquet(file = list.data.frames[[1]]);
+        is.selected  <- (DF.all.dates[,'date'] == current.date);
+        DF.output    <- DF.all.dates[is.selected,];
+        remove(list = c('DF.all.dates'));
+
+        for ( temp.file in names(list.data.frames)[seq(2,length(list.data.frames))] ) {
+
+            DF.all.dates <- arrow::read_parquet(file = list.data.frames[[temp.file]]);
+            is.selected  <- (DF.all.dates[,'date'] == current.date);
+            DF.temp      <- DF.all.dates[is.selected,];
+            remove(list = c('DF.all.dates'));
+
             # DF.output <- merge(
             #     x  = DF.output,
             #     y  = DF.temp,
@@ -130,7 +138,9 @@ test.terrainr_get.DF.date <- function(
                 ));
             remove(list = c("DF.temp"));
             }
+
         arrow::write_parquet(x = DF.output, sink = parquet.file);
+
         }
     return( DF.output );
     }

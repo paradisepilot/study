@@ -72,7 +72,8 @@ getData_all.variables <- function(
         cat("\nstr(DF.",var.name,")\n",sep="");
         print( str(DF.temp) );
 
-        list.data.frames[[var.name]] <- DF.temp;
+      # list.data.frames[[var.name]] <- DF.temp;
+        list.data.frames[[var.name]] <- file.parquet;
         remove(list = c("DF.temp"))
 
         }
