@@ -65,6 +65,8 @@ test.terrainr_plot <- function(
     require(ggplot2);
 
     DF.temp <- DF.input;
+    remove(list = c('DF.input'));
+
     colnames(DF.temp) <- gsub(x = colnames(DF.temp), pattern = "Sigma0_", replacement = "");
     colnames(DF.temp) <- gsub(x = colnames(DF.temp), pattern = "_db",     replacement = "");
 
