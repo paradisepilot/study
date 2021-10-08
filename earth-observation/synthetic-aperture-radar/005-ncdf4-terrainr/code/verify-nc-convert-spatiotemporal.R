@@ -109,7 +109,7 @@ verify.nc_convert.spatiotemporal <- function(
     print( sum(is.nan(DF.output[,'max.ab.diff']))   );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    remove(list = c('DF.output','DF.temp','DF.sptmpl','DF.snap','reference.date','date.integers'));
+    remove(list = c('DF.output','reference.date','date.integers'));
     gc();
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat(paste0("\n",thisFunctionName,"() quits."));
