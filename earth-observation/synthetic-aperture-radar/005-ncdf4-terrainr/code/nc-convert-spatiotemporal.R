@@ -38,11 +38,10 @@ nc_convert.spatiotemporal <- function(
             );
 
         ncdf4::nc_close(my.ncdf4.object);
+        remove(list = c('list.data'));
 
         }
 
-    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    remove(list = c('list.data'));
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat(paste0("\n",thisFunctionName,"() quits."));
     cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###\n");
