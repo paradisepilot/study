@@ -85,6 +85,9 @@ verify.nc_convert.spatiotemporal <- function(
 
         DF.output[i,] <- DF.temp;
 
+        remove(list = c('DF.sptmpl','DF.snap'));
+
+
         }
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
