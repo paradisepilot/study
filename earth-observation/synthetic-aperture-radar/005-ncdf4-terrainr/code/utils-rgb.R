@@ -1,8 +1,8 @@
 
 rgb.transform <- function(
     x    = NULL,
-    xmin = as.numeric(quantile(x = as.matrix(x), probs = c(0.05))),
-    xmax = as.numeric(quantile(x = as.matrix(x), probs = c(0.95)))
+    xmin = as.numeric(quantile(x = as.matrix(x), probs = c(0.05), na.rm = TRUE)),
+    xmax = as.numeric(quantile(x = as.matrix(x), probs = c(0.95), na.rm = TRUE))
     ) {
     x    <- as.matrix(x);
     temp <- 255 * (x - xmin) / (xmax - xmin) ;
