@@ -32,6 +32,8 @@ test.terrainr <- function(
             );
         cat("\nstr(DF.date)\n");
         print( str(DF.date)   );
+        cat("\nsummary(DF.date)\n");
+        print( summary(DF.date)   );
 
         test.terrainr_plot(
            current.date = temp.date,
