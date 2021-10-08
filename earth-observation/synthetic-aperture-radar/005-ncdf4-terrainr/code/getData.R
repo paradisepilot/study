@@ -73,10 +73,11 @@ getData_all.variables <- function(
         print( str(DF.temp) );
 
         list.data.frames[[var.name]] <- DF.temp;
+        remove(list = c("DF.temp"))
 
         }
 
-    remove(list = c('DF.temp','reference.date','var.name','file.parquet'));
+    remove(list = c('reference.date','var.name','file.parquet'));
     return( list.data.frames );
 
     }
