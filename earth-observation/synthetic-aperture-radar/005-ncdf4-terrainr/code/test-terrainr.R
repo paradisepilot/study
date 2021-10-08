@@ -128,12 +128,6 @@ test.terrainr_get.DF.date <- function(
             is.selected  <- (DF.all.dates[,'date'] == current.date);
             DF.temp      <- DF.all.dates[is.selected,];
             remove(list = c('DF.all.dates'));
-
-            # DF.output <- merge(
-            #     x  = DF.output,
-            #     y  = DF.temp,
-            #     by = setdiff(colnames(DF.output),names(list.data.frames))
-            #     );
             DF.output <- as.data.frame(dplyr::inner_join(
                 x  = DF.output,
                 y  = DF.temp,
