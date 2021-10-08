@@ -177,7 +177,11 @@ nc_convert.spatiotemporal_list.data <- function(
                 list.variables[[var.name]][date.index,,] <- base::t(DF.band);
                 }
             cat("\n(date.suffix, var.name, band.name, dim(DF.band)) = (",date.suffix,",",var.name,",",band.name,",",base::paste(dim(DF.band),collapse=" x "),")");
-            cat("\n")
+            cat("\n");
+            cat("\nsum(sapply(DF.band, FUN = is.nan))\n");
+            print( sum(sapply(DF.band, FUN = is.nan))   );
+            cat("\nsum(sapply(list.variables[[var.name]][date.index,,], FUN = is.nan))\n");
+            print( sum(sapply(list.variables[[var.name]][date.index,,], FUN = is.nan))   );
             }
         }
 
