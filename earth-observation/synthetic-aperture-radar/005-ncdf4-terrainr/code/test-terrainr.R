@@ -76,6 +76,10 @@ test.terrainr_plot <- function(
         DF.temp[,temp.colname] <- rgb.transform(x = DF.temp[,temp.colname]);
         }
 
+    DF.temp[is.nan(DF.temp[,'VV'        ]),'VV'        ] <- 0;
+    DF.temp[is.nan(DF.temp[,'VH'        ]),'VH'        ] <- 0;
+    DF.temp[is.nan(DF.temp[,'VV.over.VH']),'VV.over.VH'] <- 0;
+
     my.ggplot <- ggplot2::ggplot(data = NULL) + ggplot2::theme_bw();
     my.ggplot <- my.ggplot + terrainr::geom_spatial_rgb(
         data    = DF.temp,
