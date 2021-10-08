@@ -22,8 +22,8 @@ test.terrainr <- function(
     print(  DF.image.dates   );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-  # for ( temp.date in seq(1,nrow(DF.image.dates)) ) {
-    for ( temp.index in seq(15,15) ) {
+  # for ( temp.index in seq(15,15) ) {
+    for ( temp.index in seq(1,nrow(DF.image.dates)) ) {
 
         temp.date <- DF.image.dates[temp.index,'date'];
         print( temp.date );
