@@ -38,7 +38,7 @@ nc_convert.spatiotemporal <- function(
             );
 
         ncdf4::nc_close(my.ncdf4.object);
-        remove(list = c('list.data'));
+        remove(list = c('list.data','my.ncdf4.object'));
         gc();
 
         }

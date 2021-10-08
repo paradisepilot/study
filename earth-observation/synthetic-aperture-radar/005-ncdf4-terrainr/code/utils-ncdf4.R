@@ -15,7 +15,7 @@ get.DF.dates <- function(
     }
 
 getTidyData.byDate <- function(
-    ncdf4.input    = 'data-input-spatiotemporal.nc',
+    ncdf4.object   = NULL,
     date.requested = NULL
     ) {
 
@@ -24,12 +24,10 @@ getTidyData.byDate <- function(
     cat(paste0("\n",thisFunctionName,"() starts.\n\n"));
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    ncdf4.object <- ncdf4::nc_open(ncdf4.input);
     DF.output <- getTidyData.byDate_all.variables(
         ncdf4.object   = ncdf4.object,
         date.requested = date.requested
         );
-    ncdf4::nc_close(ncdf4.object);
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat(paste0("\n",thisFunctionName,"() quits."));
@@ -72,8 +70,6 @@ getTidyData.byDate_all.variables <- function(
             date.index   = date.index,
             varid        = var.name
             );
-        cat("\nstr(DF.",var.name,")\n",sep="");
-        print( str(DF.temp) );
         DF.output <- cbind(
             DF.output,
             temp.colname = DF.temp[,var.name]
@@ -86,7 +82,7 @@ getTidyData.byDate_all.variables <- function(
         remove(list = c("DF.temp"))
         }
 
-    remove(list = c('reference.date','time.values','DF.dates','date.index','var.names','var.name'));
+    remove(list = c('DF.dates','date.index','var.names','var.name'));
     DF.output <- DF.output[,c('date',setdiff(colnames(DF.output),'date'))];
     return( DF.output );
 

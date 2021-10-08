@@ -63,27 +63,10 @@ verify.nc_convert.spatiotemporal(
     );
 gc();
 
-DF.date <- getTidyData.byDate(
-      ncdf4.input = ncdf4.spatiotemporal,
-      date        = as.Date("2019-07-23")
-      );
+test.terrainr(
+    ncdf4.spatiotemporal = ncdf4.spatiotemporal
+    );
 gc();
-print( str(DF.date) );
-
-# list.data.frames <- getData(
-#     ncdf4.input  = ncdf4.spatiotemporal,
-#     RData.output = RData.output
-#     );
-# gc();
-
-# test.raster(
-#     ncdf4.spatiotemporal = ncdf4.spatiotemporal
-#     );
-
-# test.terrainr(
-#     ncdf4.spatiotemporal = ncdf4.spatiotemporal
-#     );
-# gc();
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 

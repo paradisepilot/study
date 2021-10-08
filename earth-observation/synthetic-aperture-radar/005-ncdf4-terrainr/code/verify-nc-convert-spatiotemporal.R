@@ -96,6 +96,7 @@ verify.nc_convert.spatiotemporal <- function(
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     ncdf4::nc_close(ncdf4.object.spatiotemppral);
     ncdf4::nc_close(ncdf4.object.snap);
+    remove(list = c('ncdf4.object.spatiotemppral','ncdf4.object.snap'));
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat("\nDF.output\n");
