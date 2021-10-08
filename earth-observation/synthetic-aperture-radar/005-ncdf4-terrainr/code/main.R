@@ -57,16 +57,19 @@ nc_convert.spatiotemporal(
     input.file   = ncdf4.snap,
     ncdf4.output = ncdf4.spatiotemporal
     );
+gc();
 
 verify.nc_convert.spatiotemporal(
     ncdf4.spatiotemporal = ncdf4.spatiotemporal,
     ncdf4.snap           = ncdf4.snap
     );
+gc();
 
 list.data.frames <- getData(
     ncdf4.input  = ncdf4.spatiotemporal,
     RData.output = RData.output
     );
+gc();
 
 # test.raster(
 #     ncdf4.spatiotemporal = ncdf4.spatiotemporal
@@ -75,6 +78,7 @@ list.data.frames <- getData(
 test.terrainr(
     list.data.frames = list.data.frames
     );
+gc();
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 
