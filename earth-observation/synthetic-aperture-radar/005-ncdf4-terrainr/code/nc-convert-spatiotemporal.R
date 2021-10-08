@@ -39,6 +39,7 @@ nc_convert.spatiotemporal <- function(
 
         ncdf4::nc_close(my.ncdf4.object);
         remove(list = c('list.data'));
+        gc();
 
         }
 
@@ -112,8 +113,8 @@ nc_convert.spatiotemporal_ncdf4 <- function(
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     ncdf4::nc_close(output.object);
-    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    remove(list = c('list.vars','dimension.time'));
+    remove(list = c('output.object','list.vars','dimension.time'));
+    gc();
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     return( NULL );
 
@@ -176,12 +177,12 @@ nc_convert.spatiotemporal_list.data <- function(
             } else {
                 list.variables[[var.name]][date.index,,] <- base::t(DF.band);
                 }
-            cat("\n(date.suffix, var.name, band.name, dim(DF.band)) = (",date.suffix,",",var.name,",",band.name,",",base::paste(dim(DF.band),collapse=" x "),")");
+            cat("\n(",date.suffix,",",var.name,",",band.name,")");
+            cat("\ndim(DF.band) = ",base::paste(dim(DF.band),collapse = " x "));
+            cat("\nsum(sapply(DF.band, FUN = is.nan)): ",sum(sapply(DF.band, FUN = is.nan)));
+            cat("\nsum(sapply(list.variables[[var.name]][date.index,,], FUN = is.nan)): ",sum(sapply(list.variables[[var.name]][date.index,,], FUN = is.nan)));
             cat("\n");
-            cat("\nsum(sapply(DF.band, FUN = is.nan))\n");
-            print( sum(sapply(DF.band, FUN = is.nan))   );
-            cat("\nsum(sapply(list.variables[[var.name]][date.index,,], FUN = is.nan))\n");
-            print( sum(sapply(list.variables[[var.name]][date.index,,], FUN = is.nan))   );
+            remove(list = c('DF.band'));
             }
         }
 
@@ -191,6 +192,9 @@ nc_convert.spatiotemporal_list.data <- function(
         variables = list.variables
         );
 
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    remove(list = c('DF.dates','list.variables'));
+    gc();
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     return( list.output );
 

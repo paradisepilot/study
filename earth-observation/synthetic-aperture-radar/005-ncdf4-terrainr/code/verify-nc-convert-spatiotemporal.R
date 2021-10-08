@@ -24,12 +24,6 @@ verify.nc_convert.spatiotemporal <- function(
     date.integers <- ncdf4.object.spatiotemppral[['dim']][['time']][['vals']];
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    list.sptml.vars <- list();
-    for ( var.name in names(ncdf4.object.spatiotemppral[['var']]) ) {
-        list.sptml.vars[[var.name]] <- ncdf4::ncvar_get(nc = ncdf4.object.spatiotemppral, varid = var.name);
-        }
-
-    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     band.names <- names(ncdf4.object.snap[['var']]);
 
     DF.output <- data.frame(
@@ -41,6 +35,7 @@ verify.nc_convert.spatiotemporal <- function(
         max.ab.diff = numeric(length = length(band.names))
         );
 
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     for ( i in seq(1,length(band.names)) ) {
 
         band.name <- band.names[i];
@@ -52,8 +47,17 @@ verify.nc_convert.spatiotemporal <- function(
         date.int   <- as.integer(var.date - reference.date);
         date.index <- which(date.int == date.integers)[1];
 
-        DF.snap     <- ncdf4::ncvar_get(nc = ncdf4.object.snap, varid = band.name);
-        DF.sptmpl   <- list.sptml.vars[[var.name]][date.index,,];
+        DF.snap <- ncdf4::ncvar_get(nc = ncdf4.object.snap, varid = band.name);
+
+        n.coords.2 <- ncdf4.object.spatiotemppral[['var']][[var.name]][['dim']][[2]][['len']];
+        n.coords.3 <- ncdf4.object.spatiotemppral[['var']][[var.name]][['dim']][[3]][['len']];
+        DF.sptmpl <- ncdf4::ncvar_get(
+            nc    = ncdf4.object.spatiotemppral,
+            varid = var.name,
+            start = c(date.index, 1, 1),
+            count = c(1,n.coords.2,n.coords.3)
+            );
+
         max.ab.diff <- max(abs(DF.sptmpl - t(DF.snap)), na.rm = TRUE);
 
         cat("\nstr(t(DF.snap)):\n");
@@ -85,8 +89,7 @@ verify.nc_convert.spatiotemporal <- function(
 
         DF.output[i,] <- DF.temp;
 
-        remove(list = c('DF.sptmpl','DF.snap'));
-
+        remove(list = c('DF.sptmpl','DF.snap','DF.temp'));
 
         }
 
@@ -105,7 +108,8 @@ verify.nc_convert.spatiotemporal <- function(
     print( sum(is.nan(DF.output[,'max.ab.diff']))   );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    remove(list = c('DF.output','DF.sptmpl','DF.snap','list.sptml.vars','reference.date','date.integers'));
+    remove(list = c('DF.output','DF.temp','DF.sptmpl','DF.snap','reference.date','date.integers'));
+    gc();
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat(paste0("\n",thisFunctionName,"() quits."));
     cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###\n");

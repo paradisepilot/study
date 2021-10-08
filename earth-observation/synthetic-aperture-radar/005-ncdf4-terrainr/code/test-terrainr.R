@@ -1,6 +1,6 @@
 
 test.terrainr <- function(
-    list.data.frames = NULL
+    ncdf4.spatiotemporal = NULL
     ) {
 
     thisFunctionName <- "test.terrainr";
@@ -8,6 +8,9 @@ test.terrainr <- function(
     cat(paste0("\n",thisFunctionName,"() starts.\n"));
 
     require(terrainr);
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    ncdf4.spatiotemporal.object <- ncdf4::nc_open(ncdf4.spatiotemporal);
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     var.names <- names(list.data.frames);
@@ -29,9 +32,25 @@ test.terrainr <- function(
         temp.date <- dates[date.index];
         cat("\n# temp.date: ",format(temp.date,"%Y-%m-%d"),"\n",sep="");
 
-        DF.date <- test.terrainr_get.DF.date(
-            list.data.frames = list.data.frames,
-            current.date     = temp.date
+        # DF.date <- test.terrainr_get.DF.date(
+        #     list.data.frames = list.data.frames,
+        #     current.date     = temp.date
+        #     );
+        DF.date <- ncdf4::ncvar_get(
+            nc    = ncdf4.spatiotemporal.object,
+            varid = "Sigma0_VV_db",
+            start = c(1,1,1),
+            count = c(1,1705,3477)
+            );
+        DF.date.VH <- ncdf4::ncvar_get(
+            nc    = ncdf4.spatiotemporal.object,
+            varid = "Sigma0_VH_db",
+            start = c(1,1,1),
+            count = c(1,1705,3477)
+            );
+        DF.date <- dplyr(
+            x = DF.date,
+            y = DF.
             );
         cat("\nstr(DF.date)\n");
         print( str(DF.date)   );
@@ -43,12 +62,12 @@ test.terrainr <- function(
            DF.input     = DF.date
            );
 
-        remove(list = c('DF.date'));
+        remove(list = c('DF.date','DF.date.VH'));
 
         }
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-
+    ncdf4::nc_close(ncdf4.spatiotemporal.object);
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat(paste0("\n",thisFunctionName,"() quits."));
     cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###\n");

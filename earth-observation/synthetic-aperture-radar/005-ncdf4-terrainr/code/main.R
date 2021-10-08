@@ -27,8 +27,8 @@ require(stringr);
 code.files <- c(
     "getData.R",
     "nc-convert-spatiotemporal.R",
-    "test-raster.R",
     "test-terrainr.R",
+    "utils-ncdf4.R",
     "utils-rgb.R",
     "verify-nc-convert-spatiotemporal.R"
     );
@@ -44,11 +44,9 @@ set.seed(7654321);
 ncdf4.spatiotemporal <- 'data-input-spatiotemporal.nc';
 RData.output         <- 'data-long.RData';
 
-test_getData_one.variable_elongate();
-
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 temp.dir   <- gsub(x = output.directory, pattern = "005-ncdf4-terrainr.+", replacement = "");
-temp.dir   <- file.path(temp.dir,"004-preprocess","02-bay-of-quinte","01-AAW","output.AAW.kc-512.2021-10-07.02");
+temp.dir   <- file.path(temp.dir,"004-preprocess","02-bay-of-quinte","01-AAW","output.AAW.kc-512.2021-10-04.01");
 temp.file  <- "coregistered_stack.nc";
 ncdf4.snap <- file.path(temp.dir,temp.file)
 
@@ -65,20 +63,27 @@ verify.nc_convert.spatiotemporal(
     );
 gc();
 
-list.data.frames <- getData(
-    ncdf4.input  = ncdf4.spatiotemporal,
-    RData.output = RData.output
-    );
+DF.date <- getTidyData.byDate(
+      ncdf4.input = ncdf4.spatiotemporal,
+      date        = as.Date("2019-07-23")
+      );
 gc();
+print( str(DF.date) );
+
+# list.data.frames <- getData(
+#     ncdf4.input  = ncdf4.spatiotemporal,
+#     RData.output = RData.output
+#     );
+# gc();
 
 # test.raster(
 #     ncdf4.spatiotemporal = ncdf4.spatiotemporal
 #     );
 
-test.terrainr(
-    list.data.frames = list.data.frames
-    );
-gc();
+# test.terrainr(
+#     ncdf4.spatiotemporal = ncdf4.spatiotemporal
+#     );
+# gc();
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 
