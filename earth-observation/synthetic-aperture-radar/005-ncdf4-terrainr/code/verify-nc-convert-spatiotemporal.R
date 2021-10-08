@@ -52,16 +52,23 @@ verify.nc_convert.spatiotemporal <- function(
         date.int   <- as.integer(var.date - reference.date);
         date.index <- which(date.int == date.integers)[1];
 
-        DF.snap   <- ncdf4::ncvar_get(nc = ncdf4.object.snap, varid = band.name);
+        DF.snap     <- ncdf4::ncvar_get(nc = ncdf4.object.snap, varid = band.name);
+        DF.sptmpl   <- list.sptml.vars[[var.name]][date.index,,];
+        max.ab.diff <- max(abs(DF.sptmpl - t(DF.snap)), na.rm = TRUE);
+
         cat("\nstr(t(DF.snap)):\n");
         print( str(t(DF.snap))    );
 
-        DF.sptmpl <- list.sptml.vars[[var.name]][date.index,,];
+        cat("\n# of NaN's in DF.snap:\n");
+        print( sum(sapply(DF.snap, FUN = is.nan)) );
+
         cat("\nstr(DF.sptmpl):\n");
         print( str(DF.sptmpl)    );
 
-        max.ab.diff <- max(abs(DF.sptmpl - t(DF.snap)));
-        cat("\nmax(abs(DF.sptmpl - t(DF.snap)))\n");
+        cat("\n# of NaN's in DF.sptmpl:\n");
+        print( sum(sapply(DF.sptmpl, FUN = is.nan)) );
+
+        cat("\nmax(abs(DF.sptmpl - t(DF.snap)), na.rm = TRUE)\n");
         print( max.ab.diff   );
 
         DF.temp <- data.frame(
