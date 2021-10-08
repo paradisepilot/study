@@ -114,11 +114,17 @@ test.terrainr_get.DF.date <- function(
         for ( temp.var in names(list.data.frames)[seq(2,length(list.data.frames))] ) {
             is.selected <- (list.data.frames[[temp.var]][,'date'] == current.date);
             DF.temp <- list.data.frames[[temp.var]][is.selected,];
-            DF.output <- merge(
+            # DF.output <- merge(
+            #     x  = DF.output,
+            #     y  = DF.temp,
+            #     by = setdiff(colnames(DF.output),names(list.data.frames))
+            #     );
+            DF.output <- as.data.frame(dplyr::inner_join(
                 x  = DF.output,
                 y  = DF.temp,
-                by = setdiff(colnames(DF.output),names(list.data.frames))
-                );
+                by = c("date","lat","lon")
+                ));
+            remove(list = c("DF.temp"));
             }
         arrow::write_parquet(x = DF.output, sink = parquet.file);
         }
