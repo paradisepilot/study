@@ -69,7 +69,7 @@ verify.nc_convert.spatiotemporal <- function(
         print( sum(sapply(DF.sptmpl, FUN = is.nan)) );
 
         cat("\nmax(abs(DF.sptmpl - t(DF.snap)), na.rm = TRUE)\n");
-        print( max.ab.diff   );
+        print( max.ab.diff );
 
         DF.temp <- data.frame(
             band.name   = band.name,
