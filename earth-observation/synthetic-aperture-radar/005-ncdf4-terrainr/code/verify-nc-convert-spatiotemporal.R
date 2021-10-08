@@ -92,8 +92,11 @@ verify.nc_convert.spatiotemporal <- function(
     cat("\nDF.output\n");
     print( DF.output   );
 
-    cat("\nmax(DF.output[,'max.ab.diff'])\n");
-    print( max(DF.output[,'max.ab.diff'])   );
+    cat("\nmax(DF.output[,'max.ab.diff'], na.rm = TRUE)\n");
+    print( max(DF.output[,'max.ab.diff'], na.rm = TRUE)   );
+
+    cat("\nsum(is.nan(DF.output[,'max.ab.diff']))\n");
+    print( sum(is.nan(DF.output[,'max.ab.diff']))   );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     remove(list = c('DF.output','DF.sptmpl','DF.snap','list.sptml.vars','reference.date','date.integers'));
