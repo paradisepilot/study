@@ -11,10 +11,13 @@ test.terrainr <- function(
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     var.names <- names(list.data.frames);
-    dates     <- unique(list.data.frames[[1]][,'date']);
-
     cat("\n# var.names\n");
     print(   var.names   );
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    DF.all.dates <- arrow::read_parquet(file = list.data.frames[[1]]);
+    dates <- unique(DF.all.dates[,'date']);
+    remove(list = c('DF.all.dates'));
 
     cat("\n# dates\n");
     print(   dates   );
