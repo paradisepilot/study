@@ -46,7 +46,7 @@ RData.output         <- 'data-long.RData';
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 temp.dir   <- gsub(x = output.directory, pattern = "005-ncdf4-terrainr.+", replacement = "");
-temp.dir   <- file.path(temp.dir,"004-preprocess","02-bay-of-quinte","01-AAW","output.AAW.kc-512.2021-10-04.01");
+temp.dir   <- file.path(temp.dir,"004-preprocess","02-bay-of-quinte","01-AAW","output.AAW.kc-512.2021-10-07.01.coreg.only");
 temp.file  <- "coregistered_stack.nc";
 ncdf4.snap <- file.path(temp.dir,temp.file)
 
