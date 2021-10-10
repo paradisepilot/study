@@ -28,7 +28,7 @@ test.terrainr <- function(
         temp.date <- DF.image.dates[temp.index,'date'];
         cat("\n# temp.date: ",format(temp.date,"%Y-%m-%d"),"\n",sep="");
 
-        DF.date <- getTidyData.byDate(
+        DF.date <- nc_getTidyData.byDate(
             ncdf4.object   = ncdf4.object.spatiotemporal,
             date.requested = temp.date
             );

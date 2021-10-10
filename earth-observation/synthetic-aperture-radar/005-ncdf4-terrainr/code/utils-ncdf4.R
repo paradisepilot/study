@@ -14,17 +14,17 @@ get.DF.dates <- function(
     return( DF.dates );
     }
 
-getTidyData.byDate <- function(
+nc_getTidyData.byDate <- function(
     ncdf4.object   = NULL,
     date.requested = NULL
     ) {
 
-    thisFunctionName <- "getTidyData.byDate";
+    thisFunctionName <- "nc_getTidyData.byDate";
     cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###");
     cat(paste0("\n",thisFunctionName,"() starts.\n\n"));
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    DF.output <- getTidyData.byDate_all.variables(
+    DF.output <- nc_getTidyData.byDate_all.variables(
         ncdf4.object   = ncdf4.object,
         date.requested = date.requested
         );
@@ -37,7 +37,7 @@ getTidyData.byDate <- function(
     }
 
 ##################################################
-getTidyData.byDate_all.variables <- function(
+nc_getTidyData.byDate_all.variables <- function(
     ncdf4.object   = NULL,
     date.requested = NULL
     ) {
@@ -52,7 +52,7 @@ getTidyData.byDate_all.variables <- function(
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     var.name  <- var.names[1];
-    DF.output <- getTidyData.byDate_one.variable(
+    DF.output <- nc_getTidyData.byDate_one.variable(
         ncdf4.object = ncdf4.object,
         date.index   = date.index,
         varid        = var.name
@@ -65,7 +65,7 @@ getTidyData.byDate_all.variables <- function(
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     for ( var.index in seq(2,length(var.names)) ) {
         var.name <- var.names[var.index];
-        DF.temp  <- getTidyData.byDate_one.variable(
+        DF.temp  <- nc_getTidyData.byDate_one.variable(
             ncdf4.object = ncdf4.object,
             date.index   = date.index,
             varid        = var.name
@@ -88,7 +88,7 @@ getTidyData.byDate_all.variables <- function(
 
     }
 
-getTidyData.byDate_one.variable <- function(
+nc_getTidyData.byDate_one.variable <- function(
     ncdf4.object = NULL,
     date.index   = NULL,
     varid        = NULL
@@ -104,7 +104,7 @@ getTidyData.byDate_one.variable <- function(
         count = c(1, length(coords.2), length(coords.3))
         );
 
-    DF.output <- getTidyData.byDate_one.variable_elongate(
+    DF.output <- nc_getTidyData.byDate_one.variable_elongate(
         varid      = varid,
         coords.2   = coords.2,
         coords.3   = coords.3,
@@ -134,7 +134,7 @@ getTidyData.byDate_one.variable <- function(
 
     }
 
-getTidyData.byDate_one.variable_elongate <- function(
+nc_getTidyData.byDate_one.variable_elongate <- function(
     varid      = NULL,
     coords.2   = NULL,
     coords.3   = NULL,
