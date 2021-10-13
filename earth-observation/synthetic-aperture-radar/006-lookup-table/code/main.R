@@ -21,6 +21,7 @@ require(ggplot2);
 require(ncdf4);
 require(raster);
 require(terrainr);
+require(sf);
 require(stringr);
 
 # source supporting R code
@@ -34,6 +35,7 @@ code.files <- c(
     "getData-labelled.R",
     "getData-labelled-helper.R",
     "get-nearest-lat-lon.R",
+    "plot-labelled-data-geography.R",
     "reshapeData.R"
     );
 
@@ -110,6 +112,13 @@ DF.nearest.lat.lon <- get.nearest.lat.lon(
 
 print( str(    DF.nearest.lat.lon) );
 print( summary(DF.nearest.lat.lon) );
+
+plot.labelled.data.geography(
+    DF.nearest.lat.lon   = DF.nearest.lat.lon,
+    ncdf4.spatiotemporal = ncdf4.spatiotemporal,
+    plot.date            = as.Date("2019-07-23"),
+    DF.colour.scheme     = DF.colour.scheme
+    );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 
