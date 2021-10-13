@@ -37,9 +37,9 @@ get.nearest.lat.lon <- function(
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     ncdf4.object <- ncdf4::nc_open(ncdf4.spatiotemporal);
-
     unlabelled.lats <- ncdf4.object[['dim']][['lat']][['vals']];
     unlabelled.lons <- ncdf4.object[['dim']][['lon']][['vals']];
+    ncdf4::nc_close(ncdf4.object);
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     DF.labelled.lat.lon[,'nearest.lat'] <- vapply(
@@ -79,9 +79,6 @@ get.nearest.lat.lon <- function(
             x    = DF.labelled.lat.lon
             );
         }
-
-    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    ncdf4::nc_close(ncdf4.object);
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat(paste0("\n",thisFunctionName,"() quits."));
