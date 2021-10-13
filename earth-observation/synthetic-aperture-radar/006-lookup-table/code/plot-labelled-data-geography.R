@@ -124,7 +124,6 @@ plot.labelled.data.geography_ggplot <- function(
     ggplot2::ggsave(
         filename = file.png,
         plot     = my.ggplot,
-        # scale  = 1,
         width    = 16,
         height   = 16 * (range.lat/range.lon),
         units    = "in",
