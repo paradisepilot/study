@@ -16,6 +16,19 @@ plot.labelled.data.geography <- function(
     ncdf4.object.spatiotemporal <- ncdf4::nc_open(ncdf4.spatiotemporal);
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    unlabelled.lats <- ncdf4.object.spatiotemporal[['dim']][['lat']][['vals']];
+    unlabelled.lons <- ncdf4.object.spatiotemporal[['dim']][['lon']][['vals']];
+
+    ground.width  <- geosphere::distm(c(unlabelled.lons[1],unlabelled.lats[1]),c(unlabelled.lons[length(unlabelled.lons)],unlabelled.lats[1]));
+    ground.height <- geosphere::distm(c(unlabelled.lons[1],unlabelled.lats[1]),c(unlabelled.lons[1],unlabelled.lats[length(unlabelled.lats)]));
+
+    ratio.height.over.width <- ground.height / ground.width;
+
+    cat("\n ground.width =", ground.width, "\n");
+    cat("\n ground.height =",ground.height,"\n");
+    cat("\n ratio.height.over.width =",ratio.height.over.width,"\n");
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     DF.date <- nc_getTidyData.byDate(
         ncdf4.object   = ncdf4.object.spatiotemporal,
         date.requested = plot.date
@@ -26,14 +39,16 @@ plot.labelled.data.geography <- function(
     cat("\nsummary(DF.date)\n");
     print( summary(DF.date)   );
 
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     plot.labelled.data.geography_ggplot(
-       current.date     = plot.date,
-       DF.input         = DF.date,
-       DF.lat.lon       = DF.nearest.lat.lon,
-       DF.colour.scheme = DF.colour.scheme
+       current.date            = plot.date,
+       DF.input                = DF.date,
+       DF.lat.lon              = DF.nearest.lat.lon,
+       DF.colour.scheme        = DF.colour.scheme,
+       ratio.height.over.width = ratio.height.over.width
        );
 
-    remove(list = c('DF.date','temp.date'));
+    remove(list = c('DF.date'));
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     ncdf4::nc_close(ncdf4.object.spatiotemporal);
@@ -47,10 +62,11 @@ plot.labelled.data.geography <- function(
 
 ##################################################
 plot.labelled.data.geography_ggplot <- function(
-    current.date     = NULL,
-    DF.input         = NULL,
-    DF.lat.lon       = NULL,
-    DF.colour.scheme = NULL
+    current.date            = NULL,
+    DF.input                = NULL,
+    DF.lat.lon              = NULL,
+    DF.colour.scheme        = NULL,
+    ratio.height.over.width = NULL
     ) {
 
     require(ggplot2);
@@ -81,11 +97,6 @@ plot.labelled.data.geography_ggplot <- function(
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     my.ggplot <- ggplot2::ggplot(data = NULL) + ggplot2::theme_bw();
-
-    # if ( !is.null(DF.colour.scheme) ) {
-    #     my.ggplot <- my.ggplot + ggplot2::scale_colour_manual(values = DF.colour.scheme[,"colour"]);
-    #     my.ggplot <- my.ggplot + ggplot2::scale_fill_manual(  values = DF.colour.scheme[,"colour"]);
-    #     }
 
     my.ggplot <- my.ggplot + terrainr::geom_spatial_rgb(
         data    = DF.temp,
@@ -125,7 +136,7 @@ plot.labelled.data.geography_ggplot <- function(
         filename = file.png,
         plot     = my.ggplot,
         width    = 16,
-        height   = 16 * (range.lat/range.lon),
+        height   = 16 * (range.lat/range.lon), # 16 * ratio.height.over.width,
         units    = "in",
         dpi      = 600
         );
