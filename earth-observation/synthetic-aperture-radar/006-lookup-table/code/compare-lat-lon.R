@@ -1,7 +1,7 @@
 
 compare.lat.lon <- function(
-    ncdf4.spatiotemporal = 'data-input-spatiotemporal.nc',
-    DF.labelled          = NULL
+    ncdf4.spatiotemporal    = 'data-input-spatiotemporal.nc',
+    DF.training.coordinates = NULL
     ) {
 
     thisFunctionName <- "compare.lat.lon";
@@ -9,39 +9,25 @@ compare.lat.lon <- function(
     cat(paste0("\n",thisFunctionName,"() starts.\n\n"));
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    DF.labelled.lat.lon <- unique(DF.labelled[,c('Y','X','land_cover')]);
-    DF.labelled.lat.lon <- as.data.frame(DF.labelled.lat.lon);
-    colnames(DF.labelled.lat.lon) <- gsub(
-        x           = colnames(DF.labelled.lat.lon),
-        pattern     = "^X$",
-        replacement = "lon"
-        );
-    colnames(DF.labelled.lat.lon) <- gsub(
-        x           = colnames(DF.labelled.lat.lon),
-        pattern     = "^Y$",
-        replacement = "lat"
-        );
+    cat("\nstr( DF.training.coordinates)\n");
+    print( str( DF.training.coordinates)   );
 
-    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    cat("\nstr( DF.labelled.lat.lon)\n");
-    print( str( DF.labelled.lat.lon)   );
+    cat("\nrange(DF.training.coordinates[,'latitude.training'])\n");
+    print( range(DF.training.coordinates[,'latitude.training'])   );
 
-    cat("\nrange(DF.labelled.lat.lon[,'lat'])\n");
-    print( range(DF.labelled.lat.lon[,'lat'])   );
+    cat("\nrange(DF.training.coordinates[,'longitude.training'])\n");
+    print( range(DF.training.coordinates[,'longitude.training'])   );
 
-    cat("\nrange(DF.labelled.lat.lon[,'lon'])\n");
-    print( range(DF.labelled.lat.lon[,'lon'])   );
-
-    cat("\nhead(DF.labelled.lat.lon)\n");
-    print( head(DF.labelled.lat.lon)   );
+    cat("\nhead(DF.training.coordinates)\n");
+    print( head(DF.training.coordinates)   );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat("\n");
-    cat("\nlength(unique(DF.labelled.lat.lon$lat)): ",length(unique(DF.labelled.lat.lon$lat)));
-    cat("\nlength(unique(round(DF.labelled.lat.lon$lat, digits = 5))): ",length(unique(round(DF.labelled.lat.lon$lat, digits = 5))));
+    cat("\nlength(unique(DF.training.coordinates$latitude.training)): ",length(unique(DF.training.coordinates$latitude.training)));
+    cat("\nlength(unique(round(DF.training.coordinates$latitude.training, digits = 5))): ",length(unique(round(DF.training.coordinates$latitude.training, digits = 5))));
 
-    cat("\nlength(unique(DF.labelled.lat.lon$lon)): ",length(unique(DF.labelled.lat.lon$lon)));
-    cat("\nlength(unique(round(DF.labelled.lat.lon$lon, digits = 5))): ",length(unique(round(DF.labelled.lat.lon$lon, digits = 5))));
+    cat("\nlength(unique(DF.training.coordinates$longitude.training)): ",length(unique(DF.training.coordinates$longitude.training)));
+    cat("\nlength(unique(round(DF.training.coordinates$longitude.training, digits = 5))): ",length(unique(round(DF.training.coordinates$longitude.training, digits = 5))));
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
@@ -86,8 +72,9 @@ compare.lat.lon <- function(
     print( geosphere::distm(c(unlabelled.lons[1],unlabelled.lats[1]),c(unlabelled.lons[1],unlabelled.lats[length(unlabelled.lats)]))   );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    DF.labelled.lat.lon[,'nearest.lat'] <- vapply(
-        X         = DF.labelled.lat.lon[,'lat'],
+    DF.labelled.lat.lon <- DF.training.coordinates;
+    DF.labelled.lat.lon[,'lat'] <- vapply(
+        X         = DF.labelled.lat.lon[,'latitude.training'],
         FUN       = function(x) {
             temp.vector <- abs(x - unlabelled.lats);
             return(unlabelled.lats[which(temp.vector == min(temp.vector))])
@@ -95,8 +82,8 @@ compare.lat.lon <- function(
         FUN.VALUE = 1.0
         );
 
-    DF.labelled.lat.lon[,'nearest.lon'] <- vapply(
-        X         = DF.labelled.lat.lon[,'lon'],
+    DF.labelled.lat.lon[,'lon'] <- vapply(
+        X         = DF.labelled.lat.lon[,'longitude.training'],
         FUN       = function(x) {
             temp.vector <- abs(x - unlabelled.lons);
             return(unlabelled.lons[which(temp.vector == min(temp.vector))])
@@ -104,14 +91,15 @@ compare.lat.lon <- function(
         FUN.VALUE = 1.0
         );
 
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     DF.labelled.lat.lon[,'dist.naive'] <- apply(
-        X      = DF.labelled.lat.lon[,c('lat','lon','nearest.lat','nearest.lon')],
+        X      = DF.labelled.lat.lon[,c('latitude.training','longitude.training','lat','lon')],
         MARGIN = 1,
         FUN    = function(x) { return(sqrt( (x[1]-x[3])^2 + (x[2]-x[4])^2 )) }
         );
 
     DF.labelled.lat.lon[,'dist.geo(m)'] <- apply(
-        X      = DF.labelled.lat.lon[,c('lat','lon','nearest.lat','nearest.lon')],
+        X      = DF.labelled.lat.lon[,c('latitude.training','longitude.training','lat','lon')],
         MARGIN = 1,
         FUN    = function(x) { return(as.numeric(geosphere::distm(x = c(x[2],x[1]), y = c(x[4],x[3])) )) }
         );

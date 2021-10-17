@@ -91,8 +91,7 @@ plot.labelled.data.geography_ggplot <- function(
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     SF.lat.lon <- sf::st_as_sf(
         x      = DF.lat.lon,
-      # coords = c("lon", "lat")
-        coords = c('nearest.lon','nearest.lat')
+        coords = c("lon", "lat")
         );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
@@ -118,7 +117,7 @@ plot.labelled.data.geography_ggplot <- function(
     for ( temp.land.cover in levels(DF.lat.lon[,'land_cover']) ) {
         temp.SF <- sf::st_as_sf(
             x      = DF.lat.lon[temp.land.cover == DF.lat.lon[,'land_cover'],],
-            coords = c('nearest.lon','nearest.lat')
+            coords = c('lon','lat') # c('longitude.training','latitude.training')
             );
         temp.colour <- DF.colour.scheme[temp.land.cover == DF.colour.scheme[,'land_cover'],'colour'];
         my.ggplot <- my.ggplot + ggplot2::geom_sf(

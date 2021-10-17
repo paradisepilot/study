@@ -100,14 +100,29 @@ DF.labelled <- getData.labelled(
 print( str(DF.labelled) );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+DF.training.coordinates <- as.data.frame(unique(DF.labelled[,c('Y','X','land_cover')]));
+colnames(DF.training.coordinates) <- gsub(
+    x           = colnames(DF.training.coordinates),
+    pattern     = "^X$",
+    replacement = "longitude.training"
+    );
+colnames(DF.training.coordinates) <- gsub(
+    x           = colnames(DF.training.coordinates),
+    pattern     = "^Y$",
+    replacement = "latitude.training"
+    );
+
+print( str(DF.training.coordinates) );
+
+### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 # compare.lat.lon(
-#     ncdf4.spatiotemporal = ncdf4.spatiotemporal,
-#     DF.labelled          = DF.labelled
+#     ncdf4.spatiotemporal    = ncdf4.spatiotemporal,
+#     DF.training.coordinates = DF.training.coordinates
 #     );
 
 DF.nearest.lat.lon <- get.nearest.lat.lon(
-    DF.labelled          = DF.labelled,
-    ncdf4.spatiotemporal = ncdf4.spatiotemporal
+    DF.training.coordinates = DF.training.coordinates,
+    ncdf4.spatiotemporal    = ncdf4.spatiotemporal
     );
 
 print( str(    DF.nearest.lat.lon) );
