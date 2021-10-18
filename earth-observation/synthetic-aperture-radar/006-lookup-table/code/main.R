@@ -128,14 +128,20 @@ DF.nearest.lat.lon <- get.nearest.lat.lon(
 print( str(    DF.nearest.lat.lon) );
 print( summary(DF.nearest.lat.lon) );
 
-plot.labelled.data.geography(
-    DF.nearest.lat.lon   = DF.nearest.lat.lon,
-    ncdf4.spatiotemporal = ncdf4.spatiotemporal,
-    plot.date            = as.Date("2019-07-23"),
-    DF.colour.scheme     = DF.colour.scheme
-    );
+# plot.labelled.data.geography(
+#     DF.nearest.lat.lon   = DF.nearest.lat.lon,
+#     ncdf4.spatiotemporal = ncdf4.spatiotemporal,
+#     plot.date            = as.Date("2019-07-23"),
+#     DF.colour.scheme     = DF.colour.scheme
+#     );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+ncdf4.object.spatiotemporal <- ncdf4::nc_open(ncdf4.spatiotemporal);
+DF.training.data <- nc_getTidyData.byCoordinates(
+    ncdf4.object   = ncdf4.object.spatiotemporal,
+    DF.coordinates = DF.nearest.lat.lon[,c('lat','lon')]
+    );
+ncdf4::nc_close(ncdf4.object.spatiotemporal);
 
 ##################################################
 print( warnings() );
