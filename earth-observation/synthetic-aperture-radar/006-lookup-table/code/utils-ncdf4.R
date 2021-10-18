@@ -119,7 +119,6 @@ nc_getTidyData.byCoordinates_all.variables <- function(
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     DF.output <- data.frame();
-  # for ( temp.date.index in DF.dates[,'date.index'][c(1,2,3)] ) {
     for ( temp.date.index in DF.dates[,'date.index'] ) {
 
         temp.date <- DF.dates[temp.date.index,'date'];
@@ -131,32 +130,20 @@ nc_getTidyData.byCoordinates_all.variables <- function(
             date.index   = temp.date.index,
             varid        = var.name
             );
-        cat("\nstr(DF.temp.0) -- before filtering\n");
-        print( str(DF.temp.0)   );
 
         DF.temp.0 <- DF.temp.0[DF.temp.0[,'lat'] %in% training.lats,];
-        cat("\nstr(DF.temp.0) -- filtered by latitude\n");
-        print( str(DF.temp.0)   );
-
         DF.temp.0 <- DF.temp.0[DF.temp.0[,'lon'] %in% training.lons,];
-        cat("\nstr(DF.temp.0) -- filtered by longitude\n");
-        print( str(DF.temp.0)   );
-
         DF.temp.0[,'hash_lat_lon'] <- my.numeric.hash(apply(
             X      = DF.temp.0[,c('lat','lon')],
             MARGIN = 1,
             FUN    = function(x) { return(paste(x = x,collapse = "_")) }
             ));
-        cat("\nstr(DF.temp.0) -- added hashed concatenated lat_lon\n");
-        print( str(DF.temp.0)   );
 
         DF.temp.0 <- DF.temp.0[DF.temp.0[,'hash_lat_lon'] %in% hash.training.lats.lons,];
         DF.temp.0 <- cbind(
             date = rep(x = temp.date, times = nrow(DF.temp.0)),
             DF.temp.0
             );
-        cat("\nstr(DF.temp.0) -- filtered by lat_lon\n");
-        print( str(DF.temp.0)   );
 
         for ( var.index in seq(2,length(var.names)) ) {
             var.name <- var.names[var.index];
@@ -179,15 +166,10 @@ nc_getTidyData.byCoordinates_all.variables <- function(
                 by = "hash_lat_lon"
                 );
             remove(list = c("DF.temp.k"))
-            cat("\nstr(DF.temp.0)\n");
-            print( str(DF.temp.0)   );
             }
 
         DF.output <- rbind(DF.output,DF.temp.0);
         remove(list = c("DF.temp.0"))
-
-        cat("\nstr(DF.output)\n");
-        print( str(DF.output)   );
 
         }
 
