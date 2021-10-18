@@ -36,7 +36,156 @@ nc_getTidyData.byDate <- function(
 
     }
 
+nc_getTidyData.byCoordinates <- function(
+    ncdf4.object   = NULL,
+    DF.coordinates = NULL,
+    parquet.output = "DF-training.parquet"
+    ) {
+
+    thisFunctionName <- "nc_getTidyData.byCoordinates";
+    cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###");
+    cat(paste0("\n",thisFunctionName,"() starts.\n\n"));
+
+    require(arrow);
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    if ( file.exists(parquet.output) ) {
+        DF.output <- arrow::read_parquet(file = parquet.output);
+    } else {
+        DF.output <- nc_getTidyData.byCoordinates_all.variables(
+            ncdf4.object   = ncdf4.object,
+            DF.coordinates = DF.coordinates
+            );
+        arrow::write_parquet(
+            x    = DF.output,
+            sink = parquet.output
+            );
+        }
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    cat(paste0("\n",thisFunctionName,"() quits."));
+    cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###\n");
+    return( DF.output );
+
+    }
+
 ##################################################
+nc_getTidyData.byCoordinates_all.variables <- function(
+    ncdf4.object   = NULL,
+    DF.coordinates = NULL
+    ) {
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    cat("\nstr(DF.coordinates)\n");
+    print( str(DF.coordinates)   );
+
+    training.lats <- unique(DF.coordinates[,'lat']);
+    training.lons <- unique(DF.coordinates[,'lon']);
+
+    training.lats.lons <- apply(
+        X      = DF.coordinates[,c('lat','lon')],
+        MARGIN = 1,
+        FUN    = function(x) { return(paste(x = x, collapse = "_")) }
+        );
+
+    cat("\nstr(training.lats)\n");
+    print( str(training.lats)   );
+
+    cat("\nstr(training.lons)\n");
+    print( str(training.lons)   );
+
+    cat("\nstr(training.lats.lons)\n");
+    print( str(training.lats.lons)   );
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    DF.dates  <- get.DF.dates(ncdf4.object = ncdf4.object);
+    var.names <- names(ncdf4.object[['var']]);
+
+    cat("\nstr(DF.dates)\n");
+    print( str(DF.dates)   );
+
+    cat("\nstr(var.names)\n");
+    print( str(var.names)   );
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    DF.output <- data.frame();
+  # for ( temp.date.index in DF.dates[,'date.index'] ) {
+    for ( temp.date.index in DF.dates[,'date.index'][c(1,2,3)] ) {
+
+        temp.date <- DF.dates[temp.date.index,'date'];
+        cat("\n### temp.date: ",format(temp.date,"%Y-%m-%d"),"\n");
+
+        var.name  <- var.names[1];
+        DF.temp.0 <- nc_getTidyData.byDate_one.variable(
+            ncdf4.object = ncdf4.object,
+            date.index   = temp.date.index,
+            varid        = var.name
+            );
+        cat("\nstr(DF.temp.0) -- before filtering\n");
+        print( str(DF.temp.0)   );
+
+        DF.temp.0 <- DF.temp.0[DF.temp.0[,'lat'] %in% training.lats,];
+        cat("\nstr(DF.temp.0) -- filtered by latitude\n");
+        print( str(DF.temp.0)   );
+
+        DF.temp.0 <- DF.temp.0[DF.temp.0[,'lon'] %in% training.lons,];
+        cat("\nstr(DF.temp.0) -- filtered by longitude\n");
+        print( str(DF.temp.0)   );
+
+        DF.temp.0[,'lat_lon'] <- apply(
+            X      = DF.temp.0[,c('lat','lon')],
+            MARGIN = 1,
+            FUN    = function(x) { return(paste(x = x,collapse = "_")) }
+            );
+        cat("\nstr(DF.temp.0) -- added concatenated lat_lon\n");
+        print( str(DF.temp.0)   );
+
+        DF.temp.0 <- DF.temp.0[DF.temp.0[,'lat_lon'] %in% training.lats.lons,];
+        DF.temp.0 <- cbind(
+            date = rep(x = temp.date, times = nrow(DF.temp.0)),
+            DF.temp.0
+            );
+        cat("\nstr(DF.temp.0) -- filtered by lat_lon\n");
+        print( str(DF.temp.0)   );
+
+        for ( var.index in seq(2,length(var.names)) ) {
+            var.name <- var.names[var.index];
+            DF.temp.k  <- nc_getTidyData.byDate_one.variable(
+                ncdf4.object = ncdf4.object,
+                date.index   = temp.date.index,
+                varid        = var.name
+                );
+            DF.temp.k <- DF.temp.k[DF.temp.k[,'lat'] %in% training.lats,];
+            DF.temp.k <- DF.temp.k[DF.temp.k[,'lon'] %in% training.lons,];
+            DF.temp.k[,'lat_lon'] <- apply(
+                X      = DF.temp.k[,c('lat','lon')],
+                MARGIN = 1,
+                FUN    = function(x) { return(paste(x = x,collapse = "_")) }
+                );
+            DF.temp.k <- DF.temp.k[DF.temp.k[,'lat_lon'] %in% training.lats.lons,];
+            DF.temp.0 <- merge(
+                x  = DF.temp.0,
+                y  = DF.temp.k[,c("lat_lon",var.name)],
+                by = "lat_lon"
+                );
+            remove(list = c("DF.temp.k"))
+            cat("\nstr(DF.temp.0)\n");
+            print( str(DF.temp.0)   );
+            }
+
+        DF.output <- rbind(DF.output,DF.temp.0);
+        remove(list = c("DF.temp.0"))
+
+        cat("\nstr(DF.output)\n");
+        print( str(DF.output)   );
+
+        }
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    return( DF.output );
+
+    }
+
 nc_getTidyData.byDate_all.variables <- function(
     ncdf4.object   = NULL,
     date.requested = NULL
