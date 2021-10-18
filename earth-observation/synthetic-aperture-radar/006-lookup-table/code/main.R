@@ -145,6 +145,8 @@ DF.training.data <- nc_getTidyData.byCoordinates(
     );
 ncdf4::nc_close(ncdf4.object.spatiotemporal);
 
+print( str(DF.training.data) );
+
 ##################################################
 print( warnings() );
 
