@@ -81,9 +81,6 @@ nc_getTidyData.byCoordinates_all.variables <- function(
     ) {
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    cat("\nstr(DF.coordinates)\n");
-    print( str(DF.coordinates)   );
-
     training.lats <- unique(DF.coordinates[,'lat']);
     training.lons <- unique(DF.coordinates[,'lon']);
 
@@ -95,27 +92,9 @@ nc_getTidyData.byCoordinates_all.variables <- function(
 
     hash.training.lats.lons <- my.numeric.hash(training.lats.lons);
 
-    cat("\nstr(training.lats)\n");
-    print( str(training.lats)   );
-
-    cat("\nstr(training.lons)\n");
-    print( str(training.lons)   );
-
-    cat("\nstr(training.lats.lons)\n");
-    print( str(training.lats.lons)   );
-
-    cat("\nstr(hash.training.lats.lons)\n");
-    print( str(hash.training.lats.lons)   );
-
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     DF.dates  <- get.DF.dates(ncdf4.object = ncdf4.object);
     var.names <- names(ncdf4.object[['var']]);
-
-    cat("\nstr(DF.dates)\n");
-    print( str(DF.dates)   );
-
-    cat("\nstr(var.names)\n");
-    print( str(var.names)   );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     DF.output <- data.frame();
