@@ -70,6 +70,10 @@ nc_getTidyData.byCoordinates <- function(
     }
 
 ##################################################
+my.numeric.hash <- function(x) {
+    return( as.numeric(paste0("0x",openssl::md5(x))) );
+    }
+
 nc_getTidyData.byCoordinates_all.variables <- function(
     ncdf4.object   = NULL,
     DF.coordinates = NULL
@@ -88,6 +92,8 @@ nc_getTidyData.byCoordinates_all.variables <- function(
         FUN    = function(x) { return(paste(x = x, collapse = "_")) }
         );
 
+    hash.training.lats.lons <- my.numeric.hash(training.lats.lons);
+
     cat("\nstr(training.lats)\n");
     print( str(training.lats)   );
 
@@ -96,6 +102,9 @@ nc_getTidyData.byCoordinates_all.variables <- function(
 
     cat("\nstr(training.lats.lons)\n");
     print( str(training.lats.lons)   );
+
+    cat("\nstr(hash.training.lats.lons)\n");
+    print( str(hash.training.lats.lons)   );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     DF.dates  <- get.DF.dates(ncdf4.object = ncdf4.object);
@@ -109,8 +118,8 @@ nc_getTidyData.byCoordinates_all.variables <- function(
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     DF.output <- data.frame();
-  # for ( temp.date.index in DF.dates[,'date.index'] ) {
-    for ( temp.date.index in DF.dates[,'date.index'][c(1,2,3)] ) {
+  # for ( temp.date.index in DF.dates[,'date.index'][c(1,2,3)] ) {
+    for ( temp.date.index in DF.dates[,'date.index'] ) {
 
         temp.date <- DF.dates[temp.date.index,'date'];
         cat("\n### temp.date: ",format(temp.date,"%Y-%m-%d"),"\n");
@@ -132,15 +141,15 @@ nc_getTidyData.byCoordinates_all.variables <- function(
         cat("\nstr(DF.temp.0) -- filtered by longitude\n");
         print( str(DF.temp.0)   );
 
-        DF.temp.0[,'lat_lon'] <- apply(
+        DF.temp.0[,'hash_lat_lon'] <- my.numeric.hash(apply(
             X      = DF.temp.0[,c('lat','lon')],
             MARGIN = 1,
             FUN    = function(x) { return(paste(x = x,collapse = "_")) }
-            );
-        cat("\nstr(DF.temp.0) -- added concatenated lat_lon\n");
+            ));
+        cat("\nstr(DF.temp.0) -- added hashed concatenated lat_lon\n");
         print( str(DF.temp.0)   );
 
-        DF.temp.0 <- DF.temp.0[DF.temp.0[,'lat_lon'] %in% training.lats.lons,];
+        DF.temp.0 <- DF.temp.0[DF.temp.0[,'hash_lat_lon'] %in% hash.training.lats.lons,];
         DF.temp.0 <- cbind(
             date = rep(x = temp.date, times = nrow(DF.temp.0)),
             DF.temp.0
@@ -157,16 +166,16 @@ nc_getTidyData.byCoordinates_all.variables <- function(
                 );
             DF.temp.k <- DF.temp.k[DF.temp.k[,'lat'] %in% training.lats,];
             DF.temp.k <- DF.temp.k[DF.temp.k[,'lon'] %in% training.lons,];
-            DF.temp.k[,'lat_lon'] <- apply(
+            DF.temp.k[,'hash_lat_lon'] <- my.numeric.hash(apply(
                 X      = DF.temp.k[,c('lat','lon')],
                 MARGIN = 1,
                 FUN    = function(x) { return(paste(x = x,collapse = "_")) }
-                );
-            DF.temp.k <- DF.temp.k[DF.temp.k[,'lat_lon'] %in% training.lats.lons,];
+                ));
+            DF.temp.k <- DF.temp.k[DF.temp.k[,'hash_lat_lon'] %in% hash.training.lats.lons,];
             DF.temp.0 <- merge(
                 x  = DF.temp.0,
-                y  = DF.temp.k[,c("lat_lon",var.name)],
-                by = "lat_lon"
+                y  = DF.temp.k[,c("hash_lat_lon",var.name)],
+                by = "hash_lat_lon"
                 );
             remove(list = c("DF.temp.k"))
             cat("\nstr(DF.temp.0)\n");
@@ -180,6 +189,9 @@ nc_getTidyData.byCoordinates_all.variables <- function(
         print( str(DF.output)   );
 
         }
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    DF.output <- DF.output[,setdiff(colnames(DF.output),"hash_lat_lon")];
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     return( DF.output );

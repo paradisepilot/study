@@ -19,6 +19,7 @@ setwd( output.directory );
 require(arrow);
 require(ggplot2);
 require(ncdf4);
+require(openssl);
 require(raster);
 require(terrainr);
 require(sf);
