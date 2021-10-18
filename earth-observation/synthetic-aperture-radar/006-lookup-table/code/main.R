@@ -88,6 +88,7 @@ DF.colour.scheme <- data.frame(
     );
 rownames(DF.colour.scheme) <- DF.colour.scheme[,"land_cover"];
 
+### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 colname.pattern <- "V";
 
 DF.labelled <- getData.labelled(
@@ -96,22 +97,20 @@ DF.labelled <- getData.labelled(
     land.cover      = DF.colour.scheme[,'land_cover'],
     parquet.output  = paste0("data-labelled.parquet")
     );
-
-print( str(DF.labelled) );
-
-### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-DF.training.coordinates <- as.data.frame(unique(DF.labelled[,c('Y','X','land_cover')]));
-colnames(DF.training.coordinates) <- gsub(
-    x           = colnames(DF.training.coordinates),
+colnames(DF.labelled) <- gsub(
+    x           = colnames(DF.labelled),
     pattern     = "^X$",
     replacement = "longitude.training"
     );
-colnames(DF.training.coordinates) <- gsub(
-    x           = colnames(DF.training.coordinates),
+colnames(DF.labelled) <- gsub(
+    x           = colnames(DF.labelled),
     pattern     = "^Y$",
     replacement = "latitude.training"
     );
+print( str(DF.labelled) );
 
+### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+DF.training.coordinates <- as.data.frame(unique(DF.labelled[,c('latitude.training','longitude.training','land_cover')]));
 print( str(DF.training.coordinates) );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
@@ -124,7 +123,6 @@ DF.nearest.lat.lon <- get.nearest.lat.lon(
     DF.training.coordinates = DF.training.coordinates,
     ncdf4.spatiotemporal    = ncdf4.spatiotemporal
     );
-
 print( str(    DF.nearest.lat.lon) );
 print( summary(DF.nearest.lat.lon) );
 
@@ -143,7 +141,6 @@ DF.training <- nc_getTidyData.byCoordinates(
     parquet.output = "data-training.parquet"
     );
 ncdf4::nc_close(ncdf4.object.spatiotemporal);
-
 print( str(DF.training) );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
@@ -151,26 +148,20 @@ temp.variable <- 'Sigma0_VV_db';
 n.harmonics   <- 7;
 
 trained.fpc.FeatureEngine <- train.fpc.FeatureEngine(
-    DF.training = DF.training,
-    x           = 'lon',
-    y           = 'lat',
-    date        = 'date',
-    variable    = temp.variable,
-    min.date    = as.Date("2019-04-06"),
-    max.date    = as.Date("2019-10-27"),
-    n.harmonics = 7
+    DF.training      = DF.training,
+    DF.land.cover    = DF.nearest.lat.lon[,c('lat_lon','land_cover')],
+    x                = 'lon',
+    y                = 'lat',
+    date             = 'date',
+    variable         = temp.variable,
+    min.date         = as.Date("2019-04-06"),
+    max.date         = as.Date("2019-10-27"),
+    n.harmonics      = 7,
+    DF.colour.scheme = DF.colour.scheme
     );
-
 print( str(trained.fpc.FeatureEngine) );
 
-ggplot2::ggsave(
-    file   = paste0("plot-fpc-harmonics-",temp.variable,".png"),
-    plot   = trained.fpc.FeatureEngine$plot.harmonics(),
-    dpi    = 150,
-    height =   4 * n.harmonics,
-    width  =  16,
-    units  = 'in'
-    );
+### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 
 ##################################################
 print( warnings() );

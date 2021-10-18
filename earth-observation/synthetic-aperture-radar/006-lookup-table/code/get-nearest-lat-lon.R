@@ -47,6 +47,13 @@ get.nearest.lat.lon <- function(
         );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    DF.output[,'lat_lon'] <- apply(
+        X      = DF.output[,c('lat','lon')],
+        MARGIN = 1,
+        FUN    = function(x) { return(paste(x,collapse="_")) }
+        );
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     DF.output[,'dist.naive'] <- apply(
         X      = DF.output[,c('latitude.training','longitude.training','lat','lon')],
         MARGIN = 1,
