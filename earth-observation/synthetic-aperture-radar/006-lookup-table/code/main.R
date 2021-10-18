@@ -17,6 +17,7 @@ setwd( output.directory );
 
 ##################################################
 require(arrow);
+require(fpcFeatures);
 require(ggplot2);
 require(ncdf4);
 require(openssl);
@@ -27,17 +28,18 @@ require(stringr);
 
 # source supporting R code
 code.files <- c(
-    "nc-convert-spatiotemporal.R",
-    "test-terrainr.R",
-    "utils-ncdf4.R",
-    "utils-rgb.R",
-    "verify-nc-convert-spatiotemporal.R",
     "compare-lat-lon.R",
     "getData-labelled.R",
     "getData-labelled-helper.R",
     "get-nearest-lat-lon.R",
+    "nc-convert-spatiotemporal.R",
     "plot-labelled-data-geography.R",
-    "reshapeData.R"
+    "reshapeData.R",
+    "test-terrainr.R",
+    "train-fpc-FeatureEngine.R",
+    "utils-ncdf4.R",
+    "utils-rgb.R",
+    "verify-nc-convert-spatiotemporal.R"
     );
 
 for ( code.file in code.files ) {
@@ -54,6 +56,10 @@ temp.dir   <- gsub(x = output.directory, pattern = "006-lookup-table.+", replace
 temp.dir   <- file.path(temp.dir,"004-preprocess","02-bay-of-quinte","01-AAW","output.AAW.kc-512.2021-10-07.01.coreg.only");
 temp.file  <- "coregistered_stack.nc";
 ncdf4.snap <- file.path(temp.dir,temp.file)
+
+labelled.data.snapshot  <- "2020-12-30.01";
+labelled.data.directory <- file.path(data.directory,"bay-of-quinte-labelled",labelled.data.snapshot,"micro-mission-1","Sentinel1","IW","4");
+list.files(labelled.data.directory);
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 ncdf4.spatiotemporal <- 'data-input-spatiotemporal.nc';
@@ -76,18 +82,11 @@ gc();
 # gc();
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-
-### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 DF.colour.scheme <- data.frame(
     land_cover = c("marsh",  "swamp",  "water",  "forest", "ag",     "shallow"),
     colour     = c("#000000","#E69F00","#56B4E9","#009E73","#F0E442","red"    )
     );
 rownames(DF.colour.scheme) <- DF.colour.scheme[,"land_cover"];
-
-labelled.data.snapshot  <- "2020-12-30.01";
-labelled.data.directory <- file.path(data.directory,"bay-of-quinte-labelled",labelled.data.snapshot,"micro-mission-1","Sentinel1","IW","4");
-
-list.files(labelled.data.directory);
 
 colname.pattern <- "V";
 
@@ -138,14 +137,40 @@ print( summary(DF.nearest.lat.lon) );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 ncdf4.object.spatiotemporal <- ncdf4::nc_open(ncdf4.spatiotemporal);
-DF.training.data <- nc_getTidyData.byCoordinates(
+DF.training <- nc_getTidyData.byCoordinates(
     ncdf4.object   = ncdf4.object.spatiotemporal,
     DF.coordinates = DF.nearest.lat.lon[,c('lat','lon')],
     parquet.output = "data-training.parquet"
     );
 ncdf4::nc_close(ncdf4.object.spatiotemporal);
 
-print( str(DF.training.data) );
+print( str(DF.training) );
+
+### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+temp.variable <- 'Sigma0_VV_db';
+n.harmonics   <- 7;
+
+trained.fpc.FeatureEngine <- train.fpc.FeatureEngine(
+    DF.training = DF.training,
+    x           = 'lon',
+    y           = 'lat',
+    date        = 'date',
+    variable    = temp.variable,
+    min.date    = as.Date("2019-04-06"),
+    max.date    = as.Date("2019-10-27"),
+    n.harmonics = 7
+    );
+
+print( str(trained.fpc.FeatureEngine) );
+
+ggplot2::ggsave(
+    file   = paste0("plot-fpc-harmonics-",temp.variable,".png"),
+    plot   = trained.fpc.FeatureEngine$plot.harmonics(),
+    dpi    = 150,
+    height =   4 * n.harmonics,
+    width  =  16,
+    units  = 'in'
+    );
 
 ##################################################
 print( warnings() );
