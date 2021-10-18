@@ -39,7 +39,7 @@ nc_getTidyData.byDate <- function(
 nc_getTidyData.byCoordinates <- function(
     ncdf4.object   = NULL,
     DF.coordinates = NULL,
-    parquet.output = "DF-training.parquet"
+    parquet.output = "data-by-coordinates.parquet"
     ) {
 
     thisFunctionName <- "nc_getTidyData.byCoordinates";
@@ -71,6 +71,7 @@ nc_getTidyData.byCoordinates <- function(
 
 ##################################################
 my.numeric.hash <- function(x) {
+    require(openssl);
     return( as.numeric(paste0("0x",openssl::md5(x))) );
     }
 

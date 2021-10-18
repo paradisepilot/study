@@ -140,7 +140,8 @@ print( summary(DF.nearest.lat.lon) );
 ncdf4.object.spatiotemporal <- ncdf4::nc_open(ncdf4.spatiotemporal);
 DF.training.data <- nc_getTidyData.byCoordinates(
     ncdf4.object   = ncdf4.object.spatiotemporal,
-    DF.coordinates = DF.nearest.lat.lon[,c('lat','lon')]
+    DF.coordinates = DF.nearest.lat.lon[,c('lat','lon')],
+    parquet.output = "data-training.parquet"
     );
 ncdf4::nc_close(ncdf4.object.spatiotemporal);
 
