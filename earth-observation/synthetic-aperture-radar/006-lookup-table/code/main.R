@@ -29,6 +29,7 @@ require(stringr);
 # source supporting R code
 code.files <- c(
     "compare-lat-lon.R",
+    "compute-and-save-fpc-scores.R",
     "getData-labelled.R",
     "getData-labelled-helper.R",
     "get-nearest-lat-lon.R",
@@ -61,9 +62,13 @@ labelled.data.snapshot  <- "2020-12-30.01";
 labelled.data.directory <- file.path(data.directory,"bay-of-quinte-labelled",labelled.data.snapshot,"micro-mission-1","Sentinel1","IW","4");
 list.files(labelled.data.directory);
 
-### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+target.variable      <- 'Sigma0_VV_db';
 ncdf4.spatiotemporal <- 'data-input-spatiotemporal.nc';
+ncdf4.fpc.scores     <- 'data-output-fpc-scores.nc';
+RData.trained.engine <- 'trained-fpc-FeatureEngine.RData';
+n.harmonics          <- 7;
 
+### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 nc_convert.spatiotemporal(
     ncdf4.file.input  = ncdf4.snap,
     ncdf4.file.output = ncdf4.spatiotemporal
@@ -126,12 +131,12 @@ DF.nearest.lat.lon <- get.nearest.lat.lon(
 print( str(    DF.nearest.lat.lon) );
 print( summary(DF.nearest.lat.lon) );
 
-plot.labelled.data.geography(
-    DF.nearest.lat.lon   = DF.nearest.lat.lon,
-    ncdf4.spatiotemporal = ncdf4.spatiotemporal,
-    plot.date            = as.Date("2019-07-23"),
-    DF.colour.scheme     = DF.colour.scheme
-    );
+# plot.labelled.data.geography(
+#     DF.nearest.lat.lon   = DF.nearest.lat.lon,
+#     ncdf4.spatiotemporal = ncdf4.spatiotemporal,
+#     plot.date            = as.Date("2019-07-23"),
+#     DF.colour.scheme     = DF.colour.scheme
+#     );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 ncdf4.object.spatiotemporal <- ncdf4::nc_open(ncdf4.spatiotemporal);
@@ -144,22 +149,26 @@ ncdf4::nc_close(ncdf4.object.spatiotemporal);
 print( str(DF.training) );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-temp.variable <- 'Sigma0_VV_db';
-n.harmonics   <- 7;
-
 trained.fpc.FeatureEngine <- train.fpc.FeatureEngine(
     DF.training      = DF.training,
     DF.land.cover    = DF.nearest.lat.lon[,c('lat_lon','land_cover')],
     x                = 'lon',
     y                = 'lat',
     date             = 'date',
-    variable         = temp.variable,
+    variable         = target.variable,
     min.date         = as.Date("2019-04-06"),
     max.date         = as.Date("2019-10-27"),
     n.harmonics      = 7,
-    DF.colour.scheme = DF.colour.scheme
+    DF.colour.scheme = DF.colour.scheme,
+    RData.output     = RData.trained.engine
     );
 print( str(trained.fpc.FeatureEngine) );
+
+compute.and.save.fpc.scores(
+    ncdf4.spatiotemporal = ncdf4.spatiotemporal,
+    RData.trained.engine = RData.trained.engine,
+    ncdf4.output         = ncdf4.fpc.scores
+    );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 
