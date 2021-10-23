@@ -41,6 +41,7 @@ code.files <- c(
     "nc-convert-spatiotemporal.R",
     "plot-labelled-data-geography.R",
     "reshapeData.R",
+    "plot-RGB-fpc-scores.R",
     "test-terrainr.R",
     "train-fpc-FeatureEngine.R",
     "utils-ncdf4.R",
@@ -187,6 +188,13 @@ compute.and.save.fpc.scores(
     CSV.partitions       = CSV.partitions,
     n.cores              = n.cores,
     directory.fpc.scores = directory.fpc.scores
+    );
+
+plot.RGB.fpc.scores(
+    CSV.partitions       = CSV.partitions,
+    directory.fpc.scores = directory.fpc.scores,
+    parquet.tidy.scores  = "DF-tidy-scores.parquet",
+    PNG.ouptut           = "plot-RGB-fpc-scores.png"
     );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
