@@ -134,8 +134,12 @@ compute.and.save.fpc.scores_parallel <- function(
              MARGIN = 1,
              FUN    = function(x) { return( paste(x = x, collapse = "_") ) }
              );
+
         cat("\nstr(DF.tidy)\n");
         print( str(DF.tidy)   );
+
+        cat("\nsummary(DF.tidy)\n");
+        print( summary(DF.tidy)   );
 
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
         Sys.sleep(sample(x = 5:10, size = 1));
