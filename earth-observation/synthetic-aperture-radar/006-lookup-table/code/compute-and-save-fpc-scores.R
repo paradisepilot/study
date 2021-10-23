@@ -17,8 +17,12 @@ compute.and.save.fpc.scores <- function(
         ncdf4.spatiotemporal = ncdf4.spatiotemporal
         );
     base::gc();
+
     cat("\nstr(DF.partitions)\n");
     print( str(DF.partitions)   );
+
+    cat("\nDF.partitions\n");
+    print( DF.partitions   );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     compute.and.save.fpc.scores_parallel(
