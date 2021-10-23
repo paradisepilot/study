@@ -4,7 +4,9 @@ compute.and.save.fpc.scores <- function(
     RData.trained.engine = NULL,
     variable             = NULL,
     ncdf4.output         = NULL,
-    n.cores              = NULL
+    CSV.partitions       = "DF-partitions.csv",
+    n.cores              = 1, # parallel::detectCores()
+    directory.fpc.scores = "tmp-fpc-scores"
     ) {
 
     thisFunctionName <- "compute.and.save.fpc.scores";
@@ -26,13 +28,20 @@ compute.and.save.fpc.scores <- function(
     cat("\nDF.partitions\n");
     print( DF.partitions   );
 
+    write.csv(
+        x         = DF.partitions,
+        file      = CSV.partitions,
+        row.names = FALSE
+        );
+
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     compute.and.save.fpc.scores_parallel(
         DF.partitions        = DF.partitions,
         ncdf4.spatiotemporal = ncdf4.spatiotemporal,
         RData.trained.engine = RData.trained.engine,
         variable             = variable,
-        n.cores              = n.cores
+        n.cores              = n.cores,
+        directory.fpc.scores = directory.fpc.scores
         );
     base::gc();
 
@@ -52,7 +61,8 @@ compute.and.save.fpc.scores_parallel <- function(
     ncdf4.spatiotemporal = NULL,
     RData.trained.engine = NULL,
     variable             = NULL,
-    n.cores              = NULL
+    n.cores              = NULL,
+    directory.fpc.scores = "tmp-fpc-scores"
     ) {
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
@@ -74,17 +84,12 @@ compute.and.save.fpc.scores_parallel <- function(
         lat.count <- DF.partitions[partition.index,'lat.count'];
         lon.count <- DF.partitions[partition.index,'lon.count'];
 
-        parquet.file <- paste0(
-            stringr::str_pad(string = lat.start, width = 5),
-            "-",
-            stringr::str_pad(string = lon.start, width = 5),
-            ".parque"
-            );
+        file.stem <- DF.partitions[partition.index,'file.stem'];
 
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
         directory.original <- getwd();
         directory.log      <- file.path(directory.original,"logs");
-        directory.tmp      <- file.path(directory.original,"tmp" );
+        directory.tmp      <- file.path(directory.original,directory.fpc.scores);
 
         if ( !dir.exists(directory.log) ) {
             dir.create(path = directory.log, recursive = TRUE);
@@ -95,12 +100,6 @@ compute.and.save.fpc.scores_parallel <- function(
             }
 
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-        file.stem <- paste0(
-            stringr::str_pad(string = lat.start, width = 5, pad = "0"),
-            "-",
-            stringr::str_pad(string = lon.start, width = 5, pad = "0")
-            );
-
         file.sink.out <- paste0("sink-",file.stem,".out");
         file.sink.msg <- paste0("sink-",file.stem,".msg");
 
@@ -280,7 +279,21 @@ compute.and.save.fpc.scores_get.DF.partitions <- function(
     DF.output[,'lat.stop'] <- DF.output[,'lat.start'] + DF.output[,'lat.count'] - 1;
     DF.output[,'lon.stop'] <- DF.output[,'lon.start'] + DF.output[,'lon.count'] - 1;
 
-    DF.output <- DF.output[,c('lat.start','lat.stop','lat.count','lon.start','lon.stop','lon.count')];
+    DF.output[,'file.stem'] <- apply(
+        X      = DF.output[,c('lat.start','lon.start')],
+        MARGIN = 1,
+        FUN    = function(x) {
+            file.stem <- paste0(
+                stringr::str_pad(string = x[1], width = 5),
+                "-",
+                stringr::str_pad(string = x[2], width = 5),
+                ".parque"
+                );
+            return( file.stem );
+            }
+        );
+
+    DF.output <- DF.output[,c('lat.start','lat.stop','lat.count','lon.start','lon.stop','lon.count','file.stem')];
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     # return( DF.output );
