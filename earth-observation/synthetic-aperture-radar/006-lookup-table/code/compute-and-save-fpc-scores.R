@@ -15,38 +15,39 @@ compute.and.save.fpc.scores <- function(
     cat(paste0("\n# ",thisFunctionName,"() starts.\n"));
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    DF.partitions <- compute.and.save.fpc.scores_get.DF.partitions(
-        ncdf4.spatiotemporal = ncdf4.spatiotemporal,
-        n.partitions.lat     = 30,
-        n.partitions.lon     = 30
-        );
-    base::gc();
-
-    cat("\nstr(DF.partitions)\n");
-    print( str(DF.partitions)   );
-
-    cat("\nDF.partitions\n");
-    print( DF.partitions   );
-
-    write.csv(
-        x         = DF.partitions,
-        file      = CSV.partitions,
-        row.names = FALSE
-        );
-
-    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    compute.and.save.fpc.scores_parallel(
-        DF.partitions        = DF.partitions,
-        ncdf4.spatiotemporal = ncdf4.spatiotemporal,
-        RData.trained.engine = RData.trained.engine,
-        variable             = variable,
-        n.cores              = n.cores,
-        directory.fpc.scores = directory.fpc.scores
-        );
+    if ( file.exists(CSV.partitions) ) {
+        DF.partitions <- read.csv(file = CSV.partitions, row.names = NULL);
+    } else {
+        DF.partitions <- compute.and.save.fpc.scores_get.DF.partitions(
+            ncdf4.spatiotemporal = ncdf4.spatiotemporal,
+            n.partitions.lat     = 30,
+            n.partitions.lon     = 30
+            );
+        cat("\nstr(DF.partitions)\n");
+        print( str(DF.partitions)   );
+        write.csv(
+            x         = DF.partitions,
+            file      = CSV.partitions,
+            row.names = FALSE
+            );
+        }
     base::gc();
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    # remove(list = c("DF.partitions"));
+    if ( !dir.exists(directory.fpc.scores) ) {
+        compute.and.save.fpc.scores_parallel(
+            DF.partitions        = DF.partitions,
+            ncdf4.spatiotemporal = ncdf4.spatiotemporal,
+            RData.trained.engine = RData.trained.engine,
+            variable             = variable,
+            n.cores              = n.cores,
+            directory.fpc.scores = directory.fpc.scores
+            );
+        }
+    base::gc();
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    remove(list = c("DF.partitions"));
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat(paste0("\n# ",thisFunctionName,"() exits."));
