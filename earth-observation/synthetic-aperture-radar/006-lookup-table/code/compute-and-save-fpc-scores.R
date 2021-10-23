@@ -284,9 +284,9 @@ compute.and.save.fpc.scores_get.DF.partitions <- function(
         MARGIN = 1,
         FUN    = function(x) {
             file.stem <- paste0(
-                stringr::str_pad(string = x[1], width = 5),
+                stringr::str_pad(string = x[1], width = 5, pad = "0"),
                 "-",
-                stringr::str_pad(string = x[2], width = 5),
+                stringr::str_pad(string = x[2], width = 5, pad = "0"),
                 ".parque"
                 );
             return( file.stem );
