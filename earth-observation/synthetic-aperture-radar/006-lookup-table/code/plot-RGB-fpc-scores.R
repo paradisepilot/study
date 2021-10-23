@@ -29,6 +29,7 @@ plot.RGB.fpc.scores <- function(
                 DF.tidy.scores <- rbind(DF.tidy.scores,DF.temp);
                 remove(list = c('DF.temp'));
                 }
+            cat("\n");
             remove(list = c('DF.partitions'));
             arrow::write_parquet(
                 x    = DF.tidy.scores,
