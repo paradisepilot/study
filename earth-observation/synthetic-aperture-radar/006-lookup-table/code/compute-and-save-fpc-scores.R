@@ -86,6 +86,8 @@ compute.and.save.fpc.scores_parallel <- function(
 
         file.stem <- DF.partitions[partition.index,'file.stem'];
 
+        fpc.scores.parquet <- DF.partitions[partition.index,'fpc.scores.parquet'];
+
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
         directory.original <- getwd();
         directory.log      <- file.path(directory.original,"logs");
@@ -178,7 +180,7 @@ compute.and.save.fpc.scores_parallel <- function(
         print( str(DF.scores)   );
         arrow::write_parquet(
             x    = DF.scores,
-            sink = file.path(directory.tmp,paste0("fpc-scores-",file.stem,".parquet"))
+            sink = file.path(directory.tmp,fpc.scores.parquet)
             );
 
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
@@ -286,14 +288,15 @@ compute.and.save.fpc.scores_get.DF.partitions <- function(
             file.stem <- paste0(
                 stringr::str_pad(string = x[1], width = 5, pad = "0"),
                 "-",
-                stringr::str_pad(string = x[2], width = 5, pad = "0"),
-                ".parque"
+                stringr::str_pad(string = x[2], width = 5, pad = "0")
                 );
             return( file.stem );
             }
         );
 
-    DF.output <- DF.output[,c('lat.start','lat.stop','lat.count','lon.start','lon.stop','lon.count','file.stem')];
+    DF.output[,'fpc.scores.parquet'] <- paste0("fpc-scores-",DF.output[,'file.stem'],".parquet");
+
+    DF.output <- DF.output[,c('lat.start','lat.stop','lat.count','lon.start','lon.stop','lon.count','file.stem','fpc.scores.parquet')];
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     # return( DF.output );
