@@ -59,6 +59,7 @@ compute.and.save.fpc.scores_parallel <- function(
     require(foreach);
     require(parallel);
     require(doParallel);
+    require(tidyr);
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     doParallel::registerDoParallel(n.cores);
@@ -165,6 +166,15 @@ compute.and.save.fpc.scores_parallel <- function(
         base::gc();
         retained.colnames <- grep(x = colnames(DF.scores), pattern = "^[0-9]+$", invert = TRUE, value = TRUE);
         DF.scores <- DF.scores[,retained.colnames];
+        DF.scores <- as.data.frame(tidyr::separate(
+            data = DF.scores,
+            col  = 'lat_lon',
+            into = c('lat','lon'),
+            sep  = "_"
+            ));
+        DF.scores <- DF.scores[,setdiff(colnames(DF.scores),c('lat_lon'))];
+        DF.scores[,'lat'] <- as.numeric(DF.scores[,'lat']);
+        DF.scores[,'lon'] <- as.numeric(DF.scores[,'lon']);
         cat("\nstr(DF.scores)\n");
         print( str(DF.scores)   );
         arrow::write_parquet(
