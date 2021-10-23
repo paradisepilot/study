@@ -141,6 +141,11 @@ compute.and.save.fpc.scores_parallel <- function(
         cat("\nsummary(DF.tidy)\n");
         print( summary(DF.tidy)   );
 
+        DF.tidy[is.na(DF.tidy[,variable]),variable] <- (-40);
+
+        cat("\nsummary(DF.tidy)\n");
+        print( summary(DF.tidy)   );
+
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
         Sys.sleep(sample(x = 5:10, size = 1));
         trained.fpc.FeatureEngine <- readRDS(RData.trained.engine);
