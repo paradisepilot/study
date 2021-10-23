@@ -72,6 +72,9 @@ plot.RGB.fpc.scores_terrainr <- function(
     DF.temp <- DF.tidy.scores[,c(x,y,channel.red,channel.green,channel.blue)];
     remove(list = c('DF.tidy.scores'));
 
+    colnames(DF.temp) <- gsub(x = colnames(DF.temp), pattern = x, replacement = "x");
+    colnames(DF.temp) <- gsub(x = colnames(DF.temp), pattern = y, replacement = "y");
+
     colnames(DF.temp) <- gsub(x = colnames(DF.temp), pattern = channel.red,   replacement = "red"  );
     colnames(DF.temp) <- gsub(x = colnames(DF.temp), pattern = channel.green, replacement = "green");
     colnames(DF.temp) <- gsub(x = colnames(DF.temp), pattern = channel.blue,  replacement = "blue" );
@@ -84,8 +87,8 @@ plot.RGB.fpc.scores_terrainr <- function(
     my.ggplot <- my.ggplot + terrainr::geom_spatial_rgb(
         data    = DF.temp,
         mapping = ggplot2::aes(
-            x = lon,
-            y = lat,
+            x = x,
+            y = y,
             r = red,
             g = green,
             b = blue
