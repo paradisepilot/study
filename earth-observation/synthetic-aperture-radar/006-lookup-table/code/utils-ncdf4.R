@@ -251,6 +251,7 @@ nc_getTidyData.byLatLon <- function(
         replacement = varid
         );
 
+    remove(list = c("data.array","DF.dates","n.dates","lats","lons","n.lats","n.lons"));
     return( DF.output );
 
     }
