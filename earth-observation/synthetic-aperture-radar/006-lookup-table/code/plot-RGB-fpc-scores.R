@@ -107,7 +107,7 @@ plot.RGB.fpc.scores_terrainr <- function(
         width    = 16,
         height   = 16 * (range.y/range.x),
         units    = "in",
-        dpi      = 300
+        dpi      = 1000
         );
 
     remove(list = c('DF.temp','my.ggplot','range.lat','range.lon'));
