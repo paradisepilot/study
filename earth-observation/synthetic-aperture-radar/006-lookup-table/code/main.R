@@ -176,25 +176,17 @@ trained.fpc.FeatureEngine <- train.fpc.FeatureEngine(
 print( str(trained.fpc.FeatureEngine) );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-# temp.dir   <- gsub(x = output.directory, pattern = "006-lookup-table.+", replacement = "");
-# temp.dir   <- file.path(temp.dir,"004-preprocess","02-bay-of-quinte","01-AAW","output.AAW.kc-512.2021-10-04.01");
-# temp.file  <- "coregistered_stack.nc";
-# ncdf4.snap <- file.path(temp.dir,temp.file);
-#
-# ncdf4.to.transform <- 'data-spatiotemporal-to-transform.nc';
-#
-# nc_convert.spatiotemporal(
-#     ncdf4.file.input  = ncdf4.snap,
-#     ncdf4.file.output = ncdf4.to.transform
-#     );
-# gc();
+CSV.partitions       <- "DF-partitions.csv";
+directory.fpc.scores <- "tmp-fpc-scores";
 
 compute.and.save.fpc.scores(
-    ncdf4.spatiotemporal = ncdf4.spatiotemporal, # ncdf4.to.transform,
+    ncdf4.spatiotemporal = ncdf4.spatiotemporal,
     RData.trained.engine = RData.trained.engine,
     variable             = target.variable,
     ncdf4.output         = ncdf4.fpc.scores,
-    n.cores              = n.cores
+    CSV.partitions       = CSV.partitions,
+    n.cores              = n.cores,
+    directory.fpc.scores = directory.fpc.scores
     );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
