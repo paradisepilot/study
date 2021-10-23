@@ -60,7 +60,7 @@ temp.dir   <- gsub(x = output.directory, pattern = "006-lookup-table.+", replace
 #temp.dir  <- file.path(temp.dir,"004-preprocess","02-bay-of-quinte","01-AAW","output.AAW.kc-512.2021-10-04.01");
 temp.dir   <- file.path(temp.dir,"004-preprocess","02-bay-of-quinte","01-AAW","output.AAW.kc-512.2021-10-07.01.coreg.only");
 temp.file  <- "coregistered_stack.nc";
-ncdf4.snap <- file.path(temp.dir,temp.file)
+ncdf4.snap <- file.path(temp.dir,temp.file);
 
 labelled.data.snapshot  <- "2020-12-30.01";
 labelled.data.directory <- file.path(data.directory,"bay-of-quinte-labelled",labelled.data.snapshot,"micro-mission-1","Sentinel1","IW","4");
@@ -174,8 +174,22 @@ trained.fpc.FeatureEngine <- train.fpc.FeatureEngine(
     );
 print( str(trained.fpc.FeatureEngine) );
 
+### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+temp.dir   <- gsub(x = output.directory, pattern = "006-lookup-table.+", replacement = "");
+temp.dir   <- file.path(temp.dir,"004-preprocess","02-bay-of-quinte","01-AAW","output.AAW.kc-512.2021-10-04.01");
+temp.file  <- "coregistered_stack.nc";
+ncdf4.snap <- file.path(temp.dir,temp.file);
+
+ncdf4.to.transform <- 'data-spatiotemporal-to-transform.nc';
+
+nc_convert.spatiotemporal(
+    ncdf4.file.input  = ncdf4.snap,
+    ncdf4.file.output = ncdf4.to.transform
+    );
+gc();
+
 compute.and.save.fpc.scores(
-    ncdf4.spatiotemporal = ncdf4.spatiotemporal,
+    ncdf4.spatiotemporal = ncdf4.to.transform,
     RData.trained.engine = RData.trained.engine,
     variable             = target.variable,
     ncdf4.output         = ncdf4.fpc.scores,
