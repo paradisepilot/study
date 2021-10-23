@@ -235,7 +235,7 @@ nc_getTidyData.byLatLon <- function(
         nc    = ncdf4.object,
         varid = varid,
         start = c(1,       lat.start, lon.start),
-        count = c(n.dates, lon.start, lon.count)
+        count = c(n.dates, lat.count, lon.count)
         );
 
     DF.output <- data.frame(
