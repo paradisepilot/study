@@ -15,8 +15,8 @@ compute.and.save.fpc.scores <- function(
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     DF.partitions <- compute.and.save.fpc.scores_get.DF.partitions(
         ncdf4.spatiotemporal = ncdf4.spatiotemporal,
-        n.partitions.lat     = 20,
-        n.partitions.lon     = 20
+        n.partitions.lat     = 30,
+        n.partitions.lon     = 30
         );
     base::gc();
 
