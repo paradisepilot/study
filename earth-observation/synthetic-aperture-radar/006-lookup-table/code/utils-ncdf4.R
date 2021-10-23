@@ -211,6 +211,50 @@ nc_getTidyData.byDate_all.variables <- function(
 
     }
 
+nc_getTidyData.byLatLon <- function(
+    ncdf4.object = NULL,
+    varid        = NULL,
+    lat.start    = NULL,
+    lat.count    = NULL,
+    lon.start    = NULL,
+    lon.count    = NULL
+    ) {
+
+    DF.dates <- get.DF.dates(ncdf4.object = ncdf4.object);
+    n.dates  <- nrow(DF.dates);
+
+    lats   <- ncdf4.object[['var']][[varid]][['dim']][[2]][['vals']];
+    lats   <- lats[seq(lat.start,lat.start + lat.count - 1)];
+    n.lats <- length(lats);
+
+    lons   <- ncdf4.object[['var']][[varid]][['dim']][[3]][['vals']];
+    lons   <- lons[seq(lon.start,lon.start + lon.count - 1)];
+    n.lons <- length(lons);
+
+    data.array <- ncdf4::ncvar_get(
+        nc    = ncdf4.object,
+        varid = varid,
+        start = c(1,       lat.start, lon.start),
+        count = c(n.dates, lon.start, lon.count)
+        );
+
+    DF.output <- data.frame(
+        date    = rep(x = DF.dates[,'date'], times = n.lats * n.lons),
+        lat     = rep(rep(x = lats, each = n.dates), times = n.lons),
+        lon     = rep(x = lons,  each = n.dates * n.lats),
+        varname = as.vector(data.array)
+        );
+
+    colnames(DF.output) <- gsub(
+        x           = colnames(DF.output),
+        pattern     = "varname",
+        replacement = varid
+        );
+
+    return( DF.output );
+
+    }
+
 nc_getTidyData.byDate_one.variable <- function(
     ncdf4.object = NULL,
     date.index   = NULL,

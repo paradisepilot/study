@@ -17,14 +17,18 @@ setwd( output.directory );
 
 ##################################################
 require(arrow);
-require(fpcFeatures);
+require(doParallel);
+require(foreach);
 require(ggplot2);
 require(ncdf4);
 require(openssl);
+require(parallel);
 require(raster);
 require(terrainr);
 require(sf);
 require(stringr);
+
+require(fpcFeatures);
 
 # source supporting R code
 code.files <- c(
@@ -67,6 +71,12 @@ ncdf4.spatiotemporal <- 'data-input-spatiotemporal.nc';
 ncdf4.fpc.scores     <- 'data-output-fpc-scores.nc';
 RData.trained.engine <- 'trained-fpc-FeatureEngine.RData';
 n.harmonics          <- 7;
+
+is.macOS <- grepl(x = sessionInfo()[['platform']], pattern = 'apple', ignore.case = TRUE);
+n.cores  <- ifelse(test = is.macOS, yes = 4, no = parallel::detectCores());
+print( n.cores );
+
+### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 nc_convert.spatiotemporal(
@@ -167,7 +177,9 @@ print( str(trained.fpc.FeatureEngine) );
 compute.and.save.fpc.scores(
     ncdf4.spatiotemporal = ncdf4.spatiotemporal,
     RData.trained.engine = RData.trained.engine,
-    ncdf4.output         = ncdf4.fpc.scores
+    variable             = target.variable,
+    ncdf4.output         = ncdf4.fpc.scores,
+    n.cores              = n.cores
     );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
