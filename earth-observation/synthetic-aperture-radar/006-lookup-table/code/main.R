@@ -27,6 +27,7 @@ require(raster);
 require(terrainr);
 require(sf);
 require(stringr);
+require(tidyr);
 
 require(fpcFeatures);
 
