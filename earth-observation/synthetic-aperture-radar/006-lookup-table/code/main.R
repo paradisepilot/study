@@ -194,7 +194,7 @@ plot.RGB.fpc.scores(
     CSV.partitions       = CSV.partitions,
     directory.fpc.scores = directory.fpc.scores,
     parquet.tidy.scores  = "DF-tidy-scores.parquet",
-    PNG.ouptut           = "plot-RGB-fpc-scores.png"
+    PNG.output           = "plot-RGB-fpc-scores.png"
     );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
