@@ -116,6 +116,7 @@ compute.and.save.fpc.scores_parallel <- function(
         start.proc.time <- proc.time();
 
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+        Sys.sleep(sample(x = 5:10, size = 1));
         ncdf4.object.spatiotemporal <- ncdf4::nc_open(ncdf4.spatiotemporal);
         DF.tidy <- nc_getTidyData.byLatLon(
             ncdf4.object = ncdf4.object.spatiotemporal,
@@ -137,6 +138,7 @@ compute.and.save.fpc.scores_parallel <- function(
         print( str(DF.tidy)   );
 
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+        Sys.sleep(sample(x = 5:10, size = 1));
         trained.fpc.FeatureEngine <- readRDS(RData.trained.engine);
         DF.scores <- trained.fpc.FeatureEngine$transform(
             newdata  = DF.tidy,
