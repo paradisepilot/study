@@ -58,7 +58,7 @@ compute.and.save.fpc.scores_parallel <- function(
     doParallel::registerDoParallel(n.cores);
 
   # foreach ( partition.index = seq(1,4) ) %dopar% {
-    foreach ( batch.index = seq(1,nrow(DF.partition.table)) ) %dopar% {
+    foreach ( batch.index = seq(1,nrow(DF.partitions)) ) %dopar% {
 
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
         lat.start <- DF.partitions[partition.index,'lat.start'];
