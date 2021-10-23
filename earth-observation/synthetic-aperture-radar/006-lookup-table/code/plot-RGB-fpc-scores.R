@@ -22,10 +22,12 @@ plot.RGB.fpc.scores <- function(
             DF.partitions  <- read.csv(file = CSV.partitions, row.names = NULL);
             DF.tidy.scores <- data.frame();
             for ( row.index in seq(1,nrow(DF.partitions)) ) {
+                cat("\nprocessing DF.partitions: ",row.index," of ",nrow(DF.partitions)," rows", sep = "");
                 DF.temp <- arrow::read_parquet(
                     file = file.path(directory.fpc.scores,DF.partitions[row.index,'fpc.scores.parquet'])
                     );
                 DF.tidy.scores <- rbind(DF.tidy.scores,DF.temp);
+                remove(list = c('DF.temp'));
                 }
             arrow::write_parquet(
                 x    = DF.tidy.scores,
