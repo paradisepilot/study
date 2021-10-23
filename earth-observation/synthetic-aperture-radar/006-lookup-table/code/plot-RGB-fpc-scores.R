@@ -81,9 +81,12 @@ plot.RGB.fpc.scores_terrainr <- function(
     colnames(DF.temp) <- gsub(x = colnames(DF.temp), pattern = channel.green, replacement = "green");
     colnames(DF.temp) <- gsub(x = colnames(DF.temp), pattern = channel.blue,  replacement = "blue" );
 
-    for ( temp.colname in c('red','green','blue') ) {
-        DF.temp[,temp.colname] <- rgb.transform(x = DF.temp[,temp.colname]);
-        }
+    # for ( temp.colname in c('red','green','blue') ) {
+    #     DF.temp[,temp.colname] <- rgb.transform(x = DF.temp[,temp.colname]);
+    #     }
+    DF.temp[,'red'  ] <- rgb.transform(x = DF.temp[,'red'  ], xmin = -200, xmax = 120);
+    DF.temp[,'green'] <- rgb.transform(x = DF.temp[,'green'], xmin =  -50, xmax =  50);
+    DF.temp[,'blue' ] <- rgb.transform(x = DF.temp[,'blue' ], xmin =  -30, xmax =  50);
 
     my.ggplot <- ggplot2::ggplot(data = NULL) + ggplot2::theme_bw();
     my.ggplot <- my.ggplot + terrainr::geom_spatial_rgb(
