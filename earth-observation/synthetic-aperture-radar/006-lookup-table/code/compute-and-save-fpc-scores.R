@@ -14,7 +14,9 @@ compute.and.save.fpc.scores <- function(
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     DF.partitions <- compute.and.save.fpc.scores_get.DF.partitions(
-        ncdf4.spatiotemporal = ncdf4.spatiotemporal
+        ncdf4.spatiotemporal = ncdf4.spatiotemporal,
+        n.partitions.lat     = 20,
+        n.partitions.lon     = 20
         );
     base::gc();
 
@@ -141,7 +143,7 @@ compute.and.save.fpc.scores_parallel <- function(
         cat("\nsummary(DF.tidy)\n");
         print( summary(DF.tidy)   );
 
-        DF.tidy[is.na(DF.tidy[,variable]),variable] <- (-40);
+        DF.tidy[is.na(DF.tidy[,variable]),variable] <- (-60);
 
         cat("\nsummary(DF.tidy)\n");
         print( summary(DF.tidy)   );
