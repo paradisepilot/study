@@ -3,7 +3,7 @@ plot.RGB.fpc.scores <- function(
     CSV.partitions       = NULL,
     directory.fpc.scores = NULL,
     parquet.tidy.scores  = "DF-tidy-scores.parquet",
-    PNG.ouptut           = "plot-RGB-fpc-scores.png"
+    PNG.output           = "plot-RGB-fpc-scores.png"
     ) {
 
     thisFunctionName <- "plot.RGB.fpc.scores";
@@ -14,7 +14,7 @@ plot.RGB.fpc.scores <- function(
     require(terrainr);
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    if ( !file.exists(PNG.ouptut) ) {
+    if ( !file.exists(PNG.output) ) {
 
         if ( file.exists(parquet.tidy.scores) ) {
             DF.tidy.scores <- arrow::read_parquet(file = parquet.tidy.scores);
@@ -42,7 +42,7 @@ plot.RGB.fpc.scores <- function(
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
         plot.RGB.fpc.scores_terrainr(
             DF.tidy.scores = DF.tidy.scores,
-            PNG.ouptut     = PNG.ouptut
+            PNG.output     = PNG.output
             );
 
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
