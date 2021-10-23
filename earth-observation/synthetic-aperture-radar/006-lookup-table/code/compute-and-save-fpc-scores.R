@@ -143,10 +143,10 @@ compute.and.save.fpc.scores_parallel <- function(
         cat("\nsummary(DF.tidy)\n");
         print( summary(DF.tidy)   );
 
-        # DF.tidy[is.na(DF.tidy[,variable]),variable] <- (-60);
-        #
-        # cat("\nsummary(DF.tidy)\n");
-        # print( summary(DF.tidy)   );
+        DF.tidy[is.na(DF.tidy[,variable]),variable] <- (-60);
+
+        cat("\nsummary(DF.tidy)\n");
+        print( summary(DF.tidy)   );
 
         arrow::write_parquet(
             x    = DF.tidy,
