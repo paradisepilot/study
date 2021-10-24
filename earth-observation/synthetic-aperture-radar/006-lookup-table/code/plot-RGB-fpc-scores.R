@@ -60,8 +60,8 @@ plot.RGB.fpc.scores <- function(
 ##################################################
 plot.RGB.fpc.scores_terrainr <- function(
     DF.tidy.scores = NULL,
-    x              = 'lon',
-    y              = 'lat',
+    latitude       = 'lat',
+    longitude      = 'lon',
     channel.red    = 'fpc_1',
     channel.green  = 'fpc_2',
     channel.blue   = 'fpc_3',
@@ -74,8 +74,8 @@ plot.RGB.fpc.scores_terrainr <- function(
     DF.temp <- DF.tidy.scores[,c(x,y,channel.red,channel.green,channel.blue)];
     remove(list = c('DF.tidy.scores'));
 
-    colnames(DF.temp) <- gsub(x = colnames(DF.temp), pattern = x, replacement = "x");
-    colnames(DF.temp) <- gsub(x = colnames(DF.temp), pattern = y, replacement = "y");
+    colnames(DF.temp) <- gsub(x = colnames(DF.temp), pattern = latitude,  replacement = "latitude" );
+    colnames(DF.temp) <- gsub(x = colnames(DF.temp), pattern = longitude, replacement = "longitude");
 
     colnames(DF.temp) <- gsub(x = colnames(DF.temp), pattern = channel.red,   replacement = "red"  );
     colnames(DF.temp) <- gsub(x = colnames(DF.temp), pattern = channel.green, replacement = "green");
@@ -92,8 +92,8 @@ plot.RGB.fpc.scores_terrainr <- function(
     my.ggplot <- my.ggplot + terrainr::geom_spatial_rgb(
         data    = DF.temp,
         mapping = ggplot2::aes(
-            x = x,
-            y = y,
+            x = longitude,
+            y = latitude,
             r = red,
             g = green,
             b = blue
