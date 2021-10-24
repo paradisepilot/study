@@ -100,8 +100,8 @@ plot.RGB.fpc.scores_terrainr <- function(
             )
         );
 
-    range.y <- sum(range(DF.temp[,'y']) * c(-1,1));
-    range.x <- sum(range(DF.temp[,'x']) * c(-1,1));
+    range.y <- sum(range(DF.temp[,'latitude' ]) * c(-1,1));
+    range.x <- sum(range(DF.temp[,'longitude']) * c(-1,1));
 
     ggplot2::ggsave(
         filename = PNG.output,
