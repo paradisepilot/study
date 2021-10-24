@@ -71,7 +71,7 @@ plot.RGB.fpc.scores_terrainr <- function(
     require(ggplot2);
     require(terrainr);
 
-    DF.temp <- DF.tidy.scores[,c(x,y,channel.red,channel.green,channel.blue)];
+    DF.temp <- DF.tidy.scores[,c(longitude,latitude,channel.red,channel.green,channel.blue)];
     remove(list = c('DF.tidy.scores'));
 
     colnames(DF.temp) <- gsub(x = colnames(DF.temp), pattern = latitude,  replacement = "latitude" );
