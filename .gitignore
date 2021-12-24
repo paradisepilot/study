@@ -25,3 +25,5 @@ ARCHIVE
 stderr.*
 stdout.*
 *000-data*
+S1*.zip
+S1*.SAFE
