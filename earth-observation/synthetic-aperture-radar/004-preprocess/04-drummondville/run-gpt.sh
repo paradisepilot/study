@@ -16,7 +16,7 @@ cp -r ${codeDIR} ${outputDIR}
 cp    $0         ${outputDIR}/code
 
 ##################################################
-inputFolder=bay-of-quinte
+inputFolder=drummondville
 
 inputFileStems=( \
     "S1A_IW_GRDH_1SDV_20190109T224409_20190109T224434_025407_02D06C_7E15" \
