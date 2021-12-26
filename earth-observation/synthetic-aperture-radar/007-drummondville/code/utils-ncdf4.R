@@ -83,14 +83,10 @@ nc_getTidyData.byCoordinates_all.variables <- function(
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     if ( "ncdf4" == class(ncdf4.object) ) {
-        # length.lat <- ncdf4.object[['dim']][['lat']][['len' ]];
-        # length.lon <- ncdf4.object[['dim']][['lon']][['len' ]];
         vals.lat   <- ncdf4.object[['dim']][['lat']][['vals']];
         vals.lon   <- ncdf4.object[['dim']][['lon']][['vals']];
     } else {
         ncdf4.object.temp <- ncdf4::nc_open(ncdf4.object);
-        # length.lat <- ncdf4.object.temp[['dim']][['lat']][['len' ]];
-        # length.lon <- ncdf4.object.temp[['dim']][['lon']][['len' ]];
         vals.lat   <- ncdf4.object.temp[['dim']][['lat']][['vals']];
         vals.lon   <- ncdf4.object.temp[['dim']][['lon']][['vals']];
         ncdf4::nc_close(ncdf4.object.temp);
@@ -102,8 +98,10 @@ nc_getTidyData.byCoordinates_all.variables <- function(
         n.partitions.lat     = 30,
         n.partitions.lon     = 30
         );
+
     cat("\nstr(DF.partitions)\n");
     print( str(DF.partitions)   );
+
     write.csv(
         x         = DF.partitions,
         file      = CSV.partitions,
@@ -131,6 +129,7 @@ nc_getTidyData.byCoordinates_all.variables <- function(
 
     cat("\nstr(DF.coordinates)\n");
     print( str(DF.coordinates)   );
+
     write.csv(
         x         = DF.coordinates,
         file      = "DF-coordinates.csv",
@@ -184,29 +183,14 @@ nc_getTidyData.byCoordinates_all.variables <- function(
             lon.count    = DF.partitions[row.index,'lon.count']
             );
 
-        cat("\nstr(DF.temp.0) -- A1\n");
-        print( str(DF.temp.0) );
-
         DF.temp.0 <- DF.temp.0[DF.temp.0[,'lat'] %in% training.lats,];
-        cat("\nstr(DF.temp.0) -- A2\n");
-        print( str(DF.temp.0) );
-
         DF.temp.0 <- DF.temp.0[DF.temp.0[,'lon'] %in% training.lons,];
-        cat("\nstr(DF.temp.0) -- A3\n");
-        print( str(DF.temp.0) );
-
         DF.temp.0[,'hash_lat_lon'] <- my.numeric.hash(apply(
             X      = DF.temp.0[,c('lat','lon')],
             MARGIN = 1,
             FUN    = function(x) { return(paste(x = x,collapse = "_")) }
             ));
-        cat("\nstr(DF.temp.0) -- A4\n");
-        print( str(DF.temp.0) );
-
         DF.temp.0 <- DF.temp.0[DF.temp.0[,'hash_lat_lon'] %in% hash.training.lats.lons,];
-        cat("\nstr(DF.temp.0) -- A5\n");
-        print( str(DF.temp.0) );
-
 
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
         for ( var.index in seq(2,length(var.names)) ) {
@@ -219,8 +203,6 @@ nc_getTidyData.byCoordinates_all.variables <- function(
                 lon.start    = DF.partitions[row.index,'lon.start'],
                 lon.count    = DF.partitions[row.index,'lon.count']
                 );
-            cat("\nstr(DF.temp.k)\n");
-            print( str(DF.temp.k)   );
             DF.temp.k <- DF.temp.k[DF.temp.k[,'lat'] %in% training.lats,];
             DF.temp.k <- DF.temp.k[DF.temp.k[,'lon'] %in% training.lons,];
             DF.temp.k[,'hash_lat_lon'] <- my.numeric.hash(apply(
@@ -239,6 +221,9 @@ nc_getTidyData.byCoordinates_all.variables <- function(
 
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
         DF.output <- rbind(DF.output,DF.temp.0);
+
+        cat("\nstr(DF.temp.0)\n");
+        print( str(DF.temp.0)   );
         remove(list = c("DF.temp.0"))
 
         }
