@@ -230,6 +230,7 @@ nc_getTidyData.byCoordinates_all.variables <- function(
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     DF.output <- DF.output[,setdiff(colnames(DF.output),"hash_lat_lon")];
+    DF.output <- DF.output[order(DF.output$lat,DF.output$lon,DF.output$date),];
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     return( DF.output );
