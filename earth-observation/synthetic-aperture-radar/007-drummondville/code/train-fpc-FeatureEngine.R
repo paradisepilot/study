@@ -65,7 +65,7 @@ train.fpc.FeatureEngine <- function(
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     ggplot2::ggsave(
-        file   = paste0("plot-",temp.variable,"-harmonics.png"),
+        file   = paste0("plot-",variable,"-harmonics.png"),
         plot   = trained.fpc.FeatureEngine$plot.harmonics(),
         dpi    = 150,
         height =   4 * n.harmonics,
@@ -93,7 +93,7 @@ train.fpc.FeatureEngine <- function(
     train.fpc.FeatureEngine_score.scatterplot(
         DF.fpc           = DF.fpc,
         DF.colour.scheme = DF.colour.scheme,
-        PNG.output       = paste0("plot-",temp.variable,"-scores.png")
+        PNG.output       = paste0("plot-",variable,"-scores.png")
         );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###

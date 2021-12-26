@@ -30,7 +30,7 @@ nc_convert.spatiotemporal <- function(
             );
 
         ncdf4::nc_close(ncdf4.object.input);
-        remove(list = c('list.data','ncdf4.object.input'));
+        remove(list = c('ncdf4.object.input'));
         gc();
 
         }
