@@ -81,11 +81,11 @@ print( n.cores );
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-# nc_convert.spatiotemporal(
-#     ncdf4.file.input  = ncdf4.snap,
-#     ncdf4.file.output = ncdf4.spatiotemporal
-#     );
-# gc();
+nc_convert.spatiotemporal(
+    ncdf4.file.input  = ncdf4.snap,
+    ncdf4.file.output = ncdf4.spatiotemporal
+    );
+gc();
 
     # verify.nc_convert.spatiotemporal(
     #     ncdf4.spatiotemporal = ncdf4.spatiotemporal,
@@ -106,29 +106,29 @@ DF.colour.scheme <- data.frame(
 rownames(DF.colour.scheme) <- DF.colour.scheme[,"land_cover"];
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-# colname.pattern <- "V";
-#
-# DF.labelled <- getData.labelled(
-#     data.directory  = labelled.data.directory,
-#     colname.pattern = colname.pattern,
-#     land.cover      = DF.colour.scheme[,'land_cover'],
-#     parquet.output  = paste0("data-labelled.parquet")
-#     );
-# colnames(DF.labelled) <- gsub(
-#     x           = colnames(DF.labelled),
-#     pattern     = "^X$",
-#     replacement = "longitude.training"
-#     );
-# colnames(DF.labelled) <- gsub(
-#     x           = colnames(DF.labelled),
-#     pattern     = "^Y$",
-#     replacement = "latitude.training"
-#     );
-# print( str(DF.labelled) );
+colname.pattern <- "V";
+
+DF.labelled <- getData.labelled(
+    data.directory  = labelled.data.directory,
+    colname.pattern = colname.pattern,
+    land.cover      = DF.colour.scheme[,'land_cover'],
+    parquet.output  = paste0("data-labelled.parquet")
+    );
+colnames(DF.labelled) <- gsub(
+    x           = colnames(DF.labelled),
+    pattern     = "^X$",
+    replacement = "longitude.training"
+    );
+colnames(DF.labelled) <- gsub(
+    x           = colnames(DF.labelled),
+    pattern     = "^Y$",
+    replacement = "latitude.training"
+    );
+print( str(DF.labelled) );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-# DF.training.coordinates <- as.data.frame(unique(DF.labelled[,c('latitude.training','longitude.training','land_cover')]));
-# print( str(DF.training.coordinates) );
+DF.training.coordinates <- as.data.frame(unique(DF.labelled[,c('latitude.training','longitude.training','land_cover')]));
+print( str(DF.training.coordinates) );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     # compare.lat.lon(
@@ -161,20 +161,20 @@ ncdf4::nc_close(ncdf4.object.spatiotemporal);
 print( str(DF.training) );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-# trained.fpc.FeatureEngine <- train.fpc.FeatureEngine(
-#     DF.training      = DF.training,
-#     DF.land.cover    = DF.nearest.lat.lon[,c('lat_lon','land_cover')],
-#     x                = 'lon',
-#     y                = 'lat',
-#     date             = 'date',
-#     variable         = target.variable,
-#     min.date         = as.Date("2019-04-06"),
-#     max.date         = as.Date("2019-10-27"),
-#     n.harmonics      = 7,
-#     DF.colour.scheme = DF.colour.scheme,
-#     RData.output     = RData.trained.engine
-#     );
-# print( str(trained.fpc.FeatureEngine) );
+trained.fpc.FeatureEngine <- train.fpc.FeatureEngine(
+    DF.training      = DF.training,
+    DF.land.cover    = DF.nearest.lat.lon[,c('lat_lon','land_cover')],
+    x                = 'lon',
+    y                = 'lat',
+    date             = 'date',
+    variable         = target.variable,
+    min.date         = as.Date("2019-04-06"),
+    max.date         = as.Date("2019-10-27"),
+    n.harmonics      = 7,
+    DF.colour.scheme = DF.colour.scheme,
+    RData.output     = RData.trained.engine
+    );
+print( str(trained.fpc.FeatureEngine) );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 # CSV.partitions       <- "DF-partitions.csv";
