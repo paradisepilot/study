@@ -23,6 +23,7 @@ train.fpc.FeatureEngine <- function(
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     require(fpcFeatures);
+    require(lubridate);
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     if ( (!is.null(RData.output)) & file.exists(RData.output) ) {
@@ -74,30 +75,44 @@ train.fpc.FeatureEngine <- function(
         );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    DF.fpc <- trained.fpc.FeatureEngine$transform(
-        newdata  = DF.training,
-        location = y_x,
-        date     = date,
-        variable = variable
-        );
+    DF.training[,'year'] <- lubridate::year(DF.training[,'date']);
 
-    DF.fpc <- merge(
-        x    = DF.fpc,
-        y    = DF.land.cover,
-        by.x = y_x,
-        by.y = y_x
-        );
+    years <- unique(DF.training[,'year']);
+    for ( temp.year in years ) {
 
-    DF.fpc <- DF.fpc[,c(y_x,'year','land_cover',paste0('fpc_',1:n.harmonics))]
+        DF.temp <- DF.training[DF.training[,'year'] == temp.year,];
 
-    train.fpc.FeatureEngine_score.scatterplot(
-        DF.fpc           = DF.fpc,
-        DF.colour.scheme = DF.colour.scheme,
-        PNG.output       = paste0("plot-",variable,"-scores.png")
-        );
+        DF.fpc <- trained.fpc.FeatureEngine$transform(
+            newdata  = DF.temp,
+            location = y_x,
+            date     = date,
+            variable = variable
+            );
+
+        remove(list = c("DF.temp"));
+
+        DF.fpc <- merge(
+            x    = DF.fpc,
+            y    = DF.land.cover,
+            by.x = y_x,
+            by.y = y_x
+            );
+
+        DF.fpc <- DF.fpc[,c(y_x,'year','land_cover',paste0('fpc_',1:n.harmonics))]
+
+        train.fpc.FeatureEngine_score.scatterplot(
+            DF.fpc           = DF.fpc,
+            year             = temp.year,
+            DF.colour.scheme = DF.colour.scheme,
+            PNG.output       = paste0("plot-",variable,"-scores-",temp.year,".png")
+            );
+
+        remove(list = c("DF.fpc"));
+
+        }
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    remove(list = c("DF.training","DF.fpc"))
+    remove(list = c("DF.training"));
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat(paste0("\n",thisFunctionName,"() quits."));
     cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###\n");
@@ -108,6 +123,7 @@ train.fpc.FeatureEngine <- function(
 ##################################################
 train.fpc.FeatureEngine_score.scatterplot <- function(
     DF.fpc           = NULL,
+    year             = NULL,
     DF.colour.scheme = NULL,
     textsize.title   = 50,
     textsize.axis    = 35,
@@ -130,9 +146,9 @@ train.fpc.FeatureEngine_score.scatterplot <- function(
         panel.grid.minor = ggplot2::element_line(colour = "gray", linetype = 2, size = 0.25)
         );
 
-    my.ggplot <- my.ggplot + ggplot2::labs(title = NULL, subtitle = NULL)
-    my.ggplot <- my.ggplot + ggplot2::scale_colour_manual(values = my.palette)
-    my.ggplot <- my.ggplot + ggplot2::scale_fill_manual(  values = my.palette)
+    my.ggplot <- my.ggplot + ggplot2::labs(title = NULL, subtitle = year);
+    my.ggplot <- my.ggplot + ggplot2::scale_colour_manual(values = my.palette);
+    my.ggplot <- my.ggplot + ggplot2::scale_fill_manual(  values = my.palette);
     my.ggplot <- my.ggplot + guides(
         colour = guide_legend(override.aes = list(alpha =  0.75, size = 5))
         )
@@ -154,7 +170,7 @@ train.fpc.FeatureEngine_score.scatterplot <- function(
         file   = PNG.output,
         plot   = my.ggplot,
         dpi    = 150,
-        height =  12,
+        height =  14,
         width  =  16,
         units  = 'in'
         );
