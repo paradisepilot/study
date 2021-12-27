@@ -141,6 +141,7 @@ DF.nearest.lat.lon <- get.nearest.lat.lon(
     DF.training.coordinates = DF.training.coordinates,
     ncdf4.spatiotemporal    = ncdf4.spatiotemporal
     );
+gc();
 print( str(    DF.nearest.lat.lon) );
 print( summary(DF.nearest.lat.lon) );
 
@@ -158,6 +159,7 @@ DF.training <- nc_getTidyData.byCoordinates(
     DF.coordinates = DF.nearest.lat.lon[,c('lat','lon')],
     parquet.output = "data-training.parquet"
     );
+gc();
 ncdf4::nc_close(ncdf4.object.spatiotemporal);
 print( str(DF.training) );
 
@@ -175,6 +177,7 @@ trained.fpc.FeatureEngine <- train.fpc.FeatureEngine(
     DF.colour.scheme = DF.colour.scheme,
     RData.output     = RData.trained.engine
     );
+gc();
 print( str(trained.fpc.FeatureEngine) );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
@@ -190,13 +193,15 @@ compute.and.save.fpc.scores(
     n.cores              = n.cores,
     directory.fpc.scores = directory.fpc.scores
     );
+gc();
 
 plot.RGB.fpc.scores(
     CSV.partitions       = CSV.partitions,
     directory.fpc.scores = directory.fpc.scores,
     parquet.tidy.scores  = "DF-tidy-scores.parquet",
-    PNG.output           = "plot-RGB-fpc-scores.png"
+    PNG.output.file.stem = "plot-RGB-fpc-scores"
     );
+gc();
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 
