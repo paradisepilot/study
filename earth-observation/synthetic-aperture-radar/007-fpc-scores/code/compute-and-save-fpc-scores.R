@@ -50,8 +50,7 @@ compute.and.save.fpc.scores <- function(
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     if ( file.exists(parquet.tidy.scores) ) {
-        # DF.tidy.scores <- arrow::read_parquet(file = parquet.tidy.scores);
-        # Do nothing.
+        DF.tidy.scores <- arrow::read_parquet(file = parquet.tidy.scores);
     } else {
         DF.tidy.scores <- data.frame();
         for ( row.index in seq(1,nrow(DF.partitions)) ) {
