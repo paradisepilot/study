@@ -4,7 +4,7 @@ compute.and.save.fpc.scores <- function(
     RData.trained.engine = NULL,
     variable             = NULL,
     ncdf4.output         = NULL,
-    CSV.partitions       = "DF-partitions.csv",
+    CSV.partitions       = "DF-partitions-scores.csv",
     n.cores              = 1, # parallel::detectCores()
     directory.fpc.scores = "tmp-fpc-scores"
     ) {
