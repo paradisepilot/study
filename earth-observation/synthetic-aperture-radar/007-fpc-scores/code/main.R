@@ -201,7 +201,7 @@ gc();
 
 plot.RGB.fpc.scores(
     directory.fpc.scores = directory.fpc.scores,
-    parquet.file.stem    = parquet.parquet.file.stem,
+    parquet.file.stem    = parquet.file.stem,
     PNG.output.file.stem = "plot-RGB-fpc-scores"
     );
 gc();
