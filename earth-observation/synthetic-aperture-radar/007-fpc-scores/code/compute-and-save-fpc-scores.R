@@ -76,7 +76,7 @@ compute.and.save.fpc.scores <- function(
     base::Sys.sleep(time = 5);
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    base::remove(list = c("DF.partitions"));
+    base::remove(list = c("DF.tidy.scores","DF.partitions"));
     base::gc();
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
