@@ -58,7 +58,7 @@ for ( code.file in code.files ) {
 set.seed(7654321);
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-temp.dir   <- gsub(x = output.directory, pattern = "007-drummondville.+", replacement = "");
+temp.dir   <- gsub(x = output.directory, pattern = "007-fpc-scores.+", replacement = "");
 #temp.dir  <- file.path(temp.dir,"004-preprocess","02-bay-of-quinte","01-AAW","output.AAW.kc-512.2021-10-04.01");
 temp.dir   <- file.path(temp.dir,"004-preprocess","02-bay-of-quinte","01-AAW","output.AAW.kc-512.2021-10-07.01.coreg.only");
 temp.file  <- "coregistered_stack.nc";
