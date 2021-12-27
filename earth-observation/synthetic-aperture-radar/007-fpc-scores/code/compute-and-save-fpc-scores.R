@@ -45,8 +45,8 @@ compute.and.save.fpc.scores <- function(
             directory.fpc.scores = directory.fpc.scores
             );
         }
-    base::gc();
     base::Sys.sleep(time = 5);
+    base::gc();
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     if ( file.exists(parquet.tidy.scores) ) {
