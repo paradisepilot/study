@@ -1,6 +1,5 @@
 
 plot.RGB.fpc.scores <- function(
-    CSV.partitions       = NULL,
     directory.fpc.scores = NULL,
     parquet.file.stem    = "DF-tidy-scores",
     PNG.output.file.stem = "plot-RGB-fpc-scores"

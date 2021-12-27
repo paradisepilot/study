@@ -200,7 +200,6 @@ compute.and.save.fpc.scores(
 gc();
 
 plot.RGB.fpc.scores(
-    CSV.partitions       = CSV.partitions,
     directory.fpc.scores = directory.fpc.scores,
     parquet.file.stem    = parquet.parquet.file.stem,
     PNG.output.file.stem = "plot-RGB-fpc-scores"
