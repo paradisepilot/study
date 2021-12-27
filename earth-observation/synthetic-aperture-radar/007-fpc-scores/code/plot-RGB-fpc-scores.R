@@ -74,6 +74,9 @@ plot.RGB.fpc.scores_terrainr <- function(
     channel.red          = 'fpc_1',
     channel.green        = 'fpc_2',
     channel.blue         = 'fpc_3',
+    textsize.title       = 50,
+    textsize.subtitle    = 35,
+    textsize.axis        = 35,
     PNG.output.file.stem = "plot-RGB-fpc-scores"
     ) {
 
@@ -98,6 +101,12 @@ plot.RGB.fpc.scores_terrainr <- function(
     DF.temp[,'blue' ] <- rgb.transform(x = DF.temp[,'blue' ], xmin =  -30, xmax =  50);
 
     my.ggplot <- ggplot2::ggplot(data = NULL) + ggplot2::theme_bw();
+
+    # my.ggplot <- my.ggplot + ggplot2::theme(
+    #     plot.subtitle = ggplot2::element_text(size = textsize.title, face = "bold")
+    #     );
+    # my.ggplot <- my.ggplot + ggplot2::labs(title = NULL, subtitle = year);
+
     my.ggplot <- my.ggplot + terrainr::geom_spatial_rgb(
         data    = DF.temp,
         mapping = ggplot2::aes(
