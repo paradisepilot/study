@@ -13,7 +13,7 @@ test.terrainr <- function(
     ncdf4.object.spatiotemporal <- ncdf4::nc_open(ncdf4.spatiotemporal);
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    DF.image.dates <- get.DF.dates(ncdf4.object = ncdf4.object.spatiotemporal);
+    DF.image.dates <- nc_get.DF.dates(ncdf4.object = ncdf4.object.spatiotemporal);
 
     cat("\n#str(DF.image.dates)\n");
     print(  str(DF.image.dates)   );

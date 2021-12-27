@@ -1,5 +1,5 @@
 
-get.DF.dates <- function(
+nc_get.DF.dates <- function(
     ncdf4.object = NULL
     ) {
     reference.date <- as.Date(stringr::str_extract(
@@ -12,6 +12,21 @@ get.DF.dates <- function(
         date       = reference.date + time.values
         );
     return( DF.dates );
+    }
+
+nc_getYears <- function(
+    ncdf4.spatiotemporal = NULL
+    ) {
+    require(lubridate);
+    if ( "ncdf4" == class(ncdf4.spatiotemporal) ) {
+        DF.dates <- nc_get.DF.dates(ncdf4.object = ncdf4.spatiotemporal);
+    } else {
+        ncdf4.object.spatiotemporal <- ncdf4::nc_open(ncdf4.spatiotemporal);
+        DF.dates <- nc_get.DF.dates(ncdf4.object = ncdf4.object.spatiotemporal);
+        ncdf4::nc_close(ncdf4.object.spatiotemporal);
+        }
+    years <- sort(unique(lubridate::year(DF.dates[,'date'])));
+    return( years );
     }
 
 nc_getTidyData.byDate <- function(
@@ -137,7 +152,7 @@ nc_getTidyData.byCoordinates_all.variables <- function(
         );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    DF.dates  <- get.DF.dates(ncdf4.object = ncdf4.object);
+    DF.dates  <- nc_get.DF.dates(ncdf4.object = ncdf4.object);
     var.names <- names(ncdf4.object[['var']]);
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
@@ -255,7 +270,7 @@ nc_getTidyData.byCoordinates_all.variables_OBSOLETE <- function(
     hash.training.lats.lons <- my.numeric.hash(training.lats.lons);
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    DF.dates  <- get.DF.dates(ncdf4.object = ncdf4.object);
+    DF.dates  <- nc_get.DF.dates(ncdf4.object = ncdf4.object);
     var.names <- names(ncdf4.object[['var']]);
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
@@ -328,7 +343,7 @@ nc_getTidyData.byDate_all.variables <- function(
     ) {
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    DF.dates <- get.DF.dates(ncdf4.object = ncdf4.object);
+    DF.dates <- nc_get.DF.dates(ncdf4.object = ncdf4.object);
     if ( !(date.requested %in% DF.dates[,'date']) ) { return( NULL ) }
     date.index <- which(date.requested == DF.dates[,'date']);
 
@@ -373,6 +388,55 @@ nc_getTidyData.byDate_all.variables <- function(
 
     }
 
+nc_getTidyData.byLatLonYear <- function(
+    ncdf4.object = NULL,
+    varid        = NULL,
+    year         = NULL,
+    lat.start    = NULL,
+    lat.count    = NULL,
+    lon.start    = NULL,
+    lon.count    = NULL
+    ) {
+
+    DF.dates          <- nc_get.DF.dates(ncdf4.object = ncdf4.object);
+    DF.dates[,'year'] <- as.integer(lubridate::year(DF.dates[,'date']));
+    DF.dates          <- DF.dates[DF.dates['year'] == as.integer(year),];
+    date.start        <- DF.dates[1,'date.index'];
+    date.count        <- nrow(DF.dates);
+
+    lats   <- ncdf4.object[['var']][[varid]][['dim']][[2]][['vals']];
+    lats   <- lats[seq(lat.start,lat.start + lat.count - 1)];
+    n.lats <- length(lats);
+
+    lons   <- ncdf4.object[['var']][[varid]][['dim']][[3]][['vals']];
+    lons   <- lons[seq(lon.start,lon.start + lon.count - 1)];
+    n.lons <- length(lons);
+
+    data.array <- ncdf4::ncvar_get(
+        nc    = ncdf4.object,
+        varid = varid,
+        start = c(date.start, lat.start, lon.start),
+        count = c(date.count, lat.count, lon.count)
+        );
+
+    DF.output <- data.frame(
+        date    = rep(x = DF.dates[,'date'], times = n.lats * n.lons),
+        lat     = rep(rep(x = lats, each = date.count), times = n.lons),
+        lon     = rep(x = lons,  each = date.count * n.lats),
+        varname = as.vector(data.array)
+        );
+
+    colnames(DF.output) <- gsub(
+        x           = colnames(DF.output),
+        pattern     = "varname",
+        replacement = varid
+        );
+
+    remove(list = c("data.array","DF.dates","date.count","lats","lons","n.lats","n.lons"));
+    return( DF.output );
+
+    }
+
 nc_getTidyData.byLatLon <- function(
     ncdf4.object = NULL,
     varid        = NULL,
@@ -382,7 +446,7 @@ nc_getTidyData.byLatLon <- function(
     lon.count    = NULL
     ) {
 
-    DF.dates <- get.DF.dates(ncdf4.object = ncdf4.object);
+    DF.dates <- nc_get.DF.dates(ncdf4.object = ncdf4.object);
     n.dates  <- nrow(DF.dates);
 
     lats   <- ncdf4.object[['var']][[varid]][['dim']][[2]][['vals']];

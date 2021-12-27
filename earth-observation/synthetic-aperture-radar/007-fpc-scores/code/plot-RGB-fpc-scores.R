@@ -2,7 +2,7 @@
 plot.RGB.fpc.scores <- function(
     CSV.partitions       = NULL,
     directory.fpc.scores = NULL,
-    parquet.tidy.scores  = "DF-tidy-scores.parquet",
+    parquet.file.stem    = "DF-tidy-scores",
     PNG.output.file.stem = "plot-RGB-fpc-scores"
     ) {
 
@@ -14,53 +14,34 @@ plot.RGB.fpc.scores <- function(
     require(terrainr);
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    if ( file.exists(parquet.tidy.scores) ) {
-        DF.tidy.scores <- arrow::read_parquet(file = parquet.tidy.scores);
-    } else {
-        DF.partitions  <- read.csv(file = CSV.partitions, row.names = NULL);
-        DF.tidy.scores <- data.frame();
-        for ( row.index in seq(1,nrow(DF.partitions)) ) {
-            cat("\nprocessing DF.partitions: ",row.index," of ",nrow(DF.partitions)," rows", sep = "");
-            DF.temp <- arrow::read_parquet(
-                file = file.path(directory.fpc.scores,DF.partitions[row.index,'fpc.scores.parquet'])
-                );
-            DF.tidy.scores <- rbind(DF.tidy.scores,DF.temp);
-            remove(list = c('DF.temp'));
-            }
-        cat("\n");
-        base::remove(list = c('DF.partitions'));
-        arrow::write_parquet(
-            x    = DF.tidy.scores,
-            sink = parquet.tidy.scores
-            );
-        base::gc();
-        }
-    cat("\nstr(DF.tidy.scores)\n");
-    print( str(DF.tidy.scores)   );
-    base::Sys.sleep(time = 5);
-    base::gc();
+    years <- list.files(pattern = parquet.file.stem);
+    years <- gsub(x = years, pattern = paste0(parquet.file.stem,"-"), replacement = "");
+    years <- gsub(x = years, pattern = "\\.parquet",                  replacement = "");
+    years <- as.integer(years);
 
-    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    years <- unique(DF.tidy.scores[,'year']);
     for ( temp.year in years ) {
+
+        parquet.tidy.scores <- paste0(parquet.file.stem,"-",temp.year,".parquet");
+
+        cat("\nreading: ",parquet.tidy.scores,"\n");
+        DF.tidy.scores <- arrow::read_parquet(file = parquet.tidy.scores);
+
         PNG.output <- paste0(PNG.output.file.stem,"-",temp.year,".png");
         cat("\nprocessing: ",PNG.output,"\n");
-        if ( !file.exists(PNG.output) ) {
-            DF.temp <- DF.tidy.scores[DF.tidy.scores[,'year'] == temp.year,];
+        if ( file.exists(PNG.output) ) {
+            cat("\nThe file ",PNG.output," already exists; will not regenerate this graphic file.\n");
+        } else {
             plot.RGB.fpc.scores_terrainr(
-                DF.tidy.scores = DF.temp,
+                DF.tidy.scores = DF.tidy.scores,
                 year           = temp.year,
                 PNG.output     = PNG.output
                 );
             base::Sys.sleep(time = 5);
-            base::remove(list = c('DF.temp'));
+            base::remove(list = c('DF.tidy.scores'));
             base::gc();
             }
-        }
 
-    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    base::remove(list = c('DF.tidy.scores'));
-    base::gc();
+        }
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat(paste0("\n",thisFunctionName,"() quits."));

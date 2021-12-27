@@ -9,7 +9,8 @@ compute.and.save.fpc.scores <- function(
     n.partitions.lat     = 30,
     n.partitions.lon     = 30,
     directory.fpc.scores = "tmp-fpc-scores",
-    parquet.tidy.scores  = "DF-tidy-scores.parquet"
+    directory.log        = "logs",
+    parquet.file.stem    = "DF-tidy-scores"
     ) {
 
     thisFunctionName <- "compute.and.save.fpc.scores";
@@ -37,48 +38,70 @@ compute.and.save.fpc.scores <- function(
     base::gc();
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    if ( !dir.exists(directory.fpc.scores) ) {
-        compute.and.save.fpc.scores_parallel(
-            DF.partitions        = DF.partitions,
-            ncdf4.spatiotemporal = ncdf4.spatiotemporal,
-            RData.trained.engine = RData.trained.engine,
-            variable             = variable,
-            n.cores              = n.cores,
-            directory.fpc.scores = directory.fpc.scores
-            );
-        }
-    base::Sys.sleep(time = 5);
-    base::gc();
+    years <- nc_getYears(ncdf4.spatiotemporal = ncdf4.spatiotemporal);
+    for ( temp.year in years ) {
 
-    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    if ( file.exists(parquet.tidy.scores) ) {
-        DF.tidy.scores <- arrow::read_parquet(file = parquet.tidy.scores);
-    } else {
-        DF.tidy.scores <- data.frame();
-        for ( row.index in seq(1,nrow(DF.partitions)) ) {
-            cat("\nprocessing DF.partitions: ",row.index," of ",nrow(DF.partitions)," rows", sep = "");
-            DF.temp <- arrow::read_parquet(
-                file = file.path(directory.fpc.scores,DF.partitions[row.index,'fpc.scores.parquet'])
+        directory.year.fpc.scores <- file.path(directory.fpc.scores,temp.year);
+        if ( dir.exists(directory.year.fpc.scores) ) {
+            cat("\nThe directory ",directory.year.fpc.scores," already exists; skipping computation of corresponding FPC scores.");
+            next;
+            }
+
+        directory.log       <- file.path(directory.log,temp.year);
+        parquet.tidy.scores <- paste0(parquet.file.stem,"-",temp.year,".parquet");
+
+        ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+        if ( !dir.exists(directory.fpc.scores) ) {
+            compute.and.save.fpc.scores_parallel(
+                DF.partitions        = DF.partitions,
+                ncdf4.spatiotemporal = ncdf4.spatiotemporal,
+                RData.trained.engine = RData.trained.engine,
+                year                 = temp.year,
+                variable             = variable,
+                n.cores              = n.cores,
+                directory.fpc.scores = directory.year.fpc.scores,
+                directory.log        = directory.log
                 );
-            DF.tidy.scores <- rbind(DF.tidy.scores,DF.temp);
-            base::remove(list = c('DF.temp'));
+            }
+        base::Sys.sleep(time = 5);
+        base::gc();
+
+        ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+        if ( file.exists(parquet.tidy.scores) ) {
+            DF.tidy.scores <- arrow::read_parquet(file = parquet.tidy.scores);
+        } else {
+            DF.tidy.scores <- data.frame();
+            for ( row.index in seq(1,nrow(DF.partitions)) ) {
+                cat("\nprocessing DF.partitions: ",row.index," of ",nrow(DF.partitions)," rows", sep = "");
+                DF.temp <- arrow::read_parquet(
+                    file = file.path(directory.year.fpc.scores,DF.partitions[row.index,'fpc.scores.parquet'])
+                    );
+                DF.tidy.scores <- rbind(DF.tidy.scores,DF.temp);
+                base::remove(list = c('DF.temp'));
+                base::gc();
+                }
+            cat("\n");
+            base::Sys.sleep(time = 5);
+            base::gc();
+            arrow::write_parquet(
+                x    = DF.tidy.scores,
+                sink = parquet.tidy.scores
+                );
+            base::Sys.sleep(time = 5);
             base::gc();
             }
-        cat("\n");
-        base::remove(list = c('DF.partitions'));
+        cat("\nstr(DF.tidy.scores)\n");
+        print( str(DF.tidy.scores)   );
+
+        ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+        base::Sys.sleep(time = 5);
+        base::remove(list = c("DF.tidy.scores"));
         base::gc();
-        arrow::write_parquet(
-            x    = DF.tidy.scores,
-            sink = parquet.tidy.scores
-            );
-        base::gc();
-        }
-    cat("\nstr(DF.tidy.scores)\n");
-    print( str(DF.tidy.scores)   );
-    base::Sys.sleep(time = 5);
+
+        } # for ( temp.year in years ) { }
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    base::remove(list = c("DF.tidy.scores","DF.partitions"));
+    base::remove(list = c("DF.partitions"));
     base::gc();
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
@@ -93,9 +116,11 @@ compute.and.save.fpc.scores_parallel <- function(
     DF.partitions        = NULL,
     ncdf4.spatiotemporal = NULL,
     RData.trained.engine = NULL,
+    year                 = NULL,
     variable             = NULL,
     n.cores              = NULL,
-    directory.fpc.scores = "tmp-fpc-scores"
+    directory.fpc.scores = "tmp-fpc-scores",
+    directory.log        = "logs"
     ) {
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
@@ -123,7 +148,7 @@ compute.and.save.fpc.scores_parallel <- function(
 
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
         directory.original <- getwd();
-        directory.log      <- file.path(directory.original,"logs");
+        directory.log      <- file.path(directory.original,directory.log);
         directory.tmp      <- file.path(directory.original,directory.fpc.scores);
 
         if ( !dir.exists(directory.log) ) {
@@ -155,9 +180,10 @@ compute.and.save.fpc.scores_parallel <- function(
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
         base::Sys.sleep(sample(x = 5:10, size = 1));
         ncdf4.object.spatiotemporal <- ncdf4::nc_open(ncdf4.spatiotemporal);
-        DF.tidy <- nc_getTidyData.byLatLon(
+        DF.tidy <- nc_getTidyData.byLatLonYear(
             ncdf4.object = ncdf4.object.spatiotemporal,
             varid        = variable,
+            year         = year,
             lat.start    = lat.start,
             lat.count    = lat.count,
             lon.start    = lon.start,
