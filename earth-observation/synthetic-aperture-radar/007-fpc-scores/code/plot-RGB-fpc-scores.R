@@ -3,7 +3,7 @@ plot.RGB.fpc.scores <- function(
     CSV.partitions       = NULL,
     directory.fpc.scores = NULL,
     parquet.tidy.scores  = "DF-tidy-scores.parquet",
-    PNG.output           = "plot-RGB-fpc-scores.png"
+    PNG.output.file.stem = "plot-RGB-fpc-scores"
     ) {
 
     thisFunctionName <- "plot.RGB.fpc.scores";
@@ -40,10 +40,18 @@ plot.RGB.fpc.scores <- function(
         print( str(DF.tidy.scores)   );
 
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-        plot.RGB.fpc.scores_terrainr(
-            DF.tidy.scores = DF.tidy.scores,
-            PNG.output     = PNG.output
-            );
+        years <- unique(DF.tidy.scores[,'year']);
+        for ( temp.year in years ) {
+            DF.temp <- DF.tidy.scores[DF.tidy.scores[,'year'] == temp.year,];
+            plot.RGB.fpc.scores_terrainr(
+                DF.tidy.scores       = DF.temp,
+                year                 = temp.year,
+                PNG.output.file.stem = PNG.output.file.stem
+                );
+            gc();
+            Sys.sleep(time = 5);
+            remove(list = c('DF.temp'));
+            }
 
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
         remove(list = c('DF.tidy.scores'));
@@ -59,13 +67,14 @@ plot.RGB.fpc.scores <- function(
 
 ##################################################
 plot.RGB.fpc.scores_terrainr <- function(
-    DF.tidy.scores = NULL,
-    latitude       = 'lat',
-    longitude      = 'lon',
-    channel.red    = 'fpc_1',
-    channel.green  = 'fpc_2',
-    channel.blue   = 'fpc_3',
-    PNG.output     = "plot-RGB-fpc-scores.png"
+    DF.tidy.scores       = NULL,
+    year                 = NULL,
+    latitude             = 'lat',
+    longitude            = 'lon',
+    channel.red          = 'fpc_1',
+    channel.green        = 'fpc_2',
+    channel.blue         = 'fpc_3',
+    PNG.output.file.stem = "plot-RGB-fpc-scores"
     ) {
 
     require(ggplot2);
@@ -103,6 +112,7 @@ plot.RGB.fpc.scores_terrainr <- function(
     range.y <- sum(range(DF.temp[,'latitude' ]) * c(-1,1));
     range.x <- sum(range(DF.temp[,'longitude']) * c(-1,1));
 
+    PNG.output <- paste0(PNG.output.file.stem,"-",year,".png");
     ggplot2::ggsave(
         filename = PNG.output,
         plot     = my.ggplot,
