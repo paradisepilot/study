@@ -183,6 +183,7 @@ print( str(trained.fpc.FeatureEngine) );
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 CSV.partitions       <- "DF-partitions-scores.csv";
 directory.fpc.scores <- "tmp-fpc-scores";
+parquet.tidy.scores  <- "DF-tidy-scores.parquet";
 
 compute.and.save.fpc.scores(
     ncdf4.spatiotemporal = ncdf4.spatiotemporal,
@@ -191,14 +192,15 @@ compute.and.save.fpc.scores(
     ncdf4.output         = ncdf4.fpc.scores,
     CSV.partitions       = CSV.partitions,
     n.cores              = n.cores,
-    directory.fpc.scores = directory.fpc.scores
+    directory.fpc.scores = directory.fpc.scores,
+    parquet.tidy.scores  = parquet.tidy.scores
     );
 gc();
 
 plot.RGB.fpc.scores(
     CSV.partitions       = CSV.partitions,
     directory.fpc.scores = directory.fpc.scores,
-    parquet.tidy.scores  = "DF-tidy-scores.parquet",
+    parquet.tidy.scores  = parquet.tidy.scores,
     PNG.output.file.stem = "plot-RGB-fpc-scores"
     );
 gc();

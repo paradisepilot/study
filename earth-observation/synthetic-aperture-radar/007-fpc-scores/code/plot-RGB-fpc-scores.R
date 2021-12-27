@@ -30,14 +30,17 @@ plot.RGB.fpc.scores <- function(
                 remove(list = c('DF.temp'));
                 }
             cat("\n");
-            remove(list = c('DF.partitions'));
+            base::remove(list = c('DF.partitions'));
             arrow::write_parquet(
                 x    = DF.tidy.scores,
                 sink = parquet.tidy.scores
                 );
+            base::gc();
             }
         cat("\nstr(DF.tidy.scores)\n");
         print( str(DF.tidy.scores)   );
+        base::Sys.sleep(time = 5);
+        base::gc();
 
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
         years <- unique(DF.tidy.scores[,'year']);
@@ -48,13 +51,14 @@ plot.RGB.fpc.scores <- function(
                 year                 = temp.year,
                 PNG.output.file.stem = PNG.output.file.stem
                 );
-            gc();
-            Sys.sleep(time = 5);
-            remove(list = c('DF.temp'));
+            base::Sys.sleep(time = 5);
+            base::remove(list = c('DF.temp'));
+            base::gc();
             }
 
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-        remove(list = c('DF.tidy.scores'));
+        base::remove(list = c('DF.tidy.scores'));
+        base::gc();
 
         }
 

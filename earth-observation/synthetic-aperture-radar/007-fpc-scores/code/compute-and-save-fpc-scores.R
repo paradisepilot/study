@@ -6,7 +6,8 @@ compute.and.save.fpc.scores <- function(
     ncdf4.output         = NULL,
     CSV.partitions       = "DF-partitions-scores.csv",
     n.cores              = 1, # parallel::detectCores()
-    directory.fpc.scores = "tmp-fpc-scores"
+    directory.fpc.scores = "tmp-fpc-scores",
+    parquet.tidy.scores  = "DF-tidy-scores.parquet"
     ) {
 
     thisFunctionName <- "compute.and.save.fpc.scores";
@@ -45,9 +46,39 @@ compute.and.save.fpc.scores <- function(
             );
         }
     base::gc();
+    base::Sys.sleep(time = 5);
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    remove(list = c("DF.partitions"));
+    if ( file.exists(parquet.tidy.scores) ) {
+        # DF.tidy.scores <- arrow::read_parquet(file = parquet.tidy.scores);
+        # Do nothing.
+    } else {
+        DF.tidy.scores <- data.frame();
+        for ( row.index in seq(1,nrow(DF.partitions)) ) {
+            cat("\nprocessing DF.partitions: ",row.index," of ",nrow(DF.partitions)," rows", sep = "");
+            DF.temp <- arrow::read_parquet(
+                file = file.path(directory.fpc.scores,DF.partitions[row.index,'fpc.scores.parquet'])
+                );
+            DF.tidy.scores <- rbind(DF.tidy.scores,DF.temp);
+            base::remove(list = c('DF.temp'));
+            base::gc();
+            }
+        cat("\n");
+        base::remove(list = c('DF.partitions'));
+        base::gc();
+        arrow::write_parquet(
+            x    = DF.tidy.scores,
+            sink = parquet.tidy.scores
+            );
+        base::gc();
+        }
+    cat("\nstr(DF.tidy.scores)\n");
+    print( str(DF.tidy.scores)   );
+    base::Sys.sleep(time = 5);
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    base::remove(list = c("DF.partitions"));
+    base::gc();
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat(paste0("\n# ",thisFunctionName,"() exits."));
@@ -121,7 +152,7 @@ compute.and.save.fpc.scores_parallel <- function(
         start.proc.time <- proc.time();
 
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-        Sys.sleep(sample(x = 5:10, size = 1));
+        base::Sys.sleep(sample(x = 5:10, size = 1));
         ncdf4.object.spatiotemporal <- ncdf4::nc_open(ncdf4.spatiotemporal);
         DF.tidy <- nc_getTidyData.byLatLon(
             ncdf4.object = ncdf4.object.spatiotemporal,
@@ -157,7 +188,7 @@ compute.and.save.fpc.scores_parallel <- function(
             );
 
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-        Sys.sleep(sample(x = 5:10, size = 1));
+        base::Sys.sleep(sample(x = 5:10, size = 1));
         trained.fpc.FeatureEngine <- readRDS(RData.trained.engine);
         DF.scores <- trained.fpc.FeatureEngine$transform(
             newdata  = DF.tidy,
@@ -185,12 +216,13 @@ compute.and.save.fpc.scores_parallel <- function(
             );
 
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-        remove(list = c(
+        base::remove(list = c(
             "DF.scores","trained.fpc.FeatureEngine",
             "DF.tidy",
             "lat.start","lat.count","lon.start","lon.count",
             "file.stem","file.sink.out","file.sink.msg"
             ));
+        base::gc();
 
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
         cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###\n");
@@ -215,10 +247,10 @@ compute.and.save.fpc.scores_parallel <- function(
         sink(file = NULL, type = "message");
         sink();
 
-        Sys.sleep(time = 5);
+        base::Sys.sleep(time = 5);
 
         } # foreach () {}
-    stopImplicitCluster();
+    doParallel::stopImplicitCluster();
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     return( NULL );
