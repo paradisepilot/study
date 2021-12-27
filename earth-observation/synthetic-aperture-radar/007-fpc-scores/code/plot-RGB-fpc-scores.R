@@ -20,16 +20,15 @@ plot.RGB.fpc.scores <- function(
 
     for ( temp.year in years ) {
 
-        parquet.tidy.scores <- paste0(parquet.file.stem,"-",temp.year,".parquet");
-
-        cat("\nreading: ",parquet.tidy.scores,"\n");
-        DF.tidy.scores <- arrow::read_parquet(file = parquet.tidy.scores);
-
         PNG.output <- paste0(PNG.output.file.stem,"-",temp.year,".png");
         cat("\nprocessing: ",PNG.output,"\n");
         if ( file.exists(PNG.output) ) {
             cat("\nThe file ",PNG.output," already exists; will not regenerate this graphic file.\n");
         } else {
+            parquet.tidy.scores <- paste0(parquet.file.stem,"-",temp.year,".parquet");
+            cat("\nreading: ",parquet.tidy.scores,"\n");
+            DF.tidy.scores <- arrow::read_parquet(file = parquet.tidy.scores);
+            cat("\nplotting: ",parquet.tidy.scores,"\n");
             plot.RGB.fpc.scores_terrainr(
                 DF.tidy.scores = DF.tidy.scores,
                 year           = temp.year,
