@@ -78,7 +78,7 @@ my.numeric.hash <- function(x) {
 nc_getTidyData.byCoordinates_all.variables <- function(
     ncdf4.object   = NULL,
     DF.coordinates = NULL,
-    CSV.partitions = "DF-partitions.csv"
+    CSV.partitions = "DF-partitions-tidy-training-data.csv"
     ) {
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
