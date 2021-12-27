@@ -74,8 +74,9 @@ ncdf4.fpc.scores     <- 'data-output-fpc-scores.nc';
 RData.trained.engine <- 'trained-fpc-FeatureEngine.RData';
 n.harmonics          <- 7;
 
-is.macOS <- grepl(x = sessionInfo()[['platform']], pattern = 'apple', ignore.case = TRUE);
-n.cores  <- ifelse(test = is.macOS, yes = 4, no = parallel::detectCores());
+is.macOS  <- grepl(x = sessionInfo()[['platform']], pattern = 'apple', ignore.case = TRUE);
+# n.cores <- ifelse(test = is.macOS, yes = 4, no = parallel::detectCores());
+n.cores   <- ifelse(test = is.macOS, yes = 4, no = 10);
 print( n.cores );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
