@@ -177,7 +177,7 @@ trained.fpc.FeatureEngine <- train.fpc.FeatureEngine(
 print( str(trained.fpc.FeatureEngine) );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-CSV.partitions       <- "DF-partitions.csv";
+CSV.partitions       <- "DF-partitions-scores.csv";
 directory.fpc.scores <- "tmp-fpc-scores";
 
 compute.and.save.fpc.scores(
