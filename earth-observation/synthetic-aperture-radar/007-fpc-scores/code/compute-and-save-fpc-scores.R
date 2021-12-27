@@ -6,6 +6,8 @@ compute.and.save.fpc.scores <- function(
     ncdf4.output         = NULL,
     CSV.partitions       = "DF-partitions-scores.csv",
     n.cores              = 1, # parallel::detectCores()
+    n.partitions.lat     = 30,
+    n.partitions.lon     = 30,
     directory.fpc.scores = "tmp-fpc-scores",
     parquet.tidy.scores  = "DF-tidy-scores.parquet"
     ) {
@@ -21,8 +23,8 @@ compute.and.save.fpc.scores <- function(
     } else {
         DF.partitions <- compute.and.save.fpc.scores_get.DF.partitions(
             ncdf4.spatiotemporal = ncdf4.spatiotemporal,
-            n.partitions.lat     = 30,
-            n.partitions.lon     = 30
+            n.partitions.lat     = n.partitions.lat,
+            n.partitions.lon     = n.partitions.lon
             );
         cat("\nstr(DF.partitions)\n");
         print( str(DF.partitions)   );

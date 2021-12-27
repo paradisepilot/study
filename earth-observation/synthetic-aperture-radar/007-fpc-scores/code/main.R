@@ -192,6 +192,8 @@ compute.and.save.fpc.scores(
     ncdf4.output         = ncdf4.fpc.scores,
     CSV.partitions       = CSV.partitions,
     n.cores              = n.cores,
+    n.partitions.lat     = 30,
+    n.partitions.lon     = 30,
     directory.fpc.scores = directory.fpc.scores,
     parquet.tidy.scores  = parquet.tidy.scores
     );
