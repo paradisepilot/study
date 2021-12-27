@@ -151,10 +151,10 @@ compute.and.save.fpc.scores_parallel <- function(
         cat("\nsummary(DF.tidy) -- after setting NA to -60\n");
         print( summary(DF.tidy)   );
 
-        # arrow::write_parquet(
-        #     x    = DF.tidy,
-        #     sink = file.path(directory.tmp,paste0("tidy-",file.stem,".parquet"))
-        #     );
+        arrow::write_parquet(
+            x    = DF.tidy,
+            sink = file.path(directory.tmp,paste0("tidy-",file.stem,".parquet"))
+            );
 
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
         Sys.sleep(sample(x = 5:10, size = 1));
