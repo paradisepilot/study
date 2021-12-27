@@ -44,6 +44,7 @@ plot.RGB.fpc.scores <- function(
     years <- unique(DF.tidy.scores[,'year']);
     for ( temp.year in years ) {
         PNG.output <- paste0(PNG.output.file.stem,"-",temp.year,".png");
+        cat("\nprocessing: ",PNG.output,"\n");
         if ( !file.exists(PNG.output) ) {
             DF.temp <- DF.tidy.scores[DF.tidy.scores[,'year'] == temp.year,];
             plot.RGB.fpc.scores_terrainr(
