@@ -177,25 +177,25 @@ trained.fpc.FeatureEngine <- train.fpc.FeatureEngine(
 print( str(trained.fpc.FeatureEngine) );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-# CSV.partitions       <- "DF-partitions.csv";
-# directory.fpc.scores <- "tmp-fpc-scores";
-#
-# compute.and.save.fpc.scores(
-#     ncdf4.spatiotemporal = ncdf4.spatiotemporal,
-#     RData.trained.engine = RData.trained.engine,
-#     variable             = target.variable,
-#     ncdf4.output         = ncdf4.fpc.scores,
-#     CSV.partitions       = CSV.partitions,
-#     n.cores              = n.cores,
-#     directory.fpc.scores = directory.fpc.scores
-#     );
-#
-# plot.RGB.fpc.scores(
-#     CSV.partitions       = CSV.partitions,
-#     directory.fpc.scores = directory.fpc.scores,
-#     parquet.tidy.scores  = "DF-tidy-scores.parquet",
-#     PNG.output           = "plot-RGB-fpc-scores.png"
-#     );
+CSV.partitions       <- "DF-partitions.csv";
+directory.fpc.scores <- "tmp-fpc-scores";
+
+compute.and.save.fpc.scores(
+    ncdf4.spatiotemporal = ncdf4.spatiotemporal,
+    RData.trained.engine = RData.trained.engine,
+    variable             = target.variable,
+    ncdf4.output         = ncdf4.fpc.scores,
+    CSV.partitions       = CSV.partitions,
+    n.cores              = n.cores,
+    directory.fpc.scores = directory.fpc.scores
+    );
+
+plot.RGB.fpc.scores(
+    CSV.partitions       = CSV.partitions,
+    directory.fpc.scores = directory.fpc.scores,
+    parquet.tidy.scores  = "DF-tidy-scores.parquet",
+    PNG.output           = "plot-RGB-fpc-scores.png"
+    );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 
