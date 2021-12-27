@@ -14,53 +14,52 @@ plot.RGB.fpc.scores <- function(
     require(terrainr);
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    if ( !file.exists(PNG.output) ) {
-
-        if ( file.exists(parquet.tidy.scores) ) {
-            DF.tidy.scores <- arrow::read_parquet(file = parquet.tidy.scores);
-        } else {
-            DF.partitions  <- read.csv(file = CSV.partitions, row.names = NULL);
-            DF.tidy.scores <- data.frame();
-            for ( row.index in seq(1,nrow(DF.partitions)) ) {
-                cat("\nprocessing DF.partitions: ",row.index," of ",nrow(DF.partitions)," rows", sep = "");
-                DF.temp <- arrow::read_parquet(
-                    file = file.path(directory.fpc.scores,DF.partitions[row.index,'fpc.scores.parquet'])
-                    );
-                DF.tidy.scores <- rbind(DF.tidy.scores,DF.temp);
-                remove(list = c('DF.temp'));
-                }
-            cat("\n");
-            base::remove(list = c('DF.partitions'));
-            arrow::write_parquet(
-                x    = DF.tidy.scores,
-                sink = parquet.tidy.scores
+    if ( file.exists(parquet.tidy.scores) ) {
+        DF.tidy.scores <- arrow::read_parquet(file = parquet.tidy.scores);
+    } else {
+        DF.partitions  <- read.csv(file = CSV.partitions, row.names = NULL);
+        DF.tidy.scores <- data.frame();
+        for ( row.index in seq(1,nrow(DF.partitions)) ) {
+            cat("\nprocessing DF.partitions: ",row.index," of ",nrow(DF.partitions)," rows", sep = "");
+            DF.temp <- arrow::read_parquet(
+                file = file.path(directory.fpc.scores,DF.partitions[row.index,'fpc.scores.parquet'])
                 );
-            base::gc();
+            DF.tidy.scores <- rbind(DF.tidy.scores,DF.temp);
+            remove(list = c('DF.temp'));
             }
-        cat("\nstr(DF.tidy.scores)\n");
-        print( str(DF.tidy.scores)   );
-        base::Sys.sleep(time = 5);
+        cat("\n");
+        base::remove(list = c('DF.partitions'));
+        arrow::write_parquet(
+            x    = DF.tidy.scores,
+            sink = parquet.tidy.scores
+            );
         base::gc();
+        }
+    cat("\nstr(DF.tidy.scores)\n");
+    print( str(DF.tidy.scores)   );
+    base::Sys.sleep(time = 5);
+    base::gc();
 
-        ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-        years <- unique(DF.tidy.scores[,'year']);
-        for ( temp.year in years ) {
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    years <- unique(DF.tidy.scores[,'year']);
+    for ( temp.year in years ) {
+        PNG.output <- paste0(PNG.output.file.stem,"-",temp.year,".png");
+        if ( !file.exists(PNG.output) ) {
             DF.temp <- DF.tidy.scores[DF.tidy.scores[,'year'] == temp.year,];
             plot.RGB.fpc.scores_terrainr(
-                DF.tidy.scores       = DF.temp,
-                year                 = temp.year,
-                PNG.output.file.stem = PNG.output.file.stem
+                DF.tidy.scores = DF.temp,
+                year           = temp.year,
+                PNG.output     = PNG.output
                 );
             base::Sys.sleep(time = 5);
             base::remove(list = c('DF.temp'));
             base::gc();
             }
-
-        ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-        base::remove(list = c('DF.tidy.scores'));
-        base::gc();
-
         }
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    base::remove(list = c('DF.tidy.scores'));
+    base::gc();
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat(paste0("\n",thisFunctionName,"() quits."));
@@ -71,17 +70,17 @@ plot.RGB.fpc.scores <- function(
 
 ##################################################
 plot.RGB.fpc.scores_terrainr <- function(
-    DF.tidy.scores       = NULL,
-    year                 = NULL,
-    latitude             = 'lat',
-    longitude            = 'lon',
-    channel.red          = 'fpc_1',
-    channel.green        = 'fpc_2',
-    channel.blue         = 'fpc_3',
-    textsize.title       = 50,
-    textsize.subtitle    = 35,
-    textsize.axis        = 35,
-    PNG.output.file.stem = "plot-RGB-fpc-scores"
+    DF.tidy.scores    = NULL,
+    year              = NULL,
+    latitude          = 'lat',
+    longitude         = 'lon',
+    channel.red       = 'fpc_1',
+    channel.green     = 'fpc_2',
+    channel.blue      = 'fpc_3',
+    textsize.title    = 50,
+    textsize.subtitle = 35,
+    textsize.axis     = 35,
+    PNG.output        = "plot-RGB-fpc-scores.png"
     ) {
 
     require(ggplot2);
@@ -125,7 +124,6 @@ plot.RGB.fpc.scores_terrainr <- function(
     range.y <- sum(range(DF.temp[,'latitude' ]) * c(-1,1));
     range.x <- sum(range(DF.temp[,'longitude']) * c(-1,1));
 
-    PNG.output <- paste0(PNG.output.file.stem,"-",year,".png");
     ggplot2::ggsave(
         filename = PNG.output,
         plot     = my.ggplot,
