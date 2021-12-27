@@ -401,6 +401,7 @@ nc_getTidyData.byLatLonYear <- function(
     DF.dates          <- nc_get.DF.dates(ncdf4.object = ncdf4.object);
     DF.dates[,'year'] <- as.integer(lubridate::year(DF.dates[,'date']));
     DF.dates          <- DF.dates[DF.dates['year'] == as.integer(year),];
+    DF.dates          <- DF.dates[order(DF.dates[,'date.index']),];
     date.start        <- DF.dates[1,'date.index'];
     date.count        <- nrow(DF.dates);
 
