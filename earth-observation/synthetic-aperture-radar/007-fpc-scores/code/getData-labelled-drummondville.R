@@ -1,11 +1,9 @@
 
 getData.labelled_drummondville <- function(
-    data.directory     = NULL,
-    colname.pattern    = NULL,
-    exclude.years      = NULL,
-    exclude.land.types = NULL,
-    land.cover         = NULL,
-    parquet.output     = paste0("data-labelled.parquet")
+    file.AGRI.AAFC   = NULL,
+    file.AGRI.Quebec = NULL,
+    file.EESD        = NULL,
+    parquet.output   = "data-labelled.parquet"
     ) {
 
     thisFunctionName <- "getData.labelled_drummondville";
@@ -14,72 +12,57 @@ getData.labelled_drummondville <- function(
     cat(paste0("\n# ",thisFunctionName,"() starts.\n"));
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    # if ( file.exists(parquet.output) ) {
-    #     DF.output <- arrow::read_parquet(file = parquet.output);
-    #     cat(paste0("\n",thisFunctionName,"() exits."));
-    #     cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###\n");
-    #     return( DF.output );
-    #     }
-    #
+    if ( file.exists(parquet.output) ) {
+        DF.output <- arrow::read_parquet(file = parquet.output);
+        cat(paste0("\n",thisFunctionName,"() exits."));
+        cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###\n");
+        return( DF.output );
+        }
+
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    # initial.directory <- getwd();
-    #
+    DF.EESD <- read.csv(file = file.EESD);
+    colnames(DF.EESD) <- tolower(colnames(DF.EESD));
+
+    colnames(DF.EESD) <- gsub(
+        x           = colnames(DF.EESD),
+        pattern     = "^latitude$",
+        replacement = "latitude.training"
+        );
+    colnames(DF.EESD) <- gsub(
+        x           = colnames(DF.EESD),
+        pattern     = "^longitude$",
+        replacement = "longitude.training"
+        );
+
+    colnames(DF.EESD) <- gsub(
+        x           = colnames(DF.EESD),
+        pattern     = "^assetl1$",
+        replacement = "land_cover"
+        );
+    DF.EESD[,'land_cover'] <- tolower(  DF.EESD[,'land_cover']);
+    DF.EESD[,'land_cover'] <- as.factor(DF.EESD[,'land_cover']);
+
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    # temp.directory <- file.path(initial.directory,"data");
-    # if ( !dir.exists(temp.directory) ) {
-    #     dir.create(path = temp.directory, recursive = TRUE);
-    #     }
-    #
-    # ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    # years <- getData.labelled_bay.of.quinte_getYears(
-    #     data.directory = data.directory,
-    #     exclude.years  = exclude.years
-    #     );
-    #
-    # cat(paste0("\n# ",thisFunctionName,"(): years:","\n"));
-    # print( years );
-    #
-    # DF.output <- data.frame();
-    # for ( temp.year in years ) {
-    #
-    #     list.data <- getData.labelled_bay.of.quinte_helper(
-    #         data.directory     = data.directory,
-    #         year               = temp.year,
-    #         exclude.land.types = exclude.land.types,
-    #         output.file        = file.path(temp.directory,paste0("data-",temp.year,"-raw.RData"))
-    #         );
-    #
-    #     cat(paste0("\nstr(list.data) -- ",temp.year,"\n"));
-    #     print(        str(list.data) );
-    #
-    #     DF.data.reshaped <- reshapeData(
-    #         list.input      = list.data,
-    #         colname.pattern = colname.pattern,
-    #         land.cover      = land.cover,
-    #         output.file     = file.path(temp.directory,paste0("data-",temp.year,"-reshaped.RData"))
-    #         );
-    #
-    #     cat(paste0("\nstr(DF.data.reshaped) -- ",temp.year,"\n"));
-    #     print(        str(DF.data.reshaped) );
-    #
-    #     DF.output <- rbind(DF.output,DF.data.reshaped);
-    #
-    #     }
-    #
-    # ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    # if (!is.null(parquet.output)) {
-    #     arrow::write_parquet(x = DF.output, sink = parquet.output);
-    #     }
-    #
-    # ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    # remove(list = c("list.data"));
+    DF.output <- DF.EESD;
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    if (!is.null(parquet.output)) {
+        arrow::write_parquet(x = DF.output, sink = parquet.output);
+        }
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat(paste0("\n# ",thisFunctionName,"() exits."));
     cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###\n");
-    # return( DF.output );
-    return( NULL );
+    return( DF.output );
 
     }
 
 ##################################################
+getData.labelled_drummondville_colour.scheme <- function() {
+    DF.colour.scheme <- data.frame(
+        land_cover = c("blue","green","grey"),
+        colour     = c("blue","green","grey")
+        );
+    rownames(DF.colour.scheme) <- DF.colour.scheme[,"land_cover"];
+    return(DF.colour.scheme);
+    }

@@ -38,6 +38,7 @@ code.files <- c(
     "getData-labelled.R",
     "getData-labelled-bay-of-quinte.R",
     "getData-labelled-drummondville.R",
+    "get-ncdf4-snap.R",
     "get-nearest-lat-lon.R",
     "nc-convert-spatiotemporal.R",
     "plot-labelled-data-geography.R",
@@ -59,11 +60,7 @@ for ( code.file in code.files ) {
 set.seed(7654321);
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-temp.dir   <- gsub(x = output.directory, pattern = "007-fpc-scores.+", replacement = "");
-#temp.dir  <- file.path(temp.dir,"004-preprocess","02-bay-of-quinte","01-AAW","output.AAW.kc-512.2021-10-04.01");
-temp.dir   <- file.path(temp.dir,"004-preprocess","02-bay-of-quinte","01-AAW","output.AAW.kc-512.2021-10-07.01.coreg.only");
-temp.file  <- "coregistered_stack.nc";
-ncdf4.snap <- file.path(temp.dir,temp.file);
+study.area           <- "bay-of-quinte"; # "drummondville"
 
 target.variable      <- 'Sigma0_VV_db';
 ncdf4.spatiotemporal <- 'data-input-spatiotemporal.nc';
@@ -77,9 +74,8 @@ n.cores   <- ifelse(test = is.macOS, yes = 4, no = 10);
 print( n.cores );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 list.data.labelled <- getData.labelled(
-    study.area     = "bay-of-quinte", # "drummondville"
+    study.area     = study.area,
     data.directory = data.directory,
     RData.output   = "data-labelled.RData"
     );
@@ -95,11 +91,16 @@ DF.training.coordinates <- as.data.frame(unique(DF.labelled[,c('latitude.trainin
 print( str(DF.training.coordinates) );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-# nc_convert.spatiotemporal(
-#     ncdf4.file.input  = ncdf4.snap,
-#     ncdf4.file.output = ncdf4.spatiotemporal
-#     );
-# gc();
+ncdf4.snap <- get.ncdf4.snap(
+    study.area       = study.area,
+    output.directory = output.directory
+    );
+
+nc_convert.spatiotemporal(
+    ncdf4.file.input  = ncdf4.snap,
+    ncdf4.file.output = ncdf4.spatiotemporal
+    );
+gc();
 
                         # verify.nc_convert.spatiotemporal(
                         #     ncdf4.spatiotemporal = ncdf4.spatiotemporal,
@@ -118,13 +119,13 @@ print( str(DF.training.coordinates) );
                         #     DF.training.coordinates = DF.training.coordinates
                         #     );
 
-# DF.nearest.lat.lon <- get.nearest.lat.lon(
-#     DF.training.coordinates = DF.training.coordinates,
-#     ncdf4.spatiotemporal    = ncdf4.spatiotemporal
-#     );
-# gc();
-# print( str(    DF.nearest.lat.lon) );
-# print( summary(DF.nearest.lat.lon) );
+DF.nearest.lat.lon <- get.nearest.lat.lon(
+    DF.training.coordinates = DF.training.coordinates,
+    ncdf4.spatiotemporal    = ncdf4.spatiotemporal
+    );
+gc();
+print( str(    DF.nearest.lat.lon) );
+print( summary(DF.nearest.lat.lon) );
 
                         # plot.labelled.data.geography(
                         #     DF.nearest.lat.lon   = DF.nearest.lat.lon,
