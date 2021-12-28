@@ -71,7 +71,7 @@ getData.labelled <- function(
             "EESD_TrainingSites_Pts_AssetL1.csv"
             );
 
-        getData.labelled_drummondville(
+        DF.labelled <- getData.labelled_drummondville(
             file.AGRI.AAFC   = file.AGRI.AAFC,
             file.AGRI.Quebec = file.AGRI.Quebec,
             file.EESD        = file.EESD,
