@@ -36,7 +36,8 @@ code.files <- c(
     "compare-lat-lon.R",
     "compute-and-save-fpc-scores.R",
     "getData-labelled.R",
-    "getData-labelled-helper.R",
+    "getData-labelled-bay-of-quinte.R",
+    "getData-labelled-drummondville.R",
     "get-nearest-lat-lon.R",
     "nc-convert-spatiotemporal.R",
     "plot-labelled-data-geography.R",
@@ -64,10 +65,6 @@ temp.dir   <- file.path(temp.dir,"004-preprocess","02-bay-of-quinte","01-AAW","o
 temp.file  <- "coregistered_stack.nc";
 ncdf4.snap <- file.path(temp.dir,temp.file);
 
-labelled.data.snapshot  <- "2020-12-30.01";
-labelled.data.directory <- file.path(data.directory,"bay-of-quinte-labelled",labelled.data.snapshot,"micro-mission-1","Sentinel1","IW","4");
-list.files(labelled.data.directory);
-
 target.variable      <- 'Sigma0_VV_db';
 ncdf4.spatiotemporal <- 'data-input-spatiotemporal.nc';
 ncdf4.fpc.scores     <- 'data-output-fpc-scores.nc';
@@ -80,131 +77,115 @@ n.cores   <- ifelse(test = is.macOS, yes = 4, no = 10);
 print( n.cores );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-nc_convert.spatiotemporal(
-    ncdf4.file.input  = ncdf4.snap,
-    ncdf4.file.output = ncdf4.spatiotemporal
+list.data.labelled <- getData.labelled(
+    study.area     = "bay-of-quinte", # "drummondville"
+    data.directory = data.directory,
+    RData.output   = "data-labelled.RData"
     );
-gc();
 
-    # verify.nc_convert.spatiotemporal(
-    #     ncdf4.spatiotemporal = ncdf4.spatiotemporal,
-    #     ncdf4.snap           = ncdf4.snap
-    #     );
-    # gc();
-    #
-    # test.terrainr(
-    #     ncdf4.spatiotemporal = ncdf4.spatiotemporal
-    #     );
-    # gc();
+DF.labelled      <- list.data.labelled[['data'         ]];
+DF.colour.scheme <- list.data.labelled[['colour_scheme']];
 
-### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-DF.colour.scheme <- data.frame(
-    land_cover = c("marsh",  "swamp",  "water",  "forest", "ag",     "shallow"),
-    colour     = c("#000000","#E69F00","#56B4E9","#009E73","#F0E442","red"    )
-    );
-rownames(DF.colour.scheme) <- DF.colour.scheme[,"land_cover"];
-
-### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-colname.pattern <- "V";
-
-DF.labelled <- getData.labelled(
-    data.directory  = labelled.data.directory,
-    colname.pattern = colname.pattern,
-    land.cover      = DF.colour.scheme[,'land_cover'],
-    parquet.output  = paste0("data-labelled.parquet")
-    );
-colnames(DF.labelled) <- gsub(
-    x           = colnames(DF.labelled),
-    pattern     = "^X$",
-    replacement = "longitude.training"
-    );
-colnames(DF.labelled) <- gsub(
-    x           = colnames(DF.labelled),
-    pattern     = "^Y$",
-    replacement = "latitude.training"
-    );
-print( str(DF.labelled) );
+print( str(DF.labelled     ) );
+print( str(DF.colour.scheme) );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 DF.training.coordinates <- as.data.frame(unique(DF.labelled[,c('latitude.training','longitude.training','land_cover')]));
 print( str(DF.training.coordinates) );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    # compare.lat.lon(
-    #     ncdf4.spatiotemporal    = ncdf4.spatiotemporal,
-    #     DF.training.coordinates = DF.training.coordinates
-    #     );
+# nc_convert.spatiotemporal(
+#     ncdf4.file.input  = ncdf4.snap,
+#     ncdf4.file.output = ncdf4.spatiotemporal
+#     );
+# gc();
 
-DF.nearest.lat.lon <- get.nearest.lat.lon(
-    DF.training.coordinates = DF.training.coordinates,
-    ncdf4.spatiotemporal    = ncdf4.spatiotemporal
-    );
-gc();
-print( str(    DF.nearest.lat.lon) );
-print( summary(DF.nearest.lat.lon) );
-
-    # plot.labelled.data.geography(
-    #     DF.nearest.lat.lon   = DF.nearest.lat.lon,
-    #     ncdf4.spatiotemporal = ncdf4.spatiotemporal,
-    #     plot.date            = as.Date("2019-07-23"),
-    #     DF.colour.scheme     = DF.colour.scheme
-    #     );
+                        # verify.nc_convert.spatiotemporal(
+                        #     ncdf4.spatiotemporal = ncdf4.spatiotemporal,
+                        #     ncdf4.snap           = ncdf4.snap
+                        #     );
+                        # gc();
+                        #
+                        # test.terrainr(
+                        #     ncdf4.spatiotemporal = ncdf4.spatiotemporal
+                        #     );
+                        # gc();
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-ncdf4.object.spatiotemporal <- ncdf4::nc_open(ncdf4.spatiotemporal);
-DF.training <- nc_getTidyData.byCoordinates(
-    ncdf4.object   = ncdf4.object.spatiotemporal,
-    DF.coordinates = DF.nearest.lat.lon[,c('lat','lon')],
-    parquet.output = "data-training.parquet"
-    );
-gc();
-ncdf4::nc_close(ncdf4.object.spatiotemporal);
-print( str(DF.training) );
+                        # compare.lat.lon(
+                        #     ncdf4.spatiotemporal    = ncdf4.spatiotemporal,
+                        #     DF.training.coordinates = DF.training.coordinates
+                        #     );
+
+# DF.nearest.lat.lon <- get.nearest.lat.lon(
+#     DF.training.coordinates = DF.training.coordinates,
+#     ncdf4.spatiotemporal    = ncdf4.spatiotemporal
+#     );
+# gc();
+# print( str(    DF.nearest.lat.lon) );
+# print( summary(DF.nearest.lat.lon) );
+
+                        # plot.labelled.data.geography(
+                        #     DF.nearest.lat.lon   = DF.nearest.lat.lon,
+                        #     ncdf4.spatiotemporal = ncdf4.spatiotemporal,
+                        #     plot.date            = as.Date("2019-07-23"),
+                        #     DF.colour.scheme     = DF.colour.scheme
+                        #     );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-trained.fpc.FeatureEngine <- train.fpc.FeatureEngine(
-    DF.training      = DF.training,
-    DF.land.cover    = DF.nearest.lat.lon[,c('lat_lon','land_cover')],
-    x                = 'lon',
-    y                = 'lat',
-    date             = 'date',
-    variable         = target.variable,
-    min.date         = as.Date("2019-04-06"),
-    max.date         = as.Date("2019-10-27"),
-    n.harmonics      = 7,
-    DF.colour.scheme = DF.colour.scheme,
-    RData.output     = RData.trained.engine
-    );
-gc();
-print( str(trained.fpc.FeatureEngine) );
+# ncdf4.object.spatiotemporal <- ncdf4::nc_open(ncdf4.spatiotemporal);
+# DF.training <- nc_getTidyData.byCoordinates(
+#     ncdf4.object   = ncdf4.object.spatiotemporal,
+#     DF.coordinates = DF.nearest.lat.lon[,c('lat','lon')],
+#     parquet.output = "data-training.parquet"
+#     );
+# gc();
+# ncdf4::nc_close(ncdf4.object.spatiotemporal);
+# print( str(DF.training) );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-CSV.partitions       <- "DF-partitions-scores.csv";
-directory.fpc.scores <- "tmp-fpc-scores";
-parquet.file.stem    <- "DF-tidy-scores";
+# trained.fpc.FeatureEngine <- train.fpc.FeatureEngine(
+#     DF.training      = DF.training,
+#     DF.land.cover    = DF.nearest.lat.lon[,c('lat_lon','land_cover')],
+#     x                = 'lon',
+#     y                = 'lat',
+#     date             = 'date',
+#     variable         = target.variable,
+#     min.date         = as.Date("2019-04-06"),
+#     max.date         = as.Date("2019-10-27"),
+#     n.harmonics      = 7,
+#     DF.colour.scheme = DF.colour.scheme,
+#     RData.output     = RData.trained.engine
+#     );
+# gc();
+# print( str(trained.fpc.FeatureEngine) );
 
-compute.and.save.fpc.scores(
-    ncdf4.spatiotemporal = ncdf4.spatiotemporal,
-    RData.trained.engine = RData.trained.engine,
-    variable             = target.variable,
-    ncdf4.output         = ncdf4.fpc.scores,
-    CSV.partitions       = CSV.partitions,
-    n.cores              = n.cores,
-    n.partitions.lat     = 30,
-    n.partitions.lon     = 30,
-    directory.fpc.scores = directory.fpc.scores,
-    parquet.file.stem    = parquet.file.stem
-    );
-gc();
-
-plot.RGB.fpc.scores(
-    directory.fpc.scores = directory.fpc.scores,
-    parquet.file.stem    = parquet.file.stem,
-    PNG.output.file.stem = "plot-RGB-fpc-scores"
-    );
-gc();
+### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+# CSV.partitions       <- "DF-partitions-scores.csv";
+# directory.fpc.scores <- "tmp-fpc-scores";
+# parquet.file.stem    <- "DF-tidy-scores";
+#
+# compute.and.save.fpc.scores(
+#     ncdf4.spatiotemporal = ncdf4.spatiotemporal,
+#     RData.trained.engine = RData.trained.engine,
+#     variable             = target.variable,
+#     ncdf4.output         = ncdf4.fpc.scores,
+#     CSV.partitions       = CSV.partitions,
+#     n.cores              = n.cores,
+#     n.partitions.lat     = 30,
+#     n.partitions.lon     = 30,
+#     directory.fpc.scores = directory.fpc.scores,
+#     parquet.file.stem    = parquet.file.stem
+#     );
+# gc();
+#
+# plot.RGB.fpc.scores(
+#     directory.fpc.scores = directory.fpc.scores,
+#     parquet.file.stem    = parquet.file.stem,
+#     PNG.output.file.stem = "plot-RGB-fpc-scores"
+#     );
+# gc();
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 
