@@ -5,7 +5,7 @@ getData.labelled_bay.of.quinte <- function(
     exclude.years      = NULL,
     exclude.land.types = NULL,
     land.cover         = NULL,
-    parquet.output     = paste0("data-labelled.parquet")
+    parquet.output     = "data-labelled.parquet"
     ) {
 
     thisFunctionName <- "getData.labelled_bay.of.quinte";
