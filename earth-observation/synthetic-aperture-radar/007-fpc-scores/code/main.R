@@ -60,7 +60,7 @@ for ( code.file in code.files ) {
 set.seed(7654321);
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-study.area           <- "bay-of-quinte"; # "drummondville"
+study.area <- "drummondville"; # "bay-of-quinte";
 
 target.variable      <- 'Sigma0_VV_db';
 ncdf4.spatiotemporal <- 'data-input-spatiotemporal.nc';
