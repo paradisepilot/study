@@ -252,6 +252,10 @@ compute.and.save.fpc.scores_parallel <- function(
         base::gc();
 
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+        cat("\nshowConnections()\n");
+        print( showConnections()   );
+
+        ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
         cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###\n");
         # print warning messages to log
         cat("\n##### warnings()\n")
