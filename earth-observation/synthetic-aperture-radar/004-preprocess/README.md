@@ -3,5 +3,5 @@
 
    https://senbox.atlassian.net/wiki/spaces/SNAP/pages/30539785/Update+SNAP+from+the+command+line
 
-*  Paths (macOS, Ubuntu) of SNAP downloaded auxiliary data: ~/.snap/auxdata
+*  Path (macOS, Ubuntu) of SNAP downloaded auxiliary data: ~/.snap/auxdata
 
