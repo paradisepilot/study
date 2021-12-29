@@ -161,13 +161,13 @@ compute.and.save.fpc.scores_parallel <- function(
 
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
         file.sink.out <- paste0("sink-",file.stem,".out");
-        file.sink.msg <- paste0("sink-",file.stem,".msg");
+        # file.sink.msg <- paste0("sink-",file.stem,".msg");
 
         file.sink.out <- file(description = file.path(directory.log,file.sink.out), open = "wt");
-        file.sink.msg <- file(description = file.path(directory.log,file.sink.msg), open = "wt");
+        # file.sink.msg <- file(description = file.path(directory.log,file.sink.msg), open = "wt");
 
         sink(file = file.sink.out, type = "output" );
-        sink(file = file.sink.msg, type = "message");
+        # sink(file = file.sink.msg, type = "message");
 
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
         cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###\n");
@@ -275,7 +275,7 @@ compute.and.save.fpc.scores_parallel <- function(
 
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
         sink(file = NULL, type = "output" );
-        sink(file = NULL, type = "message");
+        # sink(file = NULL, type = "message");
         sink();
 
         base::Sys.sleep(time = 5);
