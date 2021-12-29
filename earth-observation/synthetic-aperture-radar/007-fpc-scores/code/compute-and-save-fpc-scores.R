@@ -45,13 +45,15 @@ compute.and.save.fpc.scores <- function(
         if ( dir.exists(directory.year.fpc.scores) ) {
             cat("\nThe directory ",directory.year.fpc.scores," already exists; skipping computation of corresponding FPC scores.");
             next;
+        } else {
+            dir.create(path = directory.year.fpc.scores, recursive = TRUE);
             }
 
         directory.log       <- file.path(directory.log,temp.year);
         parquet.tidy.scores <- paste0(parquet.file.stem,"-",temp.year,".parquet");
 
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-        if ( !dir.exists(directory.fpc.scores) ) {
+        if ( !dir.exists(directory.year.fpc.scores) ) {
             compute.and.save.fpc.scores_parallel(
                 DF.partitions        = DF.partitions,
                 ncdf4.spatiotemporal = ncdf4.spatiotemporal,
@@ -161,13 +163,8 @@ compute.and.save.fpc.scores_parallel <- function(
 
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
         file.sink.out <- paste0("sink-",file.stem,".out");
-        # file.sink.msg <- paste0("sink-",file.stem,".msg");
-
         file.sink.out <- file(description = file.path(directory.log,file.sink.out), open = "wt");
-        # file.sink.msg <- file(description = file.path(directory.log,file.sink.msg), open = "wt");
-
         sink(file = file.sink.out, type = "output" );
-        # sink(file = file.sink.msg, type = "message");
 
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
         cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###\n");
@@ -275,7 +272,6 @@ compute.and.save.fpc.scores_parallel <- function(
 
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
         sink(file = NULL, type = "output" );
-        # sink(file = NULL, type = "message");
         sink();
 
         base::Sys.sleep(time = 5);
