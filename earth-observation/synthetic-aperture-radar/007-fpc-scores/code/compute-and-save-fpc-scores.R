@@ -43,10 +43,8 @@ compute.and.save.fpc.scores <- function(
 
         directory.year.fpc.scores <- file.path(directory.fpc.scores,temp.year);
         if ( dir.exists(directory.year.fpc.scores) ) {
-            cat("\nThe directory ",directory.year.fpc.scores," already exists; skipping computation of corresponding FPC scores.");
+            cat("\nThe directory ",directory.year.fpc.scores," already exists; skipping computation of corresponding FPC scores.\n");
             next;
-        } else {
-            dir.create(path = directory.year.fpc.scores, recursive = TRUE);
             }
 
         directory.log       <- file.path(directory.log,temp.year);
@@ -136,6 +134,8 @@ compute.and.save.fpc.scores_parallel <- function(
 
   # foreach ( partition.index = seq(1,4) ) %dopar% {
     foreach ( partition.index = seq(1,nrow(DF.partitions)) ) %dopar% {
+
+
 
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
         lat.start <- DF.partitions[partition.index,'lat.start'];
