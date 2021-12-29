@@ -51,18 +51,16 @@ compute.and.save.fpc.scores <- function(
         parquet.tidy.scores <- paste0(parquet.file.stem,"-",temp.year,".parquet");
 
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-        if ( !dir.exists(directory.year.fpc.scores) ) {
-            compute.and.save.fpc.scores_parallel(
-                DF.partitions        = DF.partitions,
-                ncdf4.spatiotemporal = ncdf4.spatiotemporal,
-                RData.trained.engine = RData.trained.engine,
-                year                 = temp.year,
-                variable             = variable,
-                n.cores              = n.cores,
-                directory.fpc.scores = directory.year.fpc.scores,
-                directory.log        = directory.log
-                );
-            }
+        compute.and.save.fpc.scores_parallel(
+            DF.partitions        = DF.partitions,
+            ncdf4.spatiotemporal = ncdf4.spatiotemporal,
+            RData.trained.engine = RData.trained.engine,
+            year                 = temp.year,
+            variable             = variable,
+            n.cores              = n.cores,
+            directory.fpc.scores = directory.year.fpc.scores,
+            directory.log        = directory.log
+            );
         base::Sys.sleep(time = 5);
         base::gc();
 
