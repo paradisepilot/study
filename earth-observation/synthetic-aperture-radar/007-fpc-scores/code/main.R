@@ -96,9 +96,8 @@ ncdf4.snap <- get.ncdf4.snap(
     output.directory = output.directory
     );
 
-nc_convert.spatiotemporal(
-    ncdf4.file.input  = ncdf4.snap,
-    ncdf4.file.output = ncdf4.spatiotemporal
+DF.preprocessed <- nc_convert.spatiotemporal(
+    ncdf4.file.input = ncdf4.snap
     );
 gc();
 
@@ -114,48 +113,48 @@ gc();
                         #     DF.training.coordinates = DF.training.coordinates
                         #     );
 
-DF.nearest.lat.lon <- get.nearest.lat.lon(
-    DF.training.coordinates = DF.training.coordinates,
-    ncdf4.spatiotemporal    = ncdf4.spatiotemporal
-    );
-gc();
-print( str(    DF.nearest.lat.lon) );
-print( summary(DF.nearest.lat.lon) );
-
-plot.labelled.data.geography(
-    DF.nearest.lat.lon   = DF.nearest.lat.lon,
-    ncdf4.spatiotemporal = ncdf4.spatiotemporal,
-    plot.date            = NULL, # use default method to choose date
-    DF.colour.scheme     = DF.colour.scheme
-    );
-
-### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-ncdf4.object.spatiotemporal <- ncdf4::nc_open(ncdf4.spatiotemporal);
-DF.training <- nc_getTidyData.byCoordinates(
-    ncdf4.object   = ncdf4.object.spatiotemporal,
-    DF.coordinates = DF.nearest.lat.lon[,c('lat','lon')],
-    parquet.output = "data-training.parquet"
-    );
-gc();
-ncdf4::nc_close(ncdf4.object.spatiotemporal);
-print( str(DF.training) );
+# DF.nearest.lat.lon <- get.nearest.lat.lon(
+#     DF.training.coordinates = DF.training.coordinates,
+#     ncdf4.spatiotemporal    = ncdf4.spatiotemporal
+#     );
+# gc();
+# print( str(    DF.nearest.lat.lon) );
+# print( summary(DF.nearest.lat.lon) );
+#
+# plot.labelled.data.geography(
+#     DF.nearest.lat.lon   = DF.nearest.lat.lon,
+#     ncdf4.spatiotemporal = ncdf4.spatiotemporal,
+#     plot.date            = NULL, # use default method to choose date
+#     DF.colour.scheme     = DF.colour.scheme
+#     );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-trained.fpc.FeatureEngine <- train.fpc.FeatureEngine(
-    DF.training      = DF.training,
-    DF.land.cover    = DF.nearest.lat.lon[,c('lat_lon','land_cover')],
-    x                = 'lon',
-    y                = 'lat',
-    date             = 'date',
-    variable         = target.variable,
-    min.date         = as.Date("2019-04-06"),
-    max.date         = as.Date("2019-10-27"),
-    n.harmonics      = 7,
-    DF.colour.scheme = DF.colour.scheme,
-    RData.output     = RData.trained.engine
-    );
-gc();
-print( str(trained.fpc.FeatureEngine) );
+# ncdf4.object.spatiotemporal <- ncdf4::nc_open(ncdf4.spatiotemporal);
+# DF.training <- nc_getTidyData.byCoordinates(
+#     ncdf4.object   = ncdf4.object.spatiotemporal,
+#     DF.coordinates = DF.nearest.lat.lon[,c('lat','lon')],
+#     parquet.output = "data-training.parquet"
+#     );
+# gc();
+# ncdf4::nc_close(ncdf4.object.spatiotemporal);
+# print( str(DF.training) );
+
+### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+# trained.fpc.FeatureEngine <- train.fpc.FeatureEngine(
+#     DF.training      = DF.training,
+#     DF.land.cover    = DF.nearest.lat.lon[,c('lat_lon','land_cover')],
+#     x                = 'lon',
+#     y                = 'lat',
+#     date             = 'date',
+#     variable         = target.variable,
+#     min.date         = as.Date("2019-04-06"),
+#     max.date         = as.Date("2019-10-27"),
+#     n.harmonics      = 7,
+#     DF.colour.scheme = DF.colour.scheme,
+#     RData.output     = RData.trained.engine
+#     );
+# gc();
+# print( str(trained.fpc.FeatureEngine) );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 # CSV.partitions       <- "DF-partitions-scores.csv";
