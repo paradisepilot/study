@@ -124,7 +124,8 @@ plot.labelled.data.geography_ggplot <- function(
             r = VV,
             g = VH,
             b = VV.over.VH
-            )
+            ),
+        alpha = 0.25
         );
 
     my.ggplot <- my.ggplot + ggplot2::geom_sf(
@@ -156,7 +157,7 @@ plot.labelled.data.geography_ggplot <- function(
         width    = 16,
         height   = 16 * (range.lat/range.lon), # 16 * ratio.height.over.width,
         units    = "in",
-        dpi      = 300
+        dpi      = 600
         );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###

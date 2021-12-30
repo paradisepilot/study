@@ -60,8 +60,8 @@ getData.labelled_drummondville <- function(
 ##################################################
 getData.labelled_drummondville_colour.scheme <- function() {
     DF.colour.scheme <- data.frame(
-        land_cover = c("blue","green","grey"),
-        colour     = c("blue","green","red" )
+        land_cover = c("blue","green",    "grey"),
+        colour     = c("blue","darkgreen","red" )
         );
     rownames(DF.colour.scheme) <- DF.colour.scheme[,"land_cover"];
     return(DF.colour.scheme);

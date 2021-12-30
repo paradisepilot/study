@@ -122,7 +122,7 @@ print( summary(DF.nearest.lat.lon) );
 plot.labelled.data.geography(
     DF.nearest.lat.lon   = DF.nearest.lat.lon,
     DF.preprocessed      = DF.preprocessed,
-    plot.date            = NULL, # use default method to choose date
+    plot.date            = as.Date("2020-09-23"), # NULL, # use default method to choose date
     DF.colour.scheme     = DF.colour.scheme
     );
 
