@@ -2,7 +2,7 @@
 plot.labelled.data.geography <- function(
     DF.nearest.lat.lon   = NULL,
     ncdf4.spatiotemporal = NULL,
-    plot.date            = as.Date("2019-07-23"),
+    plot.date            = NULL,
     DF.colour.scheme     = NULL
     ) {
 
@@ -10,10 +10,23 @@ plot.labelled.data.geography <- function(
     cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###");
     cat(paste0("\n",thisFunctionName,"() starts.\n"));
 
+    require(geosphere);
+    require(lubridate);
+    require(ncdf4);
     require(terrainr);
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     ncdf4.object.spatiotemporal <- ncdf4::nc_open(ncdf4.spatiotemporal);
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    if ( is.null(plot.date) ) {
+        plot.year <- min(as.integer(nc_getYears(ncdf4.object.spatiotemporal)));
+        DF.dates  <- nc_get.DF.dates(ncdf4.object.spatiotemporal);
+        DF.dates[,'year'] <- lubridate::year(DF.dates[,'date']);
+        DF.dates  <- DF.dates[as.integer(DF.dates[,'year']) == plot.year,];
+        plot.date <- DF.dates[ceiling(0.4 * nrow(DF.dates)),'date'];
+        remove(list = c('DF.dates'));
+        }
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     unlabelled.lats <- ncdf4.object.spatiotemporal[['dim']][['lat']][['vals']];
@@ -137,7 +150,7 @@ plot.labelled.data.geography_ggplot <- function(
         width    = 16,
         height   = 16 * (range.lat/range.lon), # 16 * ratio.height.over.width,
         units    = "in",
-        dpi      = 600
+        dpi      = 300
         );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
