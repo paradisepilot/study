@@ -127,15 +127,13 @@ plot.labelled.data.geography(
     );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-# ncdf4.object.spatiotemporal <- ncdf4::nc_open(ncdf4.spatiotemporal);
-# DF.training <- nc_getTidyData.byCoordinates(
-#     ncdf4.object   = ncdf4.object.spatiotemporal,
-#     DF.coordinates = DF.nearest.lat.lon[,c('lat','lon')],
-#     parquet.output = "data-training.parquet"
-#     );
-# gc();
-# ncdf4::nc_close(ncdf4.object.spatiotemporal);
-# print( str(DF.training) );
+DF.training <- nc_getTidyData.byCoordinates(
+    DF.preprocessed = DF.preprocessed,
+    DF.coordinates  = DF.nearest.lat.lon[,c('lat','lon')],
+    parquet.output  = "data-training.parquet"
+    );
+gc();
+print( str(DF.training) );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 # trained.fpc.FeatureEngine <- train.fpc.FeatureEngine(
