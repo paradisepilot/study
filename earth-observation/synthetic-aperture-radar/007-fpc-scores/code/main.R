@@ -63,8 +63,6 @@ set.seed(7654321);
 study.area <- "drummondville"; # "bay-of-quinte";
 
 target.variable      <- 'Sigma0_VV_db';
-ncdf4.spatiotemporal <- 'data-input-spatiotemporal.nc';
-ncdf4.fpc.scores     <- 'data-output-fpc-scores.nc';
 RData.trained.engine <- 'trained-fpc-FeatureEngine.RData';
 n.harmonics          <- 7;
 
@@ -113,14 +111,14 @@ gc();
                         #     DF.training.coordinates = DF.training.coordinates
                         #     );
 
-# DF.nearest.lat.lon <- get.nearest.lat.lon(
-#     DF.training.coordinates = DF.training.coordinates,
-#     ncdf4.spatiotemporal    = ncdf4.spatiotemporal
-#     );
-# gc();
-# print( str(    DF.nearest.lat.lon) );
-# print( summary(DF.nearest.lat.lon) );
-#
+DF.nearest.lat.lon <- get.nearest.lat.lon(
+    DF.training.coordinates = DF.training.coordinates,
+    DF.preprocessed         = DF.preprocessed
+    );
+gc();
+print( str(    DF.nearest.lat.lon) );
+print( summary(DF.nearest.lat.lon) );
+
 # plot.labelled.data.geography(
 #     DF.nearest.lat.lon   = DF.nearest.lat.lon,
 #     ncdf4.spatiotemporal = ncdf4.spatiotemporal,

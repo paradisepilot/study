@@ -1,7 +1,7 @@
 
 get.nearest.lat.lon <- function(
     DF.training.coordinates = NULL,
-    ncdf4.spatiotemporal    = 'data-input-spatiotemporal.nc',
+    DF.preprocessed         = NULL,
     parquet.nearest.lat.lon = "DF-nearest-lat-lon.parquet"
     ) {
 
@@ -11,6 +11,7 @@ get.nearest.lat.lon <- function(
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     require(arrow);
+    require(ncdf4);
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     if ( (!is.null(parquet.nearest.lat.lon)) & file.exists(parquet.nearest.lat.lon) ) {
@@ -21,6 +22,7 @@ get.nearest.lat.lon <- function(
         }
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    ncdf4.spatiotemporal <- DF.preprocessed[1,'nc_file'];
     ncdf4.object <- ncdf4::nc_open(ncdf4.spatiotemporal);
     unlabelled.lats <- ncdf4.object[['dim']][['lat']][['vals']];
     unlabelled.lons <- ncdf4.object[['dim']][['lon']][['vals']];
