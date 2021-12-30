@@ -26,16 +26,7 @@ train.fpc.FeatureEngine <- function(
     require(lubridate);
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    if ( (!is.null(RData.output)) & file.exists(RData.output) ) {
-        trained.fpc.FeatureEngine <- readRDS(file = RData.output);
-        cat(paste0("\n",thisFunctionName,"() quits."));
-        cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###\n");
-        return( trained.fpc.FeatureEngine );
-        }
-
-    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     y_x <- paste(x = c(y, x), collapse = "_");
-
     DF.training <- DF.training[,c(y,x,date,variable)];
     DF.training[,y_x] <- apply(
         X      = DF.training[,c(y,x)],
@@ -43,36 +34,48 @@ train.fpc.FeatureEngine <- function(
         FUN    = function(x) { return(paste(x,collapse="_")) }
         );
 
-    trained.fpc.FeatureEngine <- fpcFeatureEngine$new(
-        training.data       = DF.training,
-        location            = y_x,
-        date                = date,
-        variable            = variable,
-        min.date            = min.date,
-        max.date            = max.date,
-        n.partition         = n.partition,
-        n.order             = n.order,
-        n.basis             = n.basis,
-        smoothing.parameter = smoothing.parameter,
-        n.harmonics         = n.harmonics
-        );
-
-    trained.fpc.FeatureEngine$fit();
-
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    if ( !is.null(RData.output) ) {
-        saveRDS(file = RData.output, object = trained.fpc.FeatureEngine);
+    if ( (!is.null(RData.output)) & file.exists(RData.output) ) {
+
+        trained.fpc.FeatureEngine <- readRDS(file = RData.output);
+
+    } else {
+
+        trained.fpc.FeatureEngine <- fpcFeatureEngine$new(
+            training.data       = DF.training,
+            location            = y_x,
+            date                = date,
+            variable            = variable,
+            min.date            = min.date,
+            max.date            = max.date,
+            n.partition         = n.partition,
+            n.order             = n.order,
+            n.basis             = n.basis,
+            smoothing.parameter = smoothing.parameter,
+            n.harmonics         = n.harmonics
+            );
+
+        trained.fpc.FeatureEngine$fit();
+
+        if ( !is.null(RData.output) ) {
+            saveRDS(file = RData.output, object = trained.fpc.FeatureEngine);
+            }
+
         }
 
+
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    ggplot2::ggsave(
-        file   = paste0("plot-",variable,"-harmonics.png"),
-        plot   = trained.fpc.FeatureEngine$plot.harmonics(),
-        dpi    = 150,
-        height =   4 * n.harmonics,
-        width  =  16,
-        units  = 'in'
-        );
+    PNG.harmonics <- paste0("plot-",variable,"-harmonics.png");
+    if ( !file.exists(PNG.harmonics) ) {
+        ggplot2::ggsave(
+            file   = PNG.harmonics,
+            plot   = trained.fpc.FeatureEngine$plot.harmonics(),
+            dpi    = 150,
+            height =   4 * n.harmonics,
+            width  =  16,
+            units  = 'in'
+            );
+        }
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     DF.training[,'year'] <- lubridate::year(DF.training[,'date']);
@@ -80,34 +83,35 @@ train.fpc.FeatureEngine <- function(
     years <- unique(DF.training[,'year']);
     for ( temp.year in years ) {
 
-        DF.temp <- DF.training[DF.training[,'year'] == temp.year,];
+        PNG.temp.year <- paste0("plot-",variable,"-scores-",temp.year,".png");
+        if ( !file.exists(PNG.temp.year) ) {
 
-        DF.fpc <- trained.fpc.FeatureEngine$transform(
-            newdata  = DF.temp,
-            location = y_x,
-            date     = date,
-            variable = variable
-            );
+            DF.temp <- DF.training[DF.training[,'year'] == temp.year,];
+            DF.fpc <- trained.fpc.FeatureEngine$transform(
+                newdata  = DF.temp,
+                location = y_x,
+                date     = date,
+                variable = variable
+                );
+            remove(list = c("DF.temp"));
 
-        remove(list = c("DF.temp"));
+            DF.fpc <- merge(
+                x    = DF.fpc,
+                y    = DF.land.cover,
+                by.x = y_x,
+                by.y = y_x
+                );
+            DF.fpc <- DF.fpc[,c(y_x,'year','land_cover',paste0('fpc_',1:n.harmonics))]
 
-        DF.fpc <- merge(
-            x    = DF.fpc,
-            y    = DF.land.cover,
-            by.x = y_x,
-            by.y = y_x
-            );
+            train.fpc.FeatureEngine_score.scatterplot(
+                DF.fpc           = DF.fpc,
+                year             = temp.year,
+                DF.colour.scheme = DF.colour.scheme,
+                PNG.output       = PNG.temp.year
+                );
+            remove(list = c("DF.fpc"));
 
-        DF.fpc <- DF.fpc[,c(y_x,'year','land_cover',paste0('fpc_',1:n.harmonics))]
-
-        train.fpc.FeatureEngine_score.scatterplot(
-            DF.fpc           = DF.fpc,
-            year             = temp.year,
-            DF.colour.scheme = DF.colour.scheme,
-            PNG.output       = paste0("plot-",variable,"-scores-",temp.year,".png")
-            );
-
-        remove(list = c("DF.fpc"));
+            }
 
         }
 
