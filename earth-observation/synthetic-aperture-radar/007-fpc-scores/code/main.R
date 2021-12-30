@@ -119,12 +119,12 @@ gc();
 print( str(    DF.nearest.lat.lon) );
 print( summary(DF.nearest.lat.lon) );
 
-# plot.labelled.data.geography(
-#     DF.nearest.lat.lon   = DF.nearest.lat.lon,
-#     ncdf4.spatiotemporal = ncdf4.spatiotemporal,
-#     plot.date            = NULL, # use default method to choose date
-#     DF.colour.scheme     = DF.colour.scheme
-#     );
+plot.labelled.data.geography(
+    DF.nearest.lat.lon   = DF.nearest.lat.lon,
+    DF.preprocessed      = DF.preprocessed,
+    plot.date            = NULL, # use default method to choose date
+    DF.colour.scheme     = DF.colour.scheme
+    );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 # ncdf4.object.spatiotemporal <- ncdf4::nc_open(ncdf4.spatiotemporal);

@@ -1,9 +1,9 @@
 
 plot.labelled.data.geography <- function(
-    DF.nearest.lat.lon   = NULL,
-    ncdf4.spatiotemporal = NULL,
-    plot.date            = NULL,
-    DF.colour.scheme     = NULL
+    DF.nearest.lat.lon = NULL,
+    DF.preprocessed    = NULL,
+    plot.date          = NULL,
+    DF.colour.scheme   = NULL
     ) {
 
     thisFunctionName <- "plot.labelled.data.geography";
@@ -16,17 +16,23 @@ plot.labelled.data.geography <- function(
     require(terrainr);
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    ncdf4.object.spatiotemporal <- ncdf4::nc_open(ncdf4.spatiotemporal);
-
-    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     if ( is.null(plot.date) ) {
+        ncdf4.spatiotemporal <- DF.preprocessed[1,'nc_file'];
+        ncdf4.object.spatiotemporal <- ncdf4::nc_open(ncdf4.spatiotemporal);
         plot.year <- min(as.integer(nc_getYears(ncdf4.object.spatiotemporal)));
         DF.dates  <- nc_get.DF.dates(ncdf4.object.spatiotemporal);
+        ncdf4::nc_close(ncdf4.object.spatiotemporal);
         DF.dates[,'year'] <- lubridate::year(DF.dates[,'date']);
         DF.dates  <- DF.dates[as.integer(DF.dates[,'year']) == plot.year,];
         plot.date <- DF.dates[ceiling(0.4 * nrow(DF.dates)),'date'];
         remove(list = c('DF.dates'));
+    } else {
+        plot.year <- lubridate::year(plot.date);
+        ncdf4.spatiotemporal <- DF.preprocessed[DF.preprocessed[,'year'] == plot.year,'nc_file'];
         }
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    ncdf4.object.spatiotemporal <- ncdf4::nc_open(ncdf4.spatiotemporal);
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     unlabelled.lats <- ncdf4.object.spatiotemporal[['dim']][['lat']][['vals']];
