@@ -107,11 +107,6 @@ gc();
                         #     ncdf4.snap           = ncdf4.snap
                         #     );
                         # gc();
-                        #
-                        # test.terrainr(
-                        #     ncdf4.spatiotemporal = ncdf4.spatiotemporal
-                        #     );
-                        # gc();
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
                         # compare.lat.lon(
@@ -127,12 +122,12 @@ gc();
 print( str(    DF.nearest.lat.lon) );
 print( summary(DF.nearest.lat.lon) );
 
-                        # plot.labelled.data.geography(
-                        #     DF.nearest.lat.lon   = DF.nearest.lat.lon,
-                        #     ncdf4.spatiotemporal = ncdf4.spatiotemporal,
-                        #     plot.date            = as.Date("2019-07-23"),
-                        #     DF.colour.scheme     = DF.colour.scheme
-                        #     );
+plot.labelled.data.geography(
+    DF.nearest.lat.lon   = DF.nearest.lat.lon,
+    ncdf4.spatiotemporal = ncdf4.spatiotemporal,
+    plot.date            = NULL, # use default method to choose date
+    DF.colour.scheme     = DF.colour.scheme
+    );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 ncdf4.object.spatiotemporal <- ncdf4::nc_open(ncdf4.spatiotemporal);
@@ -163,30 +158,30 @@ gc();
 print( str(trained.fpc.FeatureEngine) );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-CSV.partitions       <- "DF-partitions-scores.csv";
-directory.fpc.scores <- "tmp-fpc-scores";
-parquet.file.stem    <- "DF-tidy-scores";
-
-compute.and.save.fpc.scores(
-    ncdf4.spatiotemporal = ncdf4.spatiotemporal,
-    RData.trained.engine = RData.trained.engine,
-    variable             = target.variable,
-    ncdf4.output         = ncdf4.fpc.scores,
-    CSV.partitions       = CSV.partitions,
-    n.cores              = n.cores,
-    n.partitions.lat     = 30,
-    n.partitions.lon     = 30,
-    directory.fpc.scores = directory.fpc.scores,
-    parquet.file.stem    = parquet.file.stem
-    );
-gc();
-
-plot.RGB.fpc.scores(
-    directory.fpc.scores = directory.fpc.scores,
-    parquet.file.stem    = parquet.file.stem,
-    PNG.output.file.stem = "plot-RGB-fpc-scores"
-    );
-gc();
+# CSV.partitions       <- "DF-partitions-scores.csv";
+# directory.fpc.scores <- "tmp-fpc-scores";
+# parquet.file.stem    <- "DF-tidy-scores";
+#
+# compute.and.save.fpc.scores(
+#     ncdf4.spatiotemporal = ncdf4.spatiotemporal,
+#     RData.trained.engine = RData.trained.engine,
+#     variable             = target.variable,
+#     ncdf4.output         = ncdf4.fpc.scores,
+#     CSV.partitions       = CSV.partitions,
+#     n.cores              = n.cores,
+#     n.partitions.lat     = 30,
+#     n.partitions.lon     = 30,
+#     directory.fpc.scores = directory.fpc.scores,
+#     parquet.file.stem    = parquet.file.stem
+#     );
+# gc();
+#
+# plot.RGB.fpc.scores(
+#     directory.fpc.scores = directory.fpc.scores,
+#     parquet.file.stem    = parquet.file.stem,
+#     PNG.output.file.stem = "plot-RGB-fpc-scores"
+#     );
+# gc();
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 
