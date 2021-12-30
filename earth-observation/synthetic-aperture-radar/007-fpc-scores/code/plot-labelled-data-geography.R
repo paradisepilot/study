@@ -32,6 +32,15 @@ plot.labelled.data.geography <- function(
         }
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    output.png <- paste0("plot-labelled-data-geography-",format(plot.date,"%Y-%m-%d"),".png");
+    if ( file.exists(output.png)) {
+        cat("\nThe graphic ",output.png," already exists; will not re-generate ...\n")
+        cat(paste0("\n",thisFunctionName,"() quits."));
+        cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###\n");
+        return( NULL );
+        }
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     ncdf4.object.spatiotemporal <- ncdf4::nc_open(ncdf4.spatiotemporal);
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
@@ -60,7 +69,7 @@ plot.labelled.data.geography <- function(
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     plot.labelled.data.geography_ggplot(
-       current.date            = plot.date,
+       output.png              = output.png,
        DF.input                = DF.date,
        DF.lat.lon              = DF.nearest.lat.lon,
        DF.colour.scheme        = DF.colour.scheme,
@@ -81,7 +90,7 @@ plot.labelled.data.geography <- function(
 
 ##################################################
 plot.labelled.data.geography_ggplot <- function(
-    current.date            = NULL,
+    output.png              = NULL,
     DF.input                = NULL,
     DF.lat.lon              = NULL,
     DF.colour.scheme        = NULL,
@@ -150,9 +159,8 @@ plot.labelled.data.geography_ggplot <- function(
     range.lat <- sum(range(DF.temp[,'lat']) * c(-1,1));
     range.lon <- sum(range(DF.temp[,'lon']) * c(-1,1));
 
-    file.png <- paste0("plot-labelled-data-geography-",format(current.date,"%Y-%m-%d"),".png");
     ggplot2::ggsave(
-        filename = file.png,
+        filename = output.png,
         plot     = my.ggplot,
         width    = 16,
         height   = 16 * (range.lat/range.lon), # 16 * ratio.height.over.width,
