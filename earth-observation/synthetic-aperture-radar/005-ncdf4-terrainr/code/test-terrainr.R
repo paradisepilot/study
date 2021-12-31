@@ -1,6 +1,7 @@
 
 test.terrainr <- function(
-    ncdf4.spatiotemporal = NULL
+    ncdf4.spatiotemporal = NULL,
+    n.cores              = NULL
     ) {
 
     thisFunctionName <- "test.terrainr";
@@ -8,6 +9,7 @@ test.terrainr <- function(
     cat(paste0("\n",thisFunctionName,"() starts.\n"));
 
     require(terrainr);
+    require(doParallel);
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     ncdf4.object.spatiotemporal <- ncdf4::nc_open(ncdf4.spatiotemporal);
@@ -22,8 +24,10 @@ test.terrainr <- function(
     print(  DF.image.dates   );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    doParallel::registerDoParallel(n.cores);
   # for ( temp.index in seq(15,15) ) {
-    for ( temp.index in seq(1,nrow(DF.image.dates)) ) {
+  # for ( temp.index in seq(1,nrow(DF.image.dates)) ) {
+    foreach ( temp.index = seq(1,nrow(DF.image.dates)) ) %dopar% {
 
         temp.date <- DF.image.dates[temp.index,'date'];
         cat("\n# temp.date: ",format(temp.date,"%Y-%m-%d"),"\n",sep="");
@@ -46,6 +50,7 @@ test.terrainr <- function(
         remove(list = c('DF.date','temp.date'));
 
         }
+    doParallel::stopImplicitCluster();
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     ncdf4::nc_close(ncdf4.object.spatiotemporal);

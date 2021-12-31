@@ -22,6 +22,7 @@ require(ncdf4);
 require(raster);
 require(terrainr);
 require(stringr);
+require(doParallel);
 
 # source supporting R code
 code.files <- c(
@@ -62,7 +63,9 @@ DF.preprocessed <- nc_convert.spatiotemporal(
 gc();
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-for ( row.index in seq(1,nrow(DF.preprocessed)) ) {
+doParallel::registerDoParallel(n.cores);
+#for ( row.index in seq(1,nrow(DF.preprocessed)) ) {
+foreach ( row.index = seq(1,nrow(DF.preprocessed)) ) %dopar% {
     verify.nc_convert.spatiotemporal(
         year                 = DF.preprocessed[row.index,'year'   ],
         ncdf4.spatiotemporal = DF.preprocessed[row.index,'nc_file'],
@@ -70,7 +73,7 @@ for ( row.index in seq(1,nrow(DF.preprocessed)) ) {
         );
     gc();
     }
-
+doParallel::stopImplicitCluster();
 cat("\n");
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
@@ -78,7 +81,8 @@ for ( row.index in seq(1,nrow(DF.preprocessed)) ) {
     ncdf4.spatiotemporal <- DF.preprocessed[row.index,'nc_file'];
     cat("\n# plotting images in: ",ncdf4.spatiotemporal,"\n");
     test.terrainr(
-        ncdf4.spatiotemporal = ncdf4.spatiotemporal
+        ncdf4.spatiotemporal = ncdf4.spatiotemporal,
+        n.cores              = n.cores
         );
     gc();
     }
