@@ -1,5 +1,6 @@
 
 verify.nc_convert.spatiotemporal <- function(
+    year                 = NULL,
     ncdf4.spatiotemporal = NULL,
     ncdf4.snap           = NULL
     ) {
@@ -7,6 +8,9 @@ verify.nc_convert.spatiotemporal <- function(
     thisFunctionName <- "verify.nc_convert.spatiotemporal";
     cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###");
     cat(paste0("\n",thisFunctionName,"() starts.\n\n"));
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    cat("\n### verifying data in: ",ncdf4.spatiotemporal,"\n");
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     ncdf4.object.spatiotemppral <- ncdf4::nc_open(ncdf4.spatiotemporal);
@@ -25,14 +29,18 @@ verify.nc_convert.spatiotemporal <- function(
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     band.names <- names(ncdf4.object.snap[['var']]);
+    band.names <- grep(x = band.names, pattern = as.character(year), value = TRUE);
 
     DF.output <- data.frame(
-        band.name   = character(length = length(band.names)),
-        var.name    = character(length = length(band.names)),
-        var.date    = rep(as.Date("0000-01-01"), times = length(band.names)),
-        date.int    = integer(length = length(band.names)),
-        date.index  = integer(length = length(band.names)),
-        max.ab.diff = numeric(length = length(band.names))
+        band.name       = character(length = length(band.names)),
+        var.name        = character(length = length(band.names)),
+        var.date        = rep(as.Date("0000-01-01"), times = length(band.names)),
+        date.int        = integer(length = length(band.names)),
+        date.index      = integer(length = length(band.names)),
+        num.NaN.snap    = numeric(length = length(band.names)),
+        num.NaN.sptmpl  = numeric(length = length(band.names)),
+        num.NaN.ab.diff = numeric(length = length(band.names)),
+        max.ab.diff     = numeric(length = length(band.names))
         );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
@@ -58,33 +66,39 @@ verify.nc_convert.spatiotemporal <- function(
             count = c(1,n.coords.2,n.coords.3)
             );
 
-        max.ab.diff <- max(abs(DF.sptmpl - t(DF.snap)), na.rm = TRUE);
+        num.NaN.snap    <- sum(sapply(DF.snap,   FUN = is.nan));
+        num.NaN.sptmpl  <- sum(sapply(DF.sptmpl, FUN = is.nan));
+        num.NaN.ab.diff <- sum(is.nan(abs(DF.sptmpl - t(DF.snap))));
+        max.ab.diff     <- max(abs(DF.sptmpl - t(DF.snap)), na.rm = TRUE);
 
         cat("\nstr(t(DF.snap)):\n");
         print( str(t(DF.snap))    );
 
         cat("\n# of NaN's in DF.snap:\n");
-        print( sum(sapply(DF.snap, FUN = is.nan)) );
+        print( num.NaN.snap );
 
         cat("\nstr(DF.sptmpl):\n");
         print( str(DF.sptmpl)    );
 
         cat("\n# of NaN's in DF.sptmpl:\n");
-        print( sum(sapply(DF.sptmpl, FUN = is.nan)) );
+        print( num.NaN.sptmpl );
 
         cat("\nmax(abs(DF.sptmpl - t(DF.snap)), na.rm = TRUE)\n");
         print( max.ab.diff );
 
         cat("\nsum(is.nan(abs(DF.sptmpl - t(DF.snap))))\n");
-        print( sum(is.nan(abs(DF.sptmpl - t(DF.snap))))   );
+        print( num.NaN.ab.diff );
 
         DF.temp <- data.frame(
-            band.name   = band.name,
-            var.name    = var.name,
-            var.date    = var.date,
-            date.int    = date.int,
-            date.index  = date.index,
-            max.ab.diff = max.ab.diff
+            band.name       = band.name,
+            var.name        = var.name,
+            var.date        = var.date,
+            date.int        = date.int,
+            date.index      = date.index,
+            num.NaN.snap    = num.NaN.snap,
+            num.NaN.sptmpl  = num.NaN.sptmpl,
+            num.NaN.ab.diff = num.NaN.ab.diff,
+            max.ab.diff     = max.ab.diff
             );
 
         DF.output[i,] <- DF.temp;
@@ -107,6 +121,13 @@ verify.nc_convert.spatiotemporal <- function(
 
     cat("\nsum(is.nan(DF.output[,'max.ab.diff']))\n");
     print( sum(is.nan(DF.output[,'max.ab.diff']))   );
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    write.csv(
+        x         = DF.output,
+        file      = paste0("DF-verification-",year,".csv"),
+        row.names = FALSE
+        );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     remove(list = c('DF.output','reference.date','date.integers'));
