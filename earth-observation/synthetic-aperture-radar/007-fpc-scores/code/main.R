@@ -68,7 +68,8 @@ n.harmonics          <- 7;
 
 is.macOS  <- grepl(x = sessionInfo()[['platform']], pattern = 'apple', ignore.case = TRUE);
 # n.cores <- ifelse(test = is.macOS, yes = 4, no = parallel::detectCores());
-n.cores   <- ifelse(test = is.macOS, yes = 4, no = 10);
+# n.cores <- ifelse(test = is.macOS, yes = 4, no = 10);
+n.cores   <- ifelse(test = is.macOS, yes = 4, no =  5);
 print( n.cores );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
