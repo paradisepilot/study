@@ -26,6 +26,7 @@ require(stringr);
 # source supporting R code
 code.files <- c(
     "getData.R",
+    "get-ncdf4-snap.R",
     "nc-convert-spatiotemporal.R",
     "test-terrainr.R",
     "utils-ncdf4.R",
@@ -41,36 +42,46 @@ for ( code.file in code.files ) {
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 set.seed(7654321);
 
-ncdf4.spatiotemporal <- 'data-input-spatiotemporal.nc';
-RData.output         <- 'data-long.RData';
+study.area <- "drummondville"; # "bay-of-quinte";
+
+is.macOS  <- grepl(x = sessionInfo()[['platform']], pattern = 'apple', ignore.case = TRUE);
+# n.cores <- ifelse(test = is.macOS, yes = 4, no = parallel::detectCores());
+# n.cores <- ifelse(test = is.macOS, yes = 4, no = 10);
+n.cores   <- ifelse(test = is.macOS, yes = 2, no =  5);
+print( n.cores );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-temp.dir   <- gsub(x = output.directory, pattern = "005-ncdf4-terrainr.+", replacement = "");
-# temp.dir <- file.path(temp.dir,"004-preprocess","02-bay-of-quinte","01-AAW","output.AAW.kc-512.2021-10-04.01");
-# temp.dir <- file.path(temp.dir,"004-preprocess","02-bay-of-quinte","01-AAW","output.AAW.kc-512.2021-10-07.01.coreg.only");
-# temp.dir <- file.path(temp.dir,"004-preprocess","04-drummondville","01-AAW","output.AAW.kc-512.2021-12-25.01");
-# temp.dir <- file.path(temp.dir,"004-preprocess","04-drummondville","01-AAW","output.AAW.kc-512.2021-12-29.02");
-temp.dir   <- file.path(temp.dir,"004-preprocess","04-drummondville","01-AAW","output.AAW.kc-512.2021-12-29.01");
-temp.file  <- "coregistered_stack.nc";
-ncdf4.snap <- file.path(temp.dir,temp.file)
+ncdf4.snap <- get.ncdf4.snap(
+    study.area       = study.area,
+    output.directory = output.directory
+    );
+
+DF.preprocessed <- nc_convert.spatiotemporal(
+    ncdf4.file.input = ncdf4.snap
+    );
+gc();
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-nc_convert.spatiotemporal(
-    ncdf4.file.input  = ncdf4.snap,
-    ncdf4.file.output = ncdf4.spatiotemporal
-    );
-gc();
+for ( row.index in seq(1,nrow(DF.preprocessed)) ) {
+    verify.nc_convert.spatiotemporal(
+        year                 = DF.preprocessed[row.index,'year'   ],
+        ncdf4.spatiotemporal = DF.preprocessed[row.index,'nc_file'],
+        ncdf4.snap           = ncdf4.snap
+        );
+    gc();
+    }
 
-verify.nc_convert.spatiotemporal(
-    ncdf4.spatiotemporal = ncdf4.spatiotemporal,
-    ncdf4.snap           = ncdf4.snap
-    );
-gc();
+cat("\n");
 
-test.terrainr(
-    ncdf4.spatiotemporal = ncdf4.spatiotemporal
-    );
-gc();
+### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+for ( row.index in seq(1,nrow(DF.preprocessed)) ) {
+    ncdf4.spatiotemporal <- DF.preprocessed[row.index,'nc_file'];
+    cat("\n# plotting images in: ",ncdf4.spatiotemporal,"\n");
+    test.terrainr(
+        ncdf4.spatiotemporal = ncdf4.spatiotemporal
+        );
+    gc();
+    }
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 
