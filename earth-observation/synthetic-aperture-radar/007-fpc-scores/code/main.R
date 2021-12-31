@@ -144,8 +144,8 @@ trained.fpc.FeatureEngine <- train.fpc.FeatureEngine(
     y                = 'lat',
     date             = 'date',
     variable         = target.variable,
-    min.date         = as.Date("2019-04-06"),
-    max.date         = as.Date("2019-10-27"),
+    min.date         = as.Date("2019-01-15"),
+    max.date         = as.Date("2019-12-16"),
     n.harmonics      = 7,
     DF.colour.scheme = DF.colour.scheme,
     RData.output     = RData.trained.engine
