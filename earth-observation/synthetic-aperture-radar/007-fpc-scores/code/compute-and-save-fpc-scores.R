@@ -1,6 +1,6 @@
 
 compute.and.save.fpc.scores <- function(
-    ncdf4.spatiotemporal = NULL,
+    DF.preprocessed      = NULL,
     RData.trained.engine = NULL,
     variable             = NULL,
     ncdf4.output         = NULL,
@@ -23,7 +23,7 @@ compute.and.save.fpc.scores <- function(
         DF.partitions <- read.csv(file = CSV.partitions, row.names = NULL);
     } else {
         DF.partitions <- compute.and.save.fpc.scores_get.DF.partitions(
-            ncdf4.spatiotemporal = ncdf4.spatiotemporal,
+            ncdf4.spatiotemporal = DF.preprocessed[1,'nc_file'],
             n.partitions.lat     = n.partitions.lat,
             n.partitions.lon     = n.partitions.lon
             );
@@ -38,28 +38,30 @@ compute.and.save.fpc.scores <- function(
     base::gc();
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    years <- nc_getYears(ncdf4.spatiotemporal = ncdf4.spatiotemporal);
-    for ( temp.year in years ) {
+    for ( index.year in seq(1,nrow(DF.preprocessed)) ) {
 
+        temp.year    <- DF.preprocessed[index.year,'year'   ];
+        temp.nc.file <- DF.preprocessed[index.year,'nc_file'];
+
+        ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
         directory.year.fpc.scores <- file.path(directory.fpc.scores,temp.year);
         if ( dir.exists(directory.year.fpc.scores) ) {
             cat("\nThe directory ",directory.year.fpc.scores," already exists; skipping computation of corresponding FPC scores.\n");
             next;
             }
 
-        directory.log       <- file.path(directory.log,temp.year);
         parquet.tidy.scores <- paste0(parquet.file.stem,"-",temp.year,".parquet");
 
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
         compute.and.save.fpc.scores_parallel(
             DF.partitions        = DF.partitions,
-            ncdf4.spatiotemporal = ncdf4.spatiotemporal,
+            ncdf4.spatiotemporal = temp.nc.file,
             RData.trained.engine = RData.trained.engine,
             year                 = temp.year,
             variable             = variable,
             n.cores              = n.cores,
             directory.fpc.scores = directory.year.fpc.scores,
-            directory.log        = directory.log
+            directory.log        = file.path(directory.log,temp.year)
             );
         base::Sys.sleep(time = 5);
         base::gc();
@@ -69,10 +71,10 @@ compute.and.save.fpc.scores <- function(
             DF.tidy.scores <- arrow::read_parquet(file = parquet.tidy.scores);
         } else {
             DF.tidy.scores <- data.frame();
-            for ( row.index in seq(1,nrow(DF.partitions)) ) {
-                cat("\nprocessing DF.partitions: ",row.index," of ",nrow(DF.partitions)," rows", sep = "");
+            for ( index.partition in seq(1,nrow(DF.partitions)) ) {
+                cat("\nprocessing DF.partitions: ",index.partition," of ",nrow(DF.partitions)," rows", sep = "");
                 DF.temp <- arrow::read_parquet(
-                    file = file.path(directory.year.fpc.scores,DF.partitions[row.index,'fpc.scores.parquet'])
+                    file = file.path(directory.year.fpc.scores,DF.partitions[index.partition,'fpc.scores.parquet'])
                     );
                 DF.tidy.scores <- rbind(DF.tidy.scores,DF.temp);
                 base::remove(list = c('DF.temp'));
@@ -132,8 +134,6 @@ compute.and.save.fpc.scores_parallel <- function(
 
   # foreach ( partition.index = seq(1,4) ) %dopar% {
     foreach ( partition.index = seq(1,nrow(DF.partitions)) ) %dopar% {
-
-
 
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
         lat.start <- DF.partitions[partition.index,'lat.start'];
