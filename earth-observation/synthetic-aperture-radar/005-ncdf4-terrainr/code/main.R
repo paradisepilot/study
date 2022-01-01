@@ -63,8 +63,6 @@ DF.preprocessed <- nc_convert.spatiotemporal(
 gc();
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-# doParallel::registerDoParallel(n.cores);
-# foreach ( row.index = seq(1,nrow(DF.preprocessed)) ) %dopar% {
 for ( row.index in seq(1,nrow(DF.preprocessed)) ) {
     verify.nc_convert.spatiotemporal(
         year                 = DF.preprocessed[row.index,'year'   ],
@@ -73,7 +71,6 @@ for ( row.index in seq(1,nrow(DF.preprocessed)) ) {
         );
     gc();
     }
-# doParallel::stopImplicitCluster();
 cat("\n");
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
