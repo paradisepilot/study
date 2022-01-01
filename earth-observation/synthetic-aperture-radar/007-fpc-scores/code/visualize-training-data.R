@@ -70,7 +70,8 @@ visualize.training.data <- function(
         }
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    remove(list = c('DF.temp','DF.training'));
+    remove(list = c('DF.training'));
+    gc();
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat(paste0("\n",thisFunctionName,"() quits."));
     cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###\n");
@@ -203,6 +204,9 @@ visualize.training.data_timeSeriesRibbonPlots <- function(
             units  = 'in'
             );
 
+        remove(list = c('DF.temp','my.ggplot'));
+        gc();
+
         }}
 
     return( NULL );
@@ -284,6 +288,9 @@ visualize.training.data_groupedTimeSeries <- function(
             width  =  16,
             units  = 'in'
             );
+
+        remove(list = c('DF.temp','my.ggplot'));
+        gc();
 
         }}
 
