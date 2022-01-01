@@ -150,21 +150,21 @@ visualize.training.data(
 gc();
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-# trained.fpc.FeatureEngine <- train.fpc.FeatureEngine(
-#     DF.training      = DF.training,
-#     DF.land.cover    = DF.nearest.lat.lon[,c('lat_lon','land_cover')],
-#     x                = 'lon',
-#     y                = 'lat',
-#     date             = 'date',
-#     variable         = target.variable,
-#     min.date         = as.Date("2019-01-15"),
-#     max.date         = as.Date("2019-12-16"),
-#     n.harmonics      = 7,
-#     DF.colour.scheme = DF.colour.scheme,
-#     RData.output     = RData.trained.engine
-#     );
-# gc();
-# print( str(trained.fpc.FeatureEngine) );
+trained.fpc.FeatureEngine <- train.fpc.FeatureEngine(
+    DF.training      = DF.training,
+    DF.land.cover    = DF.nearest.lat.lon[,c('lat_lon','land_cover')],
+    x                = 'lon',
+    y                = 'lat',
+    date             = 'date',
+    variable         = target.variable,
+    min.date         = as.Date("2019-01-15"),
+    max.date         = as.Date("2019-12-16"),
+    n.harmonics      = 7,
+    DF.colour.scheme = DF.colour.scheme,
+    RData.output     = RData.trained.engine
+    );
+gc();
+print( str(trained.fpc.FeatureEngine) );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 # CSV.partitions       <- "DF-partitions-scores.csv";
