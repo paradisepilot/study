@@ -1,8 +1,14 @@
 
 plot.RGB.fpc.scores <- function(
     directory.fpc.scores = NULL,
+    latitude             = 'lat',
+    longitude            = 'lon',
+    channel.red          = 'fpc_1',
+    channel.green        = 'fpc_2',
+    channel.blue         = 'fpc_3',
     parquet.file.stem    = "DF-tidy-scores",
-    PNG.output.file.stem = "plot-RGB-fpc-scores"
+    PNG.output.file.stem = "plot-RGB-fpc-scores",
+    dots.per.inch        = 300
     ) {
 
     thisFunctionName <- "plot.RGB.fpc.scores";
@@ -16,8 +22,57 @@ plot.RGB.fpc.scores <- function(
     years <- list.files(pattern = parquet.file.stem);
     years <- gsub(x = years, pattern = paste0(parquet.file.stem,"-"), replacement = "");
     years <- gsub(x = years, pattern = "\\.parquet",                  replacement = "");
-    years <- as.integer(years);
+    years <- sort(as.integer(years));
 
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    array.q01.q99 <- array(
+        dim      = c(length(years),3,2),
+        dimnames = list(
+            year     = as.character(years),
+            channel  = c('channel.red','channel.green','channel.blue'),
+            quantile = c('q01','q99')
+            )
+        );
+
+    for ( temp.year in years ) {
+
+        parquet.tidy.scores <- paste0(parquet.file.stem,"-",temp.year,".parquet");
+        cat("\nreading: ",parquet.tidy.scores,"\n");
+
+        DF.tidy.scores <- arrow::read_parquet(file = parquet.tidy.scores);
+
+        temp.quantiles <- quantile(x = DF.tidy.scores[,channel.red], probs = c(0.01,0.99), na.rm = TRUE);
+        array.q01.q99[as.character(temp.year),'channel.red','q01'] <- min(temp.quantiles);
+        array.q01.q99[as.character(temp.year),'channel.red','q99'] <- max(temp.quantiles);
+
+        temp.quantiles <- quantile(x = DF.tidy.scores[,channel.green], probs = c(0.01,0.99), na.rm = TRUE);
+        array.q01.q99[as.character(temp.year),'channel.green','q01'] <- min(temp.quantiles);
+        array.q01.q99[as.character(temp.year),'channel.green','q99'] <- max(temp.quantiles);
+
+        temp.quantiles <- quantile(x = DF.tidy.scores[,channel.blue], probs = c(0.01,0.99), na.rm = TRUE);
+        array.q01.q99[as.character(temp.year),'channel.blue','q01'] <- min(temp.quantiles);
+        array.q01.q99[as.character(temp.year),'channel.blue','q99'] <- max(temp.quantiles);
+
+        base::Sys.sleep(time = 5);
+        base::remove(list = c('DF.tidy.scores'));
+        base::gc();
+
+        }
+
+    channel.min.red   <- min(array.q01.q99[,'channel.red',  'q01']);
+    channel.max.red   <- max(array.q01.q99[,'channel.red',  'q99']);
+
+    channel.min.green <- min(array.q01.q99[,'channel.green','q01']);
+    channel.max.green <- max(array.q01.q99[,'channel.green','q99']);
+
+    channel.min.blue  <- min(array.q01.q99[,'channel.blue', 'q01']);
+    channel.max.blue  <- max(array.q01.q99[,'channel.blue', 'q99']);
+
+    cat("\nchannel.min.red = ",  channel.min.red,  ", channel.max.red = ",  channel.max.red,  "\n");
+    cat("\nchannel.min.green = ",channel.min.green,", channel.max.green = ",channel.max.green,"\n");
+    cat("\nchannel.min.blue = ", channel.min.blue, ", channel.max.blue = ", channel.max.blue, "\n");
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     for ( temp.year in years ) {
 
         PNG.output <- paste0(PNG.output.file.stem,"-",temp.year,".png");
@@ -30,9 +85,16 @@ plot.RGB.fpc.scores <- function(
             DF.tidy.scores <- arrow::read_parquet(file = parquet.tidy.scores);
             cat("\nplotting: ",parquet.tidy.scores,"\n");
             plot.RGB.fpc.scores_terrainr(
-                DF.tidy.scores = DF.tidy.scores,
-                year           = temp.year,
-                PNG.output     = PNG.output
+                DF.tidy.scores    = DF.tidy.scores,
+                year              = temp.year,
+                PNG.output        = PNG.output,
+                channel.min.red   = channel.min.red,
+                channel.max.red   = channel.max.red,
+                channel.min.green = channel.min.green,
+                channel.max.green = channel.max.green,
+                channel.min.blue  = channel.min.blue,
+                channel.max.blue  = channel.max.blue,
+                dots.per.inch     = dots.per.inch
                 );
             base::Sys.sleep(time = 5);
             base::remove(list = c('DF.tidy.scores'));
@@ -57,10 +119,17 @@ plot.RGB.fpc.scores_terrainr <- function(
     channel.red       = 'fpc_1',
     channel.green     = 'fpc_2',
     channel.blue      = 'fpc_3',
-    textsize.title    = 50,
-    textsize.subtitle = 35,
-    textsize.axis     = 35,
-    PNG.output        = "plot-RGB-fpc-scores.png"
+    channel.min.red   = -200,
+    channel.max.red   =  120,
+    channel.min.green =  -50,
+    channel.max.green =   50,
+    channel.min.blue  =  -30,
+    channel.max.blue  =   50,
+    textsize.title    =   50,
+    textsize.subtitle =   35,
+    textsize.axis     =   35,
+    PNG.output        = "plot-RGB-fpc-scores.png",
+    dots.per.inch     = 300
     ) {
 
     require(ggplot2);
@@ -79,9 +148,9 @@ plot.RGB.fpc.scores_terrainr <- function(
     # for ( temp.colname in c('red','green','blue') ) {
     #     DF.temp[,temp.colname] <- rgb.transform(x = DF.temp[,temp.colname]);
     #     }
-    DF.temp[,'red'  ] <- rgb.transform(x = DF.temp[,'red'  ], xmin = -200, xmax = 120);
-    DF.temp[,'green'] <- rgb.transform(x = DF.temp[,'green'], xmin =  -50, xmax =  50);
-    DF.temp[,'blue' ] <- rgb.transform(x = DF.temp[,'blue' ], xmin =  -30, xmax =  50);
+    DF.temp[,'red'  ] <- rgb.transform(x = DF.temp[,'red'  ], xmin = channel.min.red,   xmax = channel.max.red  );
+    DF.temp[,'green'] <- rgb.transform(x = DF.temp[,'green'], xmin = channel.min.green, xmax = channel.max.green);
+    DF.temp[,'blue' ] <- rgb.transform(x = DF.temp[,'blue' ], xmin = channel.min.blue,  xmax = channel.max.blue );
 
     my.ggplot <- ggplot2::ggplot(data = NULL) + ggplot2::theme_bw();
 
@@ -111,7 +180,7 @@ plot.RGB.fpc.scores_terrainr <- function(
         width    = 16,
         height   = 16 * (range.y/range.x),
         units    = "in",
-        dpi      = 300
+        dpi      = dots.per.inch
         );
 
     remove(list = c('DF.temp','my.ggplot','range.lat','range.lon'));
