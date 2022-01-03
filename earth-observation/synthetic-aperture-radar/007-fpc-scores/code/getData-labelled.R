@@ -49,6 +49,8 @@ getData.labelled <- function(
     } else if ( "drummondville" == study.area ) {
 
         DF.colour.scheme <- getData.labelled_drummondville_colour.scheme();
+        cat("\nDF.colour.scheme\n");
+        print( DF.colour.scheme   );
 
         labelled.data.snapshot  <- "2021-12-26.01";
         labelled.data.directory <- file.path(data.directory,"drummondville-labelled",labelled.data.snapshot);
@@ -75,6 +77,7 @@ getData.labelled <- function(
             file.AGRI.AAFC   = file.AGRI.AAFC,
             file.AGRI.Quebec = file.AGRI.Quebec,
             file.EESD        = file.EESD,
+            DF.colour.scheme = DF.colour.scheme,
             parquet.output   = "data-labelled.parquet"
             );
 
