@@ -130,6 +130,16 @@ visualize.training.data_timeSeriesRibbonPlots <- function(
         print( levels(DF.temp[,'land_cover'])   );
 
         ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+        cat("\nas.character(unique(DF.temp[,'land_cover']))\n");
+        print( as.character(unique(DF.temp[,'land_cover']))   );
+
+        cat("\nDF.colour.scheme\n");
+        print( DF.colour.scheme   );
+
+        cat("\nDF.colour.scheme[DF.colour.scheme[,'land_cover'] %in% as.character(unique(DF.temp[,'land_cover'])),]\n");
+        print( DF.colour.scheme[DF.colour.scheme[,'land_cover'] %in% as.character(unique(DF.temp[,'land_cover'])),]   );
+
+        ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
         my.ggplot <- initializePlot(
             title      = NULL,
             subtitle   = paste0(year,", ",target.variable),
