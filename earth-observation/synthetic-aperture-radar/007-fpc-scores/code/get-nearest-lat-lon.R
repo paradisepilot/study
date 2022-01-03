@@ -56,6 +56,9 @@ get.nearest.lat.lon <- function(
         );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    DF.output <- get.nearest.lat.lon_deduplicate(DF.input = DF.output);
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     DF.output[,'dist.naive'] <- apply(
         X      = DF.output[,c('latitude.training','longitude.training','lat','lon')],
         MARGIN = 1,
@@ -84,3 +87,99 @@ get.nearest.lat.lon <- function(
     }
 
 ##################################################
+get.nearest.lat.lon_deduplicate <- function(
+    DF.input = NULL
+    ) {
+
+    thisFunctionName <- "get.nearest.lat.lon_deduplicate";
+    cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###");
+    cat(paste0("\n",thisFunctionName,"() starts.\n\n"));
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    is.EESD <- as.character(DF.input[,'land_cover']) %in% c('blue','green','grey');
+
+    DF.EESD <- DF.input[ is.EESD,];
+    DF.AGRI <- DF.input[!is.EESD,];
+
+    DF.AGRI[,'lat_lon'] <- apply(
+        X      = DF.AGRI[,c('lat','lon')],
+        MARGIN = 1,
+        FUN    = function(x) { return( paste(x, collapse = "_") ) }
+        );
+
+    DF.EESD[,'lat_lon'] <- apply(
+        X      = DF.EESD[,c('lat','lon')],
+        MARGIN = 1,
+        FUN    = function(x) { return( paste(x, collapse = "_") ) }
+        );
+
+    DF.AGRI[,'in_EESD'] <- apply(
+        X      = DF.AGRI[,c('lat_lon','land_cover')],
+        MARGIN = 1,
+        FUN    = function(x) { return( x[1] %in% DF.EESD[,'lat_lon'] ) }
+        );
+
+    DF.EESD[,'in_AGRI'] <- apply(
+        X      = DF.EESD[,c('lat_lon','land_cover')],
+        MARGIN = 1,
+        FUN    = function(x) { return( x[1] %in% DF.AGRI[,'lat_lon'] ) }
+        );
+
+    cat("\nstr(DF.AGRI)\n");
+    print( str(DF.AGRI)   );
+
+    cat("\nstr(DF.EESD)\n");
+    print( str(DF.EESD)   );
+
+    cat("\nsummary(DF.AGRI)\n");
+    print( summary(DF.AGRI)   );
+
+    cat("\nsummary(DF.EESD)\n");
+    print( summary(DF.EESD)   );
+
+    cat("\ntable(DF.AGRI[,c('land_cover','in_EESD')])\n");
+    print( table(DF.AGRI[,c('land_cover','in_EESD')])   );
+
+    cat("\ntable(DF.EESD[,c('land_cover','in_AGRI')])\n");
+    print( table(DF.EESD[,c('land_cover','in_AGRI')])   );
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    DF.intersection <- DF.EESD[DF.EESD[,'in_AGRI'],c('lat_lon','land_cover')];
+    colnames(DF.intersection) <- gsub(
+        x           = colnames(DF.intersection),
+        pattern     = '^land_cover$',
+        replacement = 'land_cover_EESD'
+        );
+
+    DF.intersection <- merge(
+        x  = DF.intersection,
+        y  = DF.AGRI[DF.AGRI[,'in_EESD'],c('lat_lon','land_cover')],
+        by = 'lat_lon'
+        );
+    colnames(DF.intersection) <- gsub(
+        x           = colnames(DF.intersection),
+        pattern     = '^land_cover$',
+        replacement = 'land_cover_AGRI'
+        );
+
+    cat("\ntable(DF.intersection[,c('land_cover_AGRI','land_cover_EESD')])\n");
+    print( table(DF.intersection[,c('land_cover_AGRI','land_cover_EESD')])   );
+
+    remove(list = c('is.EESD','DF.intersection'));
+    gc();
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    DF.output <- rbind(
+        DF.AGRI[,                    colnames(DF.input)],
+        DF.EESD[!DF.EESD[,'in_AGRI'],colnames(DF.input)]
+        );
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    remove(list = c('DF.AGRI','DF.EESD'));
+    gc();
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    cat(paste0("\n",thisFunctionName,"() quits."));
+    cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###\n");
+    return( DF.output );
+
+    }
