@@ -3,6 +3,7 @@ getData.labelled_drummondville <- function(
     file.AGRI.AAFC   = NULL,
     file.AGRI.Quebec = NULL,
     file.EESD        = NULL,
+    DF.colour.scheme = NULL,
     parquet.output   = "data-labelled.parquet"
     ) {
 
@@ -124,7 +125,10 @@ getData.labelled_drummondville <- function(
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     DF.output <- rbind(DF.EESD,DF.AAFC,DF.Quebec);
-    DF.output[,'land_cover'] <- as.factor(DF.output[,'land_cover']);
+    DF.output[,'land_cover'] <- factor(
+        x      = DF.output[,'land_cover'],
+        levels = DF.colour.scheme[,'land_cover']
+        );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat("\nlevels(DF.output[,'land_cover'])\n");
