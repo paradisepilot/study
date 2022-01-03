@@ -130,9 +130,9 @@ getData.labelled_drummondville <- function(
         levels = DF.colour.scheme[,'land_cover']
         );
 
-    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat("\nlevels(DF.output[,'land_cover'])\n");
     print( levels(DF.output[,'land_cover'])   );
+
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     if (!is.null(parquet.output)) {
@@ -149,27 +149,50 @@ getData.labelled_drummondville <- function(
 ##################################################
 getData.labelled_drummondville_colour.scheme <- function() {
 
+    require(RColorBrewer);
+
     # DF.colour.scheme <- data.frame(
     #     land_cover = c("blue","green",    "grey"),
     #     colour     = c("blue","darkgreen","red" )
     #     );
 
+    # vector.colour.scheme <- c(
+    #     "blue",        "blue",
+    #     "green",       "darkgreen",
+    #     "grey",        "red",
+    #     "barebuiltup", "black",
+    #     "canola",      "black",
+    #     "corn",        "black",
+    #     "drybeans",    "black",
+    #     "forestshrub", "black",
+    #     "fruits",      "black",
+    #     "greenfeed",   "black",
+    #     "potatoes",    "black",
+    #     "smallgrains", "black",
+    #     "soybeans",    "black",
+    #     "vegetables",  "black",
+    #     "water",       "black",
+    #     "wetland",     "black"
+    #     );
+
+    my.palette <- RColorBrewer::brewer.pal(n = 12, name = "Set3");
+
     vector.colour.scheme <- c(
         "blue",        "blue",
         "green",       "darkgreen",
         "grey",        "red",
-        "barebuiltup", "black",
-        "canola",      "black",
-        "corn",        "black",
-        "drybeans",    "black",
-        "forestshrub", "black",
-        "fruits",      "black",
-        "greenfeed",   "black",
-        "potatoes",    "black",
-        "smallgrains", "black",
-        "soybeans",    "black",
-        "vegetables",  "black",
-        "water",       "black",
+        "barebuiltup", my.palette[ 1],
+        "canola",      my.palette[ 2],
+        "corn",        my.palette[ 3],
+        "drybeans",    my.palette[ 4],
+        "forestshrub", my.palette[ 5],
+        "fruits",      my.palette[ 6],
+        "greenfeed",   my.palette[ 7],
+        "potatoes",    my.palette[ 8],
+        "smallgrains", my.palette[ 9],
+        "soybeans",    my.palette[10],
+        "vegetables",  my.palette[11],
+        "water",       my.palette[12],
         "wetland",     "black"
         );
 
