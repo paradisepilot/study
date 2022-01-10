@@ -50,6 +50,7 @@ code.files <- c(
     "utils-ncdf4.R",
     "utils-rgb.R",
     "verify-nc-convert-spatiotemporal.R",
+    "visualize-fpc-approximations.R",
     "visualize-training-data.R"
     );
 
@@ -167,31 +168,66 @@ gc();
 print( str(trained.fpc.FeatureEngine) );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+approximations.directory <- file.path(getwd(),"tmp-fpc-approximations");
+
+print( str(DF.training) );
+
+DF.training[,"lat_lon"] <- apply(
+    X      = DF.training[,c("lat","lon")],
+    MARGIN = 1,
+    FUN    = function(x) { return(paste(x = x, collapse = "_")) }
+    );
+
+DF.training <- merge(
+    x     = DF.training,
+    y     = DF.nearest.lat.lon[,c('lat_lon','land_cover')],
+    by    = 'lat_lon',
+    all.x = TRUE
+    );
+
+print( str(DF.training) );
+
+visualize.fpc.approximations(
+    featureEngine    = trained.fpc.FeatureEngine,
+    DF.variable      = DF.training,
+    location         = 'lat_lon',
+    date             = 'date',
+    land.cover       = 'land_cover',
+    variable         = target.variable,
+    n.locations      = 10,
+    DF.colour.scheme = DF.colour.scheme,
+    output.directory = approximations.directory
+    );
+
+remove(list = c('DF.training'));
+gc();
+
+### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 CSV.partitions       <- "DF-partitions-scores.csv";
 directory.fpc.scores <- "tmp-fpc-scores";
 parquet.file.stem    <- "DF-tidy-scores";
 
-compute.and.save.fpc.scores(
-    DF.preprocessed      = DF.preprocessed,
-    RData.trained.engine = RData.trained.engine,
-    variable             = target.variable,
-    ncdf4.output         = ncdf4.fpc.scores,
-    CSV.partitions       = CSV.partitions,
-    n.cores              = n.cores,
-    n.partitions.lat     = 30,
-    n.partitions.lon     = 30,
-    directory.fpc.scores = directory.fpc.scores,
-    parquet.file.stem    = parquet.file.stem
-    );
-gc();
-
-plot.RGB.fpc.scores(
-    directory.fpc.scores = directory.fpc.scores,
-    parquet.file.stem    = parquet.file.stem,
-    PNG.output.file.stem = "plot-RGB-fpc-scores",
-    dots.per.inch        = ifelse(test = is.macOS, yes = 1000, no = 300)
-    );
-gc();
+# compute.and.save.fpc.scores(
+#     DF.preprocessed      = DF.preprocessed,
+#     RData.trained.engine = RData.trained.engine,
+#     variable             = target.variable,
+#     ncdf4.output         = ncdf4.fpc.scores,
+#     CSV.partitions       = CSV.partitions,
+#     n.cores              = n.cores,
+#     n.partitions.lat     = 30,
+#     n.partitions.lon     = 30,
+#     directory.fpc.scores = directory.fpc.scores,
+#     parquet.file.stem    = parquet.file.stem
+#     );
+# gc();
+#
+# plot.RGB.fpc.scores(
+#     directory.fpc.scores = directory.fpc.scores,
+#     parquet.file.stem    = parquet.file.stem,
+#     PNG.output.file.stem = "plot-RGB-fpc-scores",
+#     dots.per.inch        = ifelse(test = is.macOS, yes = 1000, no = 300)
+#     );
+# gc();
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 
