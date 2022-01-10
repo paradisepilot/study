@@ -170,8 +170,6 @@ print( str(trained.fpc.FeatureEngine) );
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 approximations.directory <- file.path(getwd(),"tmp-fpc-approximations");
 
-print( str(DF.training) );
-
 DF.training[,"lat_lon"] <- apply(
     X      = DF.training[,c("lat","lon")],
     MARGIN = 1,
