@@ -13,6 +13,21 @@ getData.labelled <- function(
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     if ( file.exists(RData.output) ) {
         list.output <- readRDS(file = RData.output);
+        cat(paste0("\nThe file ",RData.output," already exists; will not regenerate ...\n"));
+        if ( "bay-of-quinte" == study.area ) {
+            DF.colour.scheme <- getData.labelled_bay.of.quinte_colour.scheme();
+        } else if ( "drummondville" == study.area ) {
+            DF.colour.scheme <- getData.labelled_drummondville_colour.scheme();
+            }
+        DF.labelled <- list.output[['data']];
+        DF.labelled[,'land_cover'] <- factor(
+            x      = DF.labelled[,'land_cover'],
+            levels = DF.colour.scheme[,'land_cover']
+            );
+        list.output <- list(
+            data          = DF.labelled,
+            colour_scheme = DF.colour.scheme
+            );
         cat(paste0("\n",thisFunctionName,"() exits."));
         cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###\n");
         return( list.output );

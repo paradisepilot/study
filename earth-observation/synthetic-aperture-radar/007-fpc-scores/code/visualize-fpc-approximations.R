@@ -21,6 +21,14 @@ visualize.fpc.approximations <- function(
     cat(paste0("\n",thisFunctionName,"() starts.\n\n"));
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    if ( dir.exists(output.directory) ) {
+        cat(paste0("\n The directory ",output.directory," already exists; will not regenerate its contents ...\n"));
+        cat(paste0("\n",thisFunctionName,"() exits."));
+        cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###\n");
+        return( NULL );
+        }
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     DF.temp <- DF.variable;
     DF.temp[,"year"] <- format(x = DF.variable[,date], format = "%Y");
 
@@ -39,23 +47,26 @@ visualize.fpc.approximations <- function(
 
         temp.locations <- sample(x = temp.locations, size = n.locations, replace = TRUE);
         for ( temp.location in temp.locations ) {
-            DF.location <- DF.temp[is.selected & (DF.temp[,location] == temp.location),];
-            cat(paste0("\n",thisFunctionName,"(): str(DF.locations) -- land.cover = ",temp.land.cover,", temp.year = ",temp.year,"\n"));
-            print( str(DF.location) );
-            my.ggplot <- featureEngine$plot.approximations(
-                DF.input = DF.location,
-                location = location,
-                date     = date,
-                variable = variable
-                );
-            ggplot2::ggsave(
-                filename = file.path(output.directory,paste0("fpc-approximation-",variable,"-",temp.land.cover,"-",temp.year,"-",temp.location,".png")),
-                plot     = my.ggplot,
-                dpi      = 300,
-                height   =   4,
-                width    =  16,
-                units    = "in"
-                );
+            PNG.output <- file.path(output.directory,paste0("fpc-approximation-",variable,"-",temp.land.cover,"-",temp.year,"-",temp.location,".png"));
+            if ( !file.exists(PNG.output) ) {
+                DF.location <- DF.temp[is.selected & (DF.temp[,location] == temp.location),];
+                cat(paste0("\n",thisFunctionName,"(): str(DF.locations) -- land.cover = ",temp.land.cover,", temp.year = ",temp.year,"\n"));
+                print( str(DF.location) );
+                my.ggplot <- featureEngine$plot.approximations(
+                    DF.input = DF.location,
+                    location = location,
+                    date     = date,
+                    variable = variable
+                    );
+                ggplot2::ggsave(
+                    filename = PNG.output,
+                    plot     = my.ggplot,
+                    dpi      = 300,
+                    height   =   4,
+                    width    =  16,
+                    units    = "in"
+                    );
+                }
             }
 
         }}

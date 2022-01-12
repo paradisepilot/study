@@ -169,7 +169,7 @@ plot.labelled.data.geography_ggplot <- function(
         );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    remove(list = c('DF.temp','my.ggplot','range.lat','range.lon','file.png'));
+    remove(list = c('DF.temp','my.ggplot','range.lat','range.lon'));
     return( NULL );
 
    }

@@ -175,25 +175,26 @@ getData.labelled_drummondville_colour.scheme <- function() {
     #     "wetland",     "black"
     #     );
 
-    my.palette <- RColorBrewer::brewer.pal(n = 12, name = "Set3");
+    my.palette.1 <- RColorBrewer::brewer.pal(n = 12, name = "Set1"   );
+    my.palette.2 <- RColorBrewer::brewer.pal(n = 12, name = "Pastel1");
 
     vector.colour.scheme <- c(
         "blue",        "blue",
         "green",       "darkgreen",
         "grey",        "red",
-        "barebuiltup", my.palette[ 1],
-        "canola",      my.palette[ 2],
-        "corn",        my.palette[ 3],
-        "drybeans",    my.palette[ 4],
-        "forestshrub", my.palette[ 5],
-        "fruits",      my.palette[ 6],
-        "greenfeed",   my.palette[ 7],
-        "potatoes",    my.palette[ 8],
-        "smallgrains", my.palette[ 9],
-        "soybeans",    my.palette[10],
-        "vegetables",  my.palette[11],
-        "water",       my.palette[12],
-        "wetland",     "black"
+        "forestshrub", my.palette.1[ 2],
+        "corn",        my.palette.1[ 4],
+        "soybeans",    my.palette.1[ 5],
+        "barebuiltup", "black", # my.palette.1[ 6],
+        "smallgrains", my.palette.1[ 7],
+        "wetland",     my.palette.1[ 8],
+        "water",       "cyan",
+        "vegetables",  my.palette.2[ 1],
+        "potatoes",    my.palette.2[ 3],
+        "fruits",      my.palette.2[ 4],
+        "greenfeed",   my.palette.2[ 5],
+        "drybeans",    my.palette.2[ 6],
+        "canola",      my.palette.2[ 7]
         );
 
     DF.colour.scheme <- as.data.frame(

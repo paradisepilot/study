@@ -2,6 +2,7 @@
 get.nearest.lat.lon <- function(
     DF.training.coordinates = NULL,
     DF.preprocessed         = NULL,
+    DF.colour.scheme        = NULL,
     parquet.nearest.lat.lon = "DF-nearest-lat-lon.parquet"
     ) {
 
@@ -16,6 +17,10 @@ get.nearest.lat.lon <- function(
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     if ( (!is.null(parquet.nearest.lat.lon)) & file.exists(parquet.nearest.lat.lon) ) {
         DF.nearest.lat.lon <- arrow::read_parquet(file = parquet.nearest.lat.lon);
+        DF.nearest.lat.lon[,'land_cover'] <- factor(
+            x      = DF.nearest.lat.lon[,'land_cover'],
+            levels = DF.colour.scheme[,'land_cover']
+            );
         cat(paste0("\n",thisFunctionName,"() quits."));
         cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###\n");
         return( DF.nearest.lat.lon );
