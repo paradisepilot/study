@@ -167,10 +167,37 @@ get.nearest.lat.lon_deduplicate <- function(
         replacement = 'land_cover_AGRI'
         );
 
-    cat("\ntable(DF.intersection[,c('land_cover_AGRI','land_cover_EESD')])\n");
-    print( table(DF.intersection[,c('land_cover_AGRI','land_cover_EESD')])   );
+    DF.intersection[,'land_cover_EESD'] <- as.character(DF.intersection[,'land_cover_EESD']);
 
-    remove(list = c('is.EESD','DF.intersection'));
+    DF.EESD.less.AGRI <- DF.EESD[!DF.EESD[,'in_AGRI'],c('lat_lon','land_cover')];
+    colnames(DF.EESD.less.AGRI) <- gsub(
+        x           = colnames(DF.EESD.less.AGRI),
+        pattern     = '^land_cover$',
+        replacement = 'land_cover_EESD'
+        );
+    DF.EESD.less.AGRI[,'land_cover_AGRI'] <- "not_in_AGRI";
+
+    DF.AGRI.less.EESD <- DF.AGRI[!DF.AGRI[,'in_EESD'],c('lat_lon','land_cover')];
+    colnames(DF.AGRI.less.EESD) <- gsub(
+        x           = colnames(DF.AGRI.less.EESD),
+        pattern     = '^land_cover$',
+        replacement = 'land_cover_AGRI'
+        );
+    DF.AGRI.less.EESD[,'land_cover_EESD'] <- "not_in_EESD";
+
+    DF.union <- rbind(
+        DF.intersection,
+        DF.EESD.less.AGRI,
+        DF.AGRI.less.EESD
+        );
+
+    # cat("\ntable(DF.intersection[,c('land_cover_AGRI','land_cover_EESD')])\n");
+    # print( table(DF.intersection[,c('land_cover_AGRI','land_cover_EESD')])   );
+
+    cat("\ntable(DF.union[,c('land_cover_AGRI','land_cover_EESD')])\n");
+    print( table(DF.union[,c('land_cover_AGRI','land_cover_EESD')])   );
+
+    remove(list = c('is.EESD','DF.intersection','DF.union'));
     gc();
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
