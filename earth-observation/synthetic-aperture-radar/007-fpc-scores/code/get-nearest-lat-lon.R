@@ -167,8 +167,8 @@ get.nearest.lat.lon_deduplicate <- function(
         replacement = 'land_cover_AGRI'
         );
 
-    DF.intersection[,'land_cover_EESD'] <- as.character(DF.intersection[,'land_cover_EESD']);
-    DF.intersection[,'land_cover_AGRI'] <- as.character(DF.intersection[,'land_cover_AGRI']);
+    # DF.intersection[,'land_cover_EESD'] <- as.character(DF.intersection[,'land_cover_EESD']);
+    # DF.intersection[,'land_cover_AGRI'] <- as.character(DF.intersection[,'land_cover_AGRI']);
 
     DF.EESD.less.AGRI <- DF.EESD[!DF.EESD[,'in_AGRI'],c('lat_lon','land_cover')];
     colnames(DF.EESD.less.AGRI) <- gsub(
