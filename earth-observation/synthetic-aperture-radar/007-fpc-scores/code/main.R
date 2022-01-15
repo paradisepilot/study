@@ -214,14 +214,11 @@ visualize.fpc.approximations(
     output.directory = approximations.directory
     );
 
-remove(list = c('DF.training'));
-gc();
-
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-# CSV.partitions       <- "DF-partitions-scores.csv";
-# directory.fpc.scores <- "tmp-fpc-scores";
-# parquet.file.stem    <- "DF-tidy-scores";
-#
+CSV.partitions       <- "DF-partitions-scores.csv";
+directory.fpc.scores <- "tmp-fpc-scores";
+parquet.file.stem    <- "DF-tidy-scores";
+
 # compute.and.save.fpc.scores(
 #     DF.preprocessed      = DF.preprocessed,
 #     RData.trained.engine = RData.trained.engine,
@@ -249,6 +246,9 @@ persist.fpc.scores(
     DF.training       = DF.training,
     parquet.file.stem = parquet.file.stem
     );
+
+remove(list = c('DF.training'));
+gc();
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 
