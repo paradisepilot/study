@@ -9,17 +9,6 @@ persist.fpc.scores <- function(
     cat(paste0("\n",thisFunctionName,"() starts.\n\n"));
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    cat("\nls()\n");
-    print( ls()   );
-
-    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    cat("\nparquet.file.stem\n");
-    print( parquet.file.stem   );
-
-    cat("\nstr(DF.training)\n");
-    print( str(DF.training)   );
-
-    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     persist.fpc.scores_training(
         DF.training = DF.training
         );
@@ -39,10 +28,6 @@ persist.fpc.scores_training <- function(
     thisFunctionName <- "persist.fpc.scores_training";
     cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###");
     cat(paste0("\n",thisFunctionName,"() starts.\n\n"));
-
-    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    cat("\nls()\n");
-    print( ls()   );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat("\nstr(DF.training)\n");

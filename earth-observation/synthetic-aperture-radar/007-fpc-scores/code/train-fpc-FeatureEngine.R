@@ -110,12 +110,17 @@ train.fpc.FeatureEngine <- function(
                 PNG.output       = PNG.temp.year
                 );
 
-            DF.fpc[,c('lat','lon')] <- apply(
-                X      = DF.fpc[c('lat_lon','year')],
-                MARGIN = 1,
-                FUN    = function(x) { return(as.numeric(unlist(strsplit(x = x[1], split = "_")))) }
+            DF.fpc[,c('lat','lon')] <- matrix(
+                ncol  = 2,
+                byrow = TRUE,
+                data  = apply(
+                    X      = DF.fpc[c('lat_lon','year')],
+                    MARGIN = 1,
+                    FUN    = function(x) { return(as.numeric(unlist(strsplit(x = x[1], split = "_")))) }
+                    )
                 );
             DF.fpc <- DF.fpc[,c('lat','lon',setdiff(colnames(DF.fpc),c('lat','lon')))];
+
 
             write.csv(
                 x         = DF.fpc,
