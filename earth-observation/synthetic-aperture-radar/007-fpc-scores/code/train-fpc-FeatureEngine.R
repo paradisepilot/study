@@ -63,7 +63,6 @@ train.fpc.FeatureEngine <- function(
 
         }
 
-
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     PNG.harmonics <- paste0("plot-",variable,"-harmonics.png");
     if ( !file.exists(PNG.harmonics) ) {
@@ -84,6 +83,7 @@ train.fpc.FeatureEngine <- function(
     for ( temp.year in years ) {
 
         PNG.temp.year <- paste0("plot-",variable,"-scores-",temp.year,".png");
+        CSV.temp.year <- paste0("DF-",variable,"-scores-training-",temp.year,".csv")
         if ( !file.exists(PNG.temp.year) ) {
 
             DF.temp <- DF.training[DF.training[,'year'] == temp.year,];
@@ -109,7 +109,22 @@ train.fpc.FeatureEngine <- function(
                 DF.colour.scheme = DF.colour.scheme,
                 PNG.output       = PNG.temp.year
                 );
+
+            DF.fpc[,c('lat','lon')] <- apply(
+                X      = DF.fpc[c('lat_lon','year')],
+                MARGIN = 1,
+                FUN    = function(x) { return(as.numeric(unlist(strsplit(x = x[1], split = "_")))) }
+                );
+            DF.fpc <- DF.fpc[,c('lat','lon',setdiff(colnames(DF.fpc),c('lat','lon')))];
+
+            write.csv(
+                x         = DF.fpc,
+                file      = CSV.temp.year,
+                row.names = FALSE
+                );
+
             remove(list = c("DF.fpc"));
+            gc();
 
             }
 
