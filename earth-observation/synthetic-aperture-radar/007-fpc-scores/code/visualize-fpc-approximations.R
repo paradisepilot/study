@@ -12,6 +12,7 @@ visualize.fpc.approximations <- function(
         land_cover = c("marsh",  "swamp",  "water",  "forest", "ag",     "shallow"),
         colour     = c("#000000","#E69F00","#56B4E9","#009E73","#F0E442","red"    )
         ),
+    my.seed          = 7654321,
     output.directory = NULL
     ) {
 
@@ -36,6 +37,7 @@ visualize.fpc.approximations <- function(
     land.covers <- unique(DF.temp[,land.cover]);
     years       <- unique(DF.temp[,'year'    ]);
 
+    set.seed(my.seed);
     for ( temp.land.cover in land.covers ) {
     for ( temp.year       in years       ) {
 

@@ -44,6 +44,7 @@ code.files <- c(
     "nc-convert-spatiotemporal.R",
     "plot-labelled-data-geography.R",
     "reshapeData.R",
+    "persist-fpc-scores.R",
     "plot-RGB-fpc-scores.R",
     "test-terrainr.R",
     "train-fpc-FeatureEngine.R",
@@ -60,7 +61,8 @@ for ( code.file in code.files ) {
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-set.seed(7654321);
+my.seed <- 7654321;
+set.seed(my.seed);
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 study.area <- "drummondville"; # "bay-of-quinte";
@@ -179,14 +181,25 @@ DF.training[,"lat_lon"] <- apply(
     FUN    = function(x) { return(paste(x = x, collapse = "_")) }
     );
 
+print( str(DF.training) );
+
+print( str(unique(DF.training)) );
+
+print( str(DF.nearest.lat.lon) );
+
+print( str(unique(DF.nearest.lat.lon)) );
+
+print( setdiff(DF.training$lat_lon,DF.nearest.lat.lon$lat_lon) );
+
+print( setdiff(DF.nearest.lat.lon$lat_lon,DF.training$lat_lon) );
+
 DF.training <- merge(
     x     = DF.training,
     y     = DF.nearest.lat.lon[,c('lat_lon','land_cover')],
     by    = 'lat_lon',
     all.x = TRUE
     );
-
-print( str(DF.training) );
+DF.training <- unique(DF.training);
 
 visualize.fpc.approximations(
     featureEngine    = trained.fpc.FeatureEngine,
@@ -197,6 +210,7 @@ visualize.fpc.approximations(
     variable         = target.variable,
     n.locations      = 10,
     DF.colour.scheme = DF.colour.scheme,
+    my.seed          = my.seed,
     output.directory = approximations.directory
     );
 
@@ -229,6 +243,12 @@ gc();
 #     dots.per.inch        = ifelse(test = is.macOS, yes = 1000, no = 300)
 #     );
 # gc();
+
+### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+persist.fpc.scores(
+    DF.training       = DF.training,
+    parquet.file.stem = parquet.file.stem
+    );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 
