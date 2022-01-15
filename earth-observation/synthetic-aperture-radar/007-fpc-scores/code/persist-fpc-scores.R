@@ -84,12 +84,11 @@ persist.fpc.scores_tiff <- function(
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     list.layers <- list();
-    for ( score.index in seq(1,n.fpc.scores) ) {
-        colname.fpc.score <- colnames.fpc.scores[score.index];
+    for ( colname.fpc.score in colnames.fpc.scores ) {
         DF.temp <- matrix(data = DF.scores[,colname.fpc.score], nrow = n.lats, ncol = n.lons);
         layer.temp <- raster::raster(nrows = n.lats, ncols = n.lons);
         raster::values(layer.temp) <- DF.temp;
-        list.layers[[score.index]] <- layer.temp;
+        list.layers[[colname.fpc.score]] <- layer.temp;
         }
 
     remove(list = c(
@@ -99,15 +98,7 @@ persist.fpc.scores_tiff <- function(
     gc();
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    my.stack <- raster::stack(
-        list.layers[[1]],
-        list.layers[[2]],
-        list.layers[[3]],
-        list.layers[[4]],
-        list.layers[[5]],
-        list.layers[[6]],
-        list.layers[[7]]
-        );
+    my.stack <- raster::stack(x = list.layers);
 
     matrix.extent <- matrix(
         data  = c(lon.min,lon.max,lat.min,lat.max),
