@@ -16,19 +16,23 @@ persist.fpc.scores <- function(
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     for ( parquet.file in parquet.files ) {
+
         nc.file <- parquet.file;
         nc.file <- gsub(x = nc.file, pattern = parquet.file.stem, replacement = nc.file.stem);
         nc.file <- gsub(x = nc.file, pattern = "\\.parquet$",     replacement = ".nc"       );
-        # persist.fpc.scores_ncdf4(
-        #     var.name     = var.name,
-        #     parquet.file = parquet.file,
-        #     nc.file      = nc.file
-        #     );
+
+        persist.fpc.scores_ncdf4(
+            var.name     = var.name,
+            parquet.file = parquet.file,
+            nc.file      = nc.file
+            );
+
         persist.fpc.scores_tiff(
             var.name     = var.name,
             parquet.file = parquet.file,
             nc.file      = nc.file
             );
+
         }
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
@@ -57,22 +61,14 @@ persist.fpc.scores_tiff <- function(
     cat("\nnc.file = ",     nc.file,     "\n");
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    print("A-0");
-
     DF.scores <- arrow::read_parquet(parquet.file);
     DF.scores <- DF.scores[order(DF.scores$lon,-DF.scores$lat),];
-
-    print("A-1");
 
     colnames.fpc.scores <- grep(x = colnames(DF.scores), pattern = "^fpc_", value = TRUE);
     n.fpc.scores <- length(colnames.fpc.scores);
 
-    print("A-2");
-
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     ncdf4.object.input <- ncdf4::nc_open(nc.file);
-
-    print("A-3");
 
     n.lats <- ncdf4.object.input[['dim']][['lat']][['len']];
     n.lons <- ncdf4.object.input[['dim']][['lon']][['len']];
@@ -82,40 +78,18 @@ persist.fpc.scores_tiff <- function(
     lon.min <- min(ncdf4.object.input[['dim']][['lon']][['vals']]);
     lon.max <- max(ncdf4.object.input[['dim']][['lon']][['vals']]);
 
-    print("A-4");
-
     ncdf4::nc_close(ncdf4.object.input);
     remove(list = c('ncdf4.object.input'));
     gc();
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    print("A-5");
-
     list.layers <- list();
     for ( score.index in seq(1,n.fpc.scores) ) {
-
-        print("B-0");
-
         colname.fpc.score <- colnames.fpc.scores[score.index];
-
-        print("B-1");
-
         DF.temp <- matrix(data = DF.scores[,colname.fpc.score], nrow = n.lats, ncol = n.lons);
-
-        print("B-2");
-
         layer.temp <- raster::raster(nrows = n.lats, ncols = n.lons);
-
-        print("B-3");
-
         raster::values(layer.temp) <- DF.temp;
-
-        print("B-4");
-
         list.layers[[score.index]] <- layer.temp;
-
-        print("B-5");
-
         }
 
     remove(list = c(
@@ -123,8 +97,6 @@ persist.fpc.scores_tiff <- function(
         'colname.fpc.score','score.index'
         ));
     gc();
-
-    print("A-6");
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     my.stack <- raster::stack(
@@ -149,14 +121,10 @@ persist.fpc.scores_tiff <- function(
         ext = raster::extent(matrix.extent)
         );
 
-    print("A-7");
-
     cat("\nstr(my.stack)\n");
     print( str(my.stack)   );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    print("A-8");
-
     tiff.file.output <- nc.file;
 
     tiff.file.output <- gsub(
@@ -165,19 +133,13 @@ persist.fpc.scores_tiff <- function(
         replacement = "fpc-scores"
         );
 
-    print("A-9");
-
     tiff.file.output <- gsub(
         x           = tiff.file.output,
         pattern     = "\\.nc",
         replacement = ".tiff"
         );
 
-    print("A-10");
-
     writeRaster(x = my.stack, filename = tiff.file.output);
-
-    print("A-11");
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     remove(list = c(
@@ -187,8 +149,6 @@ persist.fpc.scores_tiff <- function(
         'colnames.fpc.scores','dimension.fpc.score'
         ));
     gc();
-
-    print("A-12");
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat(paste0("\n",thisFunctionName,"() quits."));
