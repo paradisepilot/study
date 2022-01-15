@@ -243,7 +243,8 @@ parquet.file.stem    <- "DF-tidy-scores";
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 persist.fpc.scores(
-    DF.training       = DF.training,
+    var.name          = target.variable,
+    nc.file.stem      = "data-preprocessed",
     parquet.file.stem = parquet.file.stem
     );
 
