@@ -60,7 +60,7 @@ persist.fpc.scores_tiff <- function(
     print("A-0");
 
     DF.scores <- arrow::read_parquet(parquet.file);
-    DF.scores <- DF.scores[order(DF.scores$lon,DF.scores$lat),];
+    DF.scores <- DF.scores[order(DF.scores$lon,-DF.scores$lat),];
 
     print("A-1");
 
@@ -76,6 +76,11 @@ persist.fpc.scores_tiff <- function(
 
     n.lats <- ncdf4.object.input[['dim']][['lat']][['len']];
     n.lons <- ncdf4.object.input[['dim']][['lon']][['len']];
+
+    lat.min <- min(ncdf4.object.input[['dim']][['lat']][['vals']]);
+    lat.max <- max(ncdf4.object.input[['dim']][['lat']][['vals']]);
+    lon.min <- min(ncdf4.object.input[['dim']][['lon']][['vals']]);
+    lon.max <- max(ncdf4.object.input[['dim']][['lon']][['vals']]);
 
     print("A-4");
 
@@ -130,6 +135,18 @@ persist.fpc.scores_tiff <- function(
         list.layers[[5]],
         list.layers[[6]],
         list.layers[[7]]
+        );
+
+    matrix.extent <- matrix(
+        data  = c(lon.min,lon.max,lat.min,lat.max),
+        nrow  = 2,
+        ncol  = 2,
+        byrow = TRUE
+        );
+
+    my.stack <- setExtent(
+        x   = my.stack,
+        ext = raster::extent(matrix.extent)
         );
 
     print("A-7");
