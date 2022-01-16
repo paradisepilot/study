@@ -167,7 +167,7 @@ persist.fpc.scores_ncdf4 <- function(
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     DF.scores <- arrow::read_parquet(parquet.file);
-    DF.scores <- DF.scores[order(DF.scores$lon,-DF.scores$lat),];
+    DF.scores <- DF.scores[order(DF.scores$lon,DF.scores$lat),];
 
     colnames.fpc.scores <- grep(x = colnames(DF.scores), pattern = "^fpc_", value = TRUE);
     n.fpc.scores <- length(colnames.fpc.scores);
