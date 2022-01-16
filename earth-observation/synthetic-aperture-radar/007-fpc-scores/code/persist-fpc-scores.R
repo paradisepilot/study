@@ -21,24 +21,24 @@ persist.fpc.scores <- function(
         nc.file <- gsub(x = nc.file, pattern = parquet.file.stem, replacement = nc.file.stem);
         nc.file <- gsub(x = nc.file, pattern = "\\.parquet$",     replacement = ".nc"       );
 
-        # ncdf4.output <- gsub(
-        #     x           = nc.file,
-        #     pattern     = "preprocessed",
-        #     replacement = "fpc-scores"
-        #     );
-        #
-        # persist.fpc.scores_ncdf4(
-        #     var.name     = var.name,
-        #     parquet.file = parquet.file,
-        #     nc.file      = nc.file,
-        #     ncdf4.output = ncdf4.output
-        #     );
-        #
-        # verify.fpc.scores_ncdf4(
-        #     var.name     = var.name,
-        #     parquet.file = parquet.file,
-        #     ncdf4.output = ncdf4.output
-        #     );
+        ncdf4.output <- gsub(
+            x           = nc.file,
+            pattern     = "preprocessed",
+            replacement = "fpc-scores"
+            );
+
+        persist.fpc.scores_ncdf4(
+            var.name     = var.name,
+            parquet.file = parquet.file,
+            nc.file      = nc.file,
+            ncdf4.output = ncdf4.output
+            );
+
+        verify.fpc.scores_ncdf4(
+            var.name     = var.name,
+            parquet.file = parquet.file,
+            ncdf4.output = ncdf4.output
+            );
 
         persist.fpc.scores_tiff(
             var.name     = var.name,
