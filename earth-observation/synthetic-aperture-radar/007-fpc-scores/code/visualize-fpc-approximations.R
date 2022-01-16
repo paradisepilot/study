@@ -27,6 +27,8 @@ visualize.fpc.approximations <- function(
         cat(paste0("\n",thisFunctionName,"() exits."));
         cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###\n");
         return( NULL );
+    } else {
+        dir.create(path = output.directory, recursive = TRUE);
         }
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
