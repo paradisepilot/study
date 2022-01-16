@@ -21,10 +21,23 @@ persist.fpc.scores <- function(
         nc.file <- gsub(x = nc.file, pattern = parquet.file.stem, replacement = nc.file.stem);
         nc.file <- gsub(x = nc.file, pattern = "\\.parquet$",     replacement = ".nc"       );
 
+        ncdf4.output <- gsub(
+            x           = nc.file,
+            pattern     = "preprocessed",
+            replacement = "fpc-scores"
+            );
+
         persist.fpc.scores_ncdf4(
             var.name     = var.name,
             parquet.file = parquet.file,
-            nc.file      = nc.file
+            nc.file      = nc.file,
+            ncdf4.output = ncdf4.output
+            );
+
+        verify.fpc.scores_ncdf4(
+            var.name     = var.name,
+            parquet.file = parquet.file,
+            ncdf4.output = ncdf4.output
             );
 
         persist.fpc.scores_tiff(
@@ -43,6 +56,92 @@ persist.fpc.scores <- function(
     }
 
 ##################################################
+verify.fpc.scores_ncdf4 <- function(
+    var.name     = NULL,
+    parquet.file = NULL,
+    ncdf4.output = NULL
+    ) {
+
+    thisFunctionName <- "verify.fpc.scores_ncdf4";
+    cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###");
+    cat(paste0("\n",thisFunctionName,"() starts.\n\n"));
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    require(arrow);
+    require(ncdf4);
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    cat("\n# validating: ",ncdf4.output,"\n");
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    DF.tidy <- arrow::read_parquet(parquet.file);
+
+    # note the negative sign for latitude in the following order statement
+    # this is due to the fact that the values in the latitude dimension in
+    # an ncdf4 object is in desecending order.
+    DF.tidy <- DF.tidy[order(DF.tidy$lon,-DF.tidy$lat),];
+
+    n.lats <- length(unique(DF.tidy$lat));
+    n.lons <- length(unique(DF.tidy$lon));
+
+    colnames.scores <- grep(
+        x       = colnames(DF.tidy),
+        pattern = "^fpc_",
+        value   = TRUE
+        );
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    ncdf4.object.output <- ncdf4::nc_open(ncdf4.output);
+
+    cat("\nncdf4.object.output[['dim']][['lat']][['vals']][c(first,last)]\n");
+    print( ncdf4.object.output[['dim']][['lat']][['vals']][c(1,ncdf4.object.output[['dim']][['lat']][['len']])] );
+
+    cat("\nncdf4.object.output[['dim']][['lon']][['vals']][c(first,last)]\n");
+    print( ncdf4.object.output[['dim']][['lon']][['vals']][c(1,ncdf4.object.output[['dim']][['lon']][['len']])] );
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    for ( score.index in seq(1,length(colnames.scores)) ) {
+
+        colname.score <- colnames.scores[score.index];
+
+        DF.parquet <- matrix(
+            data = DF.tidy[,colname.score],
+            nrow = n.lats,
+            ncol = n.lons
+            );
+
+        DF.nc <- ncdf4::ncvar_get(
+            nc    = ncdf4.object.output,
+            varid = var.name,
+            start = c(1,1,score.index),
+            count = c(n.lats,n.lons,1)
+            );
+
+        max.abs.diff <- max(abs(DF.nc - DF.parquet));
+
+        cat("\n\n# ",colname.score,":\n");
+        cat("\nmax.abs.diff(",colname.score,") = ",max.abs.diff,"\n");
+        cat("\nsummary(as.vector(DF.nc))\n");
+        print( summary(as.vector(DF.nc))   );
+
+        }
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    ncdf4::nc_close(ncdf4.object.output);
+    remove(list = c(
+        'DF.tidy','n.lats','n.lons',
+        'score.index','colname.score','DF.parquet','DF.nc','max.abs.diff',
+        'ncdf4.object.output'
+        ));
+    gc();
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    cat(paste0("\n",thisFunctionName,"() quits."));
+    cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###\n");
+    return( NULL );
+
+    }
+
 persist.fpc.scores_tiff <- function(
     var.name     = NULL,
     parquet.file = NULL,
@@ -62,6 +161,10 @@ persist.fpc.scores_tiff <- function(
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     DF.scores <- arrow::read_parquet(parquet.file);
+
+    # note the negative sign for latitude in the following order statement
+    # this is due to the fact that the values in the latitude dimension in
+    # an ncdf4 object is in desecending order.
     DF.scores <- DF.scores[order(DF.scores$lon,-DF.scores$lat),];
 
     colnames.fpc.scores <- grep(x = colnames(DF.scores), pattern = "^fpc_", value = TRUE);
@@ -112,8 +215,8 @@ persist.fpc.scores_tiff <- function(
         ext = raster::extent(matrix.extent)
         );
 
-    cat("\nstr(my.stack)\n");
-    print( str(my.stack)   );
+    cat("\nclass(my.stack)\n");
+    print( class(my.stack)   );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     tiff.file.output <- nc.file;
@@ -151,7 +254,8 @@ persist.fpc.scores_tiff <- function(
 persist.fpc.scores_ncdf4 <- function(
     var.name     = NULL,
     parquet.file = NULL,
-    nc.file      = NULL
+    nc.file      = NULL,
+    ncdf4.output = NULL
     ) {
 
     thisFunctionName <- "persist.fpc.scores_ncdf4";
@@ -159,6 +263,7 @@ persist.fpc.scores_ncdf4 <- function(
     cat(paste0("\n",thisFunctionName,"() starts.\n\n"));
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    require(arrow);
     require(ncdf4);
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
@@ -167,7 +272,11 @@ persist.fpc.scores_ncdf4 <- function(
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     DF.scores <- arrow::read_parquet(parquet.file);
-    DF.scores <- DF.scores[order(DF.scores$lon,DF.scores$lat),];
+
+    # note the negative sign for latitude in the following order statement
+    # this is due to the fact that the values in the latitude dimension in
+    # an ncdf4 object is in desecending order.
+    DF.scores <- DF.scores[order(DF.scores$lon,-DF.scores$lat),];
 
     colnames.fpc.scores <- grep(x = colnames(DF.scores), pattern = "^fpc_", value = TRUE);
     n.fpc.scores <- length(colnames.fpc.scores);
@@ -200,14 +309,8 @@ persist.fpc.scores_ncdf4 <- function(
     gc();
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    ncdf4.file.output <- gsub(
-        x           = nc.file,
-        pattern     = "preprocessed",
-        replacement = "fpc-scores"
-        );
-
     ncdf4.object.output <- ncdf4::nc_create(
-        filename = ncdf4.file.output,
+        filename = ncdf4.output,
         vars     = list.vars
         );
 
@@ -230,7 +333,7 @@ persist.fpc.scores_ncdf4 <- function(
     ncdf4::nc_close(ncdf4.object.output);
     remove(list = c(
         'DF.scores','DF.temp',
-        'ncdf4.file.output','ncdf4.object.output',
+        'ncdf4.object.output',
         'n.fpc.scores','n.lats','n.lons',
         'colnames.fpc.scores','dimension.fpc.score','list.vars'
         ));
