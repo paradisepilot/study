@@ -24,6 +24,7 @@ require(ncdf4);
 require(openssl);
 require(parallel);
 require(raster);
+require(terra);
 require(terrainr);
 require(sf);
 require(stringr);

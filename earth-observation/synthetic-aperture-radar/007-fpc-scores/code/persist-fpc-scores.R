@@ -21,24 +21,24 @@ persist.fpc.scores <- function(
         nc.file <- gsub(x = nc.file, pattern = parquet.file.stem, replacement = nc.file.stem);
         nc.file <- gsub(x = nc.file, pattern = "\\.parquet$",     replacement = ".nc"       );
 
-        ncdf4.output <- gsub(
-            x           = nc.file,
-            pattern     = "preprocessed",
-            replacement = "fpc-scores"
-            );
-
-        persist.fpc.scores_ncdf4(
-            var.name     = var.name,
-            parquet.file = parquet.file,
-            nc.file      = nc.file,
-            ncdf4.output = ncdf4.output
-            );
-
-        verify.fpc.scores_ncdf4(
-            var.name     = var.name,
-            parquet.file = parquet.file,
-            ncdf4.output = ncdf4.output
-            );
+        # ncdf4.output <- gsub(
+        #     x           = nc.file,
+        #     pattern     = "preprocessed",
+        #     replacement = "fpc-scores"
+        #     );
+        #
+        # persist.fpc.scores_ncdf4(
+        #     var.name     = var.name,
+        #     parquet.file = parquet.file,
+        #     nc.file      = nc.file,
+        #     ncdf4.output = ncdf4.output
+        #     );
+        #
+        # verify.fpc.scores_ncdf4(
+        #     var.name     = var.name,
+        #     parquet.file = parquet.file,
+        #     ncdf4.output = ncdf4.output
+        #     );
 
         persist.fpc.scores_tiff(
             var.name     = var.name,
@@ -154,6 +154,7 @@ persist.fpc.scores_tiff <- function(
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     require(raster);
+    require(terra);
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat("\nparquet.file = ",parquet.file,"\n");
@@ -202,6 +203,7 @@ persist.fpc.scores_tiff <- function(
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     my.stack <- raster::stack(x = list.layers);
+    names(my.stack) <- names(list.layers);
 
     matrix.extent <- matrix(
         data  = c(lon.min,lon.max,lat.min,lat.max),
@@ -215,8 +217,13 @@ persist.fpc.scores_tiff <- function(
         ext = raster::extent(matrix.extent)
         );
 
-    cat("\nclass(my.stack)\n");
-    print( class(my.stack)   );
+    my.rast <- terra::rast(x = my.stack);
+
+    cat("\nclass(my.rast)\n");
+    print( class(my.rast)   );
+
+    cat("\nnames(my.rast)\n");
+    print( names(my.rast)   );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     tiff.file.output <- nc.file;
@@ -233,11 +240,12 @@ persist.fpc.scores_tiff <- function(
         replacement = ".tiff"
         );
 
-    raster::writeRaster(x = my.stack, filename = tiff.file.output);
+    # raster::writeRaster(x = my.stack, filename = tiff.file.output);
+    terra::writeRaster(x = my.rast, filename = tiff.file.output);
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     remove(list = c(
-        'my.stack','tiff.file.output',
+        'my.stack','my.rast','tiff.file.output',
         'list.layers','DF.scores',
         'n.fpc.scores','n.lats','n.lons',
         'colnames.fpc.scores','dimension.fpc.score'
