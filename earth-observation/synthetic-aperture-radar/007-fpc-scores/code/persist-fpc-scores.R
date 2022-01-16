@@ -233,7 +233,8 @@ persist.fpc.scores_tiff <- function(
         replacement = ".tiff"
         );
 
-    writeRaster(x = my.stack, filename = tiff.file.output);
+    # raster::writeRaster(x = my.stack, filename = tiff.file.output);
+    raster::stackSave(x = my.stack, filename = tiff.file.output);
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     remove(list = c(
