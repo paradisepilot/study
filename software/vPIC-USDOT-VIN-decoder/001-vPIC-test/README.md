@@ -20,8 +20,9 @@
     Driver=/usr/local/lib/libtdsodbc.so
     ```
 
-### Once **unixodbc** has been installed, we can view the ODBC configuration via:
+### Examine ODBC configuration
 
+Once **unixodbc** has been installed, we can view the ODBC configuration via the following command at the terminal:
 ```
 % odbcinst -j                                 
 ```
