@@ -41,7 +41,6 @@ cp    $0         ${outputDIR}/code
 dbuserid=SA
 dbpasswd=L96175e3EH48MGqw0g
 dbUseridPasswd=${dbuserid}_PASSWORD=${dbpasswd}
-# docker run -d --name containerName -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=L96175e3EH48MGqw0g' -p 1433:1433 mcr.microsoft.com/mssql/server
 docker run -d --name containerName -e 'ACCEPT_EULA=Y' -e ${dbUseridPasswd} -p 1433:1433 mcr.microsoft.com/mssql/server
 sleep 10
 
