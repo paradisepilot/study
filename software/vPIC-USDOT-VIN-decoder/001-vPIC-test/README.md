@@ -65,8 +65,8 @@ SQLSETPOSIROW Size.: 8
 *   Copy the downloaded backup file `vPICList_lite_2022_02.bak`
     to the location
     `/var/opt/mssql/data/vPICList_lite_2022_02.bak`
-    in file system of the MS SQL Server Docker container,
-    via the following Docker command in a terminal:
+    in the file system of the MS SQL Server Docker container,
+    via the following Docker command in a host terminal:
     ```
     % docker cp <HOST_FILE_SYSTEM_PATH to vPICList_lite_2022_02.bak> containerName:/var/opt/mssql/data/vPICList_lite_2022_02.bak
     ```
