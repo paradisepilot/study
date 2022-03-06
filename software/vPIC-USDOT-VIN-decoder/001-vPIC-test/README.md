@@ -112,9 +112,9 @@ SQLSETPOSIROW Size.: 8
     (This step can be skipped; it is used only to show the internal files
     whose locations in the restored database need to be specificed):
 
-   ```
-   mssql> RESTORE FILELISTONLY FROM DISK = 'vPICList_lite_2022_02.bak'
-   ```
+    ```
+    mssql> RESTORE FILELISTONLY FROM DISK = 'vPICList_lite_2022_02.bak'
+    ```
 
 *   See all tables in the database vPICList:
 
