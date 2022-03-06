@@ -89,9 +89,9 @@ SQLSETPOSIROW Size.: 8
     mssql> restore database vPICList from disk='vPICList_lite_2022_02.bak' with move 'vPICList_Data' to '/var/opt/mssql/data/vPICList.mdf', move 'vPICList_log' to '/var/opt/mssql/data/vPICList.ldf'
     ```
     Note that for the above mssql command to work,
-    the backup file **vPICList_lite_2022_02.bak**
+    the backup file `vPICList_lite_2022_02.bak`
     must have been copied to the location
-    **/var/opt/mssql/data/vPICList_lite_2022_02.bak**
+    `/var/opt/mssql/data/vPICList_lite_2022_02.bak`
     in file system of the MS SQL Server Docker container.
 
     This can be done with the following Docker command (if necessary):
