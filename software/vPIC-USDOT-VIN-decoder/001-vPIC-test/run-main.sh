@@ -38,7 +38,11 @@ cp    $0         ${outputDIR}/code
 ### docker pull mcr.microsoft.com/mssql/server
 
 ### Launch MS SQL Server container
-docker run -d --name containerName -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Dummy20031230Password' -p 1433:1433 mcr.microsoft.com/mssql/server
+dbuserid=SA
+dbpasswd=L96175e3EH48MGqw0g
+dbUseridPasswd=${dbuserid}_PASSWORD=${dbpasswd}
+# docker run -d --name containerName -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=L96175e3EH48MGqw0g' -p 1433:1433 mcr.microsoft.com/mssql/server
+docker run -d --name containerName -e 'ACCEPT_EULA=Y' -e ${dbUseridPasswd} -p 1433:1433 mcr.microsoft.com/mssql/server
 sleep 10
 
 ### Copy vPIC MS SQL backup file from host file system to Docker container file system:
@@ -50,7 +54,7 @@ sleep 10
 myRscript=${codeDIR}/main.R
 stdoutFile=${outputDIR}/stdout.R.`basename ${myRscript} .R`
 stderrFile=${outputDIR}/stderr.R.`basename ${myRscript} .R`
-R --no-save --args ${dataDIR} ${codeDIR} ${outputDIR} < ${myRscript} > ${stdoutFile} 2> ${stderrFile}
+R --no-save --args ${dataDIR} ${codeDIR} ${outputDIR} ${dbuserid} ${dbpasswd} < ${myRscript} > ${stdoutFile} 2> ${stderrFile}
 
 ##################################################
 ### Kill vPIC Docker containter

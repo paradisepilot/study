@@ -3,6 +3,8 @@ command.arguments <- commandArgs(trailingOnly = TRUE);
 data.directory    <- normalizePath(command.arguments[1]);
 code.directory    <- normalizePath(command.arguments[2]);
 output.directory  <- normalizePath(command.arguments[3]);
+db.userid         <- command.arguments[4];
+db.passwd         <- command.arguments[5];
 
 print( data.directory );
 print( code.directory );
@@ -38,8 +40,8 @@ my.connection <- odbc::dbConnect(
     drv      = odbc::odbc(),
     Driver   = "ODBC Driver for MS SQL",     # defined in /usr/local/etc/odbcinst.ini
     Server   = "Kenneths-MacBook-Pro.local", # mssql> SELECT HOST_NAME()
-    UID      = "SA",
-    PWD      = "Dummy20031230Password",
+    UID      = db.userid, # "SA",
+    PWD      = db.passwd, # "L96175e3EH48MGqw0g",
     Port     = 1433
     );
 
