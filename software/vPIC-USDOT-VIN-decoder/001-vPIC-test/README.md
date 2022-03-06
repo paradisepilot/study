@@ -22,17 +22,21 @@
 
 ### Once **unixodbc** has been installed, we can view the ODBC configuration via:
 
-    ```
-    % odbcinst -j                                 
-    unixODBC 2.3.9
-    DRIVERS............: /etc/odbcinst.ini
-    SYSTEM DATA SOURCES: /etc/odbc.ini
-    FILE DATA SOURCES..: /etc/ODBCDataSources
-    USER DATA SOURCES..: /Users/kennethchu/.odbc.ini
-    SQLULEN Size.......: 8
-    SQLLEN Size........: 8
-    SQLSETPOSIROW Size.: 8
-    ```
+```
+% odbcinst -j                                 
+```
+
+Sample output:
+```
+unixODBC 2.3.9
+DRIVERS............: /etc/odbcinst.ini
+SYSTEM DATA SOURCES: /etc/odbc.ini
+FILE DATA SOURCES..: /etc/ODBCDataSources
+USER DATA SOURCES..: /Users/kennethchu/.odbc.ini
+SQLULEN Size.......: 8
+SQLLEN Size........: 8
+SQLSETPOSIROW Size.: 8
+```
 
 # How to launch an MS SQL Server Docker container
 
