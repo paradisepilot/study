@@ -15,8 +15,10 @@
 
 1.  Create the file: /usr/local/etc/odbcinst.ini (needed to connect from R) with the following contents:
 
+    ```
     [ODBC Driver for MS SQL]
     Driver=/usr/local/lib/libtdsodbc.so
+    ```
 
 # View ODBC configuration:
 
