@@ -85,11 +85,9 @@ SQLSETPOSIROW Size.: 8
     `odbc::dbConnect(.)` via the `Server` input parameter.
 
 *   Restore the MS SQL backup file, explicitly specifying where the internal files should be saved to in the restored database:
-
     ```
     mssql> restore database vPICList from disk='vPICList_lite_2022_02.bak' with move 'vPICList_Data' to '/var/opt/mssql/data/vPICList.mdf', move 'vPICList_log' to '/var/opt/mssql/data/vPICList.ldf'
     ```
-
     Note that for the above mssql command to work,
     the backup file **vPICList_lite_2022_02.bak**
     must have been copied to the location
@@ -97,15 +95,12 @@ SQLSETPOSIROW Size.: 8
     in file system of the MS SQL Server Docker container.
 
     This can be done with the following Docker command (if necessary):
-
     ```
     docker cp <HOST_FILE_SYSTEM_PATH to vPICList_lite_2022_02.bak> containerName:/var/opt/mssql/data/vPICList_lite_2022_02.bak
     ```
-
     But the restoration of the backup file can also be done with the R session.
 
 *   See list of all databases:
-
     ```
     mssql> SELECT name, database_id, create_date FROM sys.databases;
     ```
@@ -113,44 +108,33 @@ SQLSETPOSIROW Size.: 8
 *   To see the names/paths of the files internal to the MS SQL backup file
     (This step can be skipped; it is used only to show the internal files
     whose locations in the restored database need to be specificed):
-
     ```
     mssql> RESTORE FILELISTONLY FROM DISK = 'vPICList_lite_2022_02.bak'
     ```
 
 *   See all tables in the database vPICList:
-
     ```
     mssql> SELECT * FROM vPICList.INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE';
     ```
 
 *   View two particular tables in the database vPICList:
-
     ```
     mssql> use vPICList; select * from dbo.FuelType
-    ```
-
-    ```
     mssql> use vPICList; select * from dbo.VinDescriptor
     ````
 
 *   View the stored procedures in the database vPICList:
-
     ```
     mssql> USE vPICList; SELECT ROUTINE_SCHEMA, ROUTINE_NAME FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_TYPE = 'PROCEDURE';
     ```
 
 *   Use the spVinDecode stored procedure:
-
     ```
     mssql> USE vPICList; EXEC [dbo].[spVinDecode] @v = N'3535353', @year = 2020
     ```
 
 # How to kill/stop and remove the MS SQL Server Docker container
-
   ```
   docker container kill containerName
-  ```
-  ```
   docker container rm --volumes containerName
   ```
