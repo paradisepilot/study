@@ -52,16 +52,26 @@ SQLSETPOSIROW Size.: 8
 1.  Execute the following command in a terminal:
 
     ```
-    docker run -d --name containerName -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Dummy20031230Password' -p 1433:1433 mcr.microsoft.com/mssql/server
+    docker run -d --name containerName -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=L96175e3EH48MGqw0g' -p 1433:1433 mcr.microsoft.com/mssql/server
     ```
 
 # Connect to MS SQL Server from command-line client (`mssql`)
+
+*   If the SQL client `sql-cli` (`mssql`) hasn't been installed yet,
+    execute the following command in a terminal to install it:
+
+    ```
+    npm install -g sql-cli
+    ```
 
 *   Run the following command in a Linux terminal to connect to the MSSQL server (using the mssql command-line client):
 
     ```
     $ mssql -u <db_usered> -p <db_passwd>
     ```
+
+    The parameters `db_usered` and `db_passwd` must matched the ones used
+    to launch the MS SQL Server container; see launch command above.
 
 # Some useful `mssql` commands:
 
