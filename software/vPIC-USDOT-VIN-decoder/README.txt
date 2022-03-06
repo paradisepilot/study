@@ -49,8 +49,8 @@ mssql> SELECT HOST_NAME()
 
 my.connection <- odbc::dbConnect(
     drv      = odbc::odbc(),
-    Driver   = "ODBC Driver for MS SQL",
-    Server   = "Kenneths-MacBook-Pro.local",
+    Driver   = "ODBC Driver for MS SQL",     # defined in /usr/local/etc/odbcinst.ini
+    Server   = "Kenneths-MacBook-Pro.local", # mssql> SELECT HOST_NAME()
     Database = "vPICList",
     UID      = "SA",
     PWD      = "Dummy20031230Password",
