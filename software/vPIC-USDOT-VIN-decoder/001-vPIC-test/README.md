@@ -76,6 +76,7 @@ SQLSETPOSIROW Size.: 8
 *   If the SQL client `sql-cli` (`mssql`) hasn't been installed yet,
     execute the following command in a terminal to install it:
     ```
+    % brew install npm
     % npm install -g sql-cli
     ```
 
