@@ -63,6 +63,9 @@ my.results <- odbc::dbGetQuery(
     ); 
 
 ###########################
+https://randommer.io/generate-vin
+
+###########################
 ### Disregard the following
 ### Download vPIC backup file (MS SQL backup file) to MS SQL server file system:
 wget https://vpic.nhtsa.dot.gov/api/vPICList_lite_2022_02.bak.zip
