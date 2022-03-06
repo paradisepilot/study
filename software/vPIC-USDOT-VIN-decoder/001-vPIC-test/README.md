@@ -38,14 +38,14 @@ SQLSETPOSIROW Size.: 8
 
 # How to launch an MS SQL Server Docker container
 
+1.  **Launch `Docker Desktop` (assumed installed).**
+
 1.  We assume Docker Desktop has been installed.
     If the MS SQL Docker image hasn't been previously pulled,
     do so with the following command in a terminal:
     ```
     % docker pull mcr.microsoft.com/mssql/server
     ```
-
-1.  **Launch `Docker Desktop` (assumed installed).**
 
 1.  Execute the following command in a terminal to launch the MS SQL Server container:
     ```
