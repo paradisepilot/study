@@ -79,7 +79,7 @@ SQLSETPOSIROW Size.: 8
 In this `vPIC` test pipeline, the restoration of the `vPICList` database
 is actually performed within the main program `main.R`.
 Here, we document the instructions how the restoration could be done
-using the command-line client.
+using the command-line client (in particular, outside of an R session).
 
 *   Download the `vPIC` MS SQL backup file from
     ```
