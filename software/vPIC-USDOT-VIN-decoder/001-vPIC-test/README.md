@@ -4,13 +4,13 @@
 1.  Install `unixodbc`
 
     ```
-    brew install unixodbc
+    % brew install unixodbc
     ```
 
 1.  Install `FreeTDS`
 
     ```
-    brew install FreeTDS
+    % brew install FreeTDS
     ```
 
 1.  Create the file `/usr/local/etc/odbcinst.ini` (needed to connect from R) with the following contents:
@@ -46,13 +46,13 @@ SQLSETPOSIROW Size.: 8
     do so with the following command in a terminal:
 
     ```
-    docker pull mcr.microsoft.com/mssql/server
+    % docker pull mcr.microsoft.com/mssql/server
     ```
 
 1.  Execute the following command in a terminal to launch the MS SQL Server container:
 
     ```
-    docker run -d --name containerName -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=L96175e3EH48MGqw0g' -p 1433:1433 mcr.microsoft.com/mssql/server
+    % docker run -d --name containerName -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=L96175e3EH48MGqw0g' -p 1433:1433 mcr.microsoft.com/mssql/server
     ```
 
 # Connect to MS SQL Server from command-line client (`mssql`)
@@ -61,13 +61,13 @@ SQLSETPOSIROW Size.: 8
     execute the following command in a terminal to install it:
 
     ```
-    npm install -g sql-cli
+    % npm install -g sql-cli
     ```
 
 *   Run the following command in a Linux terminal to connect to the MSSQL server (using the mssql command-line client):
 
     ```
-    $ mssql -u <db_usered> -p <db_passwd>
+    % mssql -u <db_usered> -p <db_passwd>
     ```
 
     The parameters `db_usered` and `db_passwd` must matched the ones used
@@ -75,6 +75,29 @@ SQLSETPOSIROW Size.: 8
     where `db_usered = SA` and `db_passwd = L96175e3EH48MGqw0g`.
 
 # Restoring the `vPICList` database
+
+In this `vPIC` test pipeline, the restoration of the `vPICList` database
+is actually performed within the main program `main.R`.
+Here, we document the instructions how the restoration could be done
+using the command-line client.
+
+*   Download the `vPIC` MS SQL backup file from
+    ```
+    https://vpic.nhtsa.dot.gov/api/
+    ```
+    For example,
+    ```
+    https://vpic.nhtsa.dot.gov/api/vPICList_lite_2022_02.bak.zip
+    ```
+
+*   Copy the downloaded backup file `vPICList_lite_2022_02.bak`
+    to the location
+    `/var/opt/mssql/data/vPICList_lite_2022_02.bak`
+    in file system of the MS SQL Server Docker container,
+    via the following Docker command in a terminal:
+    ```
+    % docker cp <HOST_FILE_SYSTEM_PATH to vPICList_lite_2022_02.bak> containerName:/var/opt/mssql/data/vPICList_lite_2022_02.bak
+    ```
 
 *   To see the names/paths of the files internal to the MS SQL backup file
     (This step can be skipped; it is used only to show the internal files
@@ -96,18 +119,6 @@ SQLSETPOSIROW Size.: 8
     ```
     mssql> restore database vPICList from disk='vPICList_lite_2022_02.bak' with move 'vPICList_Data' to '/var/opt/mssql/data/vPICList.mdf', move 'vPICList_log' to '/var/opt/mssql/data/vPICList.ldf'
     ```
-    Note that for the above mssql command to work,
-    the backup file `vPICList_lite_2022_02.bak`
-    must have been copied to the location
-    `/var/opt/mssql/data/vPICList_lite_2022_02.bak`
-    in file system of the MS SQL Server Docker container.
-
-    This can be done with the following Docker command (if necessary):
-    ```
-    docker cp <HOST_FILE_SYSTEM_PATH to vPICList_lite_2022_02.bak> containerName:/var/opt/mssql/data/vPICList_lite_2022_02.bak
-    ```
-    But the restoration of the backup file can also be done with the R session.
-
 # Some useful `mssql` commands:
 
 *   Check the host name
@@ -146,6 +157,6 @@ SQLSETPOSIROW Size.: 8
 
 # How to kill/stop and remove the MS SQL Server Docker container
   ```
-  docker container kill containerName
-  docker container rm --volumes containerName
+  % docker container kill containerName
+  % docker container rm --volumes containerName
   ```
