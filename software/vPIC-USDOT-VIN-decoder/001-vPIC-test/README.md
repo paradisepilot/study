@@ -77,11 +77,9 @@ SQLSETPOSIROW Size.: 8
 # Some useful `mssql` commands:
 
 *   Check the host name
-
     ```
     mssql> SELECT HOST_NAME()
     ```
-
     The output of this `mssql` command is needed to connect from R.
     More precisely, the output of the this command is supplied to
     `odbc::dbConnect(.)` via the `Server` input parameter.
