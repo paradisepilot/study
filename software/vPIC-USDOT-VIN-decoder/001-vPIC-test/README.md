@@ -27,6 +27,7 @@
     ```
 
     Sample output:
+
     ```
     unixODBC 2.3.9
     DRIVERS............: /etc/odbcinst.ini
