@@ -66,6 +66,18 @@ my.results <- odbc::dbGetQuery(
 https://randommer.io/generate-vin
 
 ###########################
+### View ODBC configuration:
+% odbcinst -j                                 
+unixODBC 2.3.9
+DRIVERS............: /etc/odbcinst.ini
+SYSTEM DATA SOURCES: /etc/odbc.ini
+FILE DATA SOURCES..: /etc/ODBCDataSources
+USER DATA SOURCES..: /Users/kennethchu/.odbc.ini
+SQLULEN Size.......: 8
+SQLLEN Size........: 8
+SQLSETPOSIROW Size.: 8
+
+###########################
 ### Disregard the following
 ### Download vPIC backup file (MS SQL backup file) to MS SQL server file system:
 wget https://vpic.nhtsa.dot.gov/api/vPICList_lite_2022_02.bak.zip
