@@ -35,6 +35,34 @@ mssql> USE vPICList; SELECT ROUTINE_SCHEMA, ROUTINE_NAME FROM INFORMATION_SCHEMA
 mssql> USE vPICList; EXEC [dbo].[spVinDecode] @v = N'3535353', @year = 2020
 
 ###########################
+(base) % more /usr/local/etc/odbcinst.ini 
+
+[ODBC Driver for MS SQL]
+Driver=/usr/local/lib/libtdsodbc.so
+
+###########################
+
+### check host name (needed to connect from R)
+mssql> SELECT HOST_NAME()
+
+###########################
+
+my.connection <- odbc::dbConnect(
+    drv      = odbc::odbc(),
+    Driver   = "ODBC Driver for MS SQL",
+    Server   = "Kenneths-MacBook-Pro.local",
+    Database = "vPICList",
+    UID      = "SA",
+    PWD      = "Dummy20031230Password",
+    Port     = 1433
+    );  
+ 
+my.results <- odbc::dbGetQuery(
+    conn      = my.connection,
+    statement = "USE vPICList; EXEC [dbo].[spVinDecode] @v = N'5N1AN0NU6BC'"
+    ); 
+
+###########################
 ### Disregard the following
 ### Download vPIC backup file (MS SQL backup file) to MS SQL server file system:
 wget https://vpic.nhtsa.dot.gov/api/vPICList_lite_2022_02.bak.zip
