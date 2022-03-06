@@ -13,7 +13,7 @@
     brew install FreeTDS
     ```
 
-1.  Create the file: /usr/local/etc/odbcinst.ini (needed to connect from R) with the following contents:
+1.  Create the file **/usr/local/etc/odbcinst.ini** (needed to connect from R) with the following contents:
 
     ```
     [ODBC Driver for MS SQL]
