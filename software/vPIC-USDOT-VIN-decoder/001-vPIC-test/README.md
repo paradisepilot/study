@@ -1,19 +1,19 @@
 
 # How to set up ODBC connection (in macOS)
 
-1.  Install **unixodbc**
+1.  Install `unixodbc`
 
     ```
     brew install unixodbc
     ```
 
-1.  Install FreeTDS
+1.  Install `FreeTDS`
 
     ```
     brew install FreeTDS
     ```
 
-1.  Create the file **/usr/local/etc/odbcinst.ini** (needed to connect from R) with the following contents:
+1.  Create the file `/usr/local/etc/odbcinst.ini` (needed to connect from R) with the following contents:
 
     ```
     [ODBC Driver for MS SQL]
@@ -22,7 +22,7 @@
 
 ### Examine the ODBC configuration
 
-Once **unixodbc** has been installed, we can view the ODBC configuration via the following command in a terminal:
+Once `unixodbc` has been installed, we can view the ODBC configuration via the following command in a terminal:
 ```
 % odbcinst -j                                 
 ```
@@ -55,7 +55,7 @@ SQLSETPOSIROW Size.: 8
     docker run -d --name containerName -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Dummy20031230Password' -p 1433:1433 mcr.microsoft.com/mssql/server
     ```
 
-# Connect to MS SQL Server from command-line client
+# Connect to MS SQL Server from command-line client (`mssql`)
 
 *   Run the following command in a Linux terminal to connect to the MSSQL server (using the mssql command-line client):
 
@@ -63,7 +63,7 @@ SQLSETPOSIROW Size.: 8
     $ mssql -u <db_usered> -p <db_passwd>
     ```
 
-# Some useful mssql commands:
+# Some useful `mssql` commands:
 
 *   Check the host name (needed to connect from R)
 
