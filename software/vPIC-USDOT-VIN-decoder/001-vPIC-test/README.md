@@ -24,11 +24,6 @@
 
     ```
     % odbcinst -j                                 
-    ```
-
-    Sample output:
-
-    ```
     unixODBC 2.3.9
     DRIVERS............: /etc/odbcinst.ini
     SYSTEM DATA SOURCES: /etc/odbc.ini
