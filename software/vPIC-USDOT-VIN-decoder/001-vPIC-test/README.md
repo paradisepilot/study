@@ -52,23 +52,6 @@ SQLSETPOSIROW Size.: 8
     % docker run -d --name containerName -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=L96175e3EH48MGqw0g' -p 1433:1433 mcr.microsoft.com/mssql/server
     ```
 
-# Connect to MS SQL Server from command-line client (`mssql`)
-
-*   If the SQL client `sql-cli` (`mssql`) hasn't been installed yet,
-    execute the following command in a terminal to install it:
-    ```
-    % npm install -g sql-cli
-    ```
-
-*   Run the following command in a Linux terminal to connect to the MSSQL server (using the mssql command-line client):
-    ```
-    % mssql -u <db_usered> -p <db_passwd>
-    ```
-
-    The parameters `db_usered` and `db_passwd` must matched the ones used
-    to launch the MS SQL Server container; see launch command above,
-    where `db_usered = SA` and `db_passwd = L96175e3EH48MGqw0g`.
-
 # Preparation for restoring the `vPICList` database
 
 *   Download the `vPIC` MS SQL backup file from
@@ -88,6 +71,23 @@ SQLSETPOSIROW Size.: 8
     ```
     % docker cp <HOST_FILE_SYSTEM_PATH to vPICList_lite_2022_02.bak> containerName:/var/opt/mssql/data/vPICList_lite_2022_02.bak
     ```
+
+# Connect to MS SQL Server from command-line client (`mssql`)
+
+*   If the SQL client `sql-cli` (`mssql`) hasn't been installed yet,
+    execute the following command in a terminal to install it:
+    ```
+    % npm install -g sql-cli
+    ```
+
+*   Run the following command in a Linux terminal to connect to the MSSQL server (using the mssql command-line client):
+    ```
+    % mssql -u <db_usered> -p <db_passwd>
+    ```
+
+    The parameters `db_usered` and `db_passwd` must matched the ones used
+    to launch the MS SQL Server container; see launch command above,
+    where `db_usered = SA` and `db_passwd = L96175e3EH48MGqw0g`.
 
 # Restoring the `vPICList` database
 
