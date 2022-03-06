@@ -74,15 +74,23 @@ SQLSETPOSIROW Size.: 8
     to launch the MS SQL Server container; see launch command above,
     where `db_usered = SA` and `db_passwd = L96175e3EH48MGqw0g`.
 
-# Some useful `mssql` commands:
+# Restoring the `vPICList` database
 
-*   Check the host name
+*   To see the names/paths of the files internal to the MS SQL backup file
+    (This step can be skipped; it is used only to show the internal files
+    whose locations in the restored database need to be specificed):
     ```
-    mssql> SELECT HOST_NAME()
+    mssql> RESTORE FILELISTONLY FROM DISK = 'vPICList_lite_2022_02.bak'
     ```
-    The output of this `mssql` command is needed to connect from R.
-    More precisely, the output of the this command is supplied to
-    `odbc::dbConnect(.)` via the `Server` input parameter.
+
+    The output of the above command will indicate that the database `vPICList`
+    has two internal objects (`vPICList_Data`,`vPICList_log`)
+    with default file system locations,
+    which must be appropriately overridden for the restoration of `vPICList`
+    to work.
+    In particular, see the subsequent `mssql` command to see how the locations
+    of the above internal objects can be overridden via parameters in
+    the `restore database` command.
 
 *   Restore the MS SQL backup file, explicitly specifying where the internal files should be saved to in the restored database:
     ```
@@ -100,16 +108,19 @@ SQLSETPOSIROW Size.: 8
     ```
     But the restoration of the backup file can also be done with the R session.
 
+# Some useful `mssql` commands:
+
+*   Check the host name
+    ```
+    mssql> SELECT HOST_NAME()
+    ```
+    The output of this `mssql` command is needed to connect from R.
+    More precisely, the output of the this command is supplied to
+    `odbc::dbConnect(.)` via the `Server` input parameter.
+
 *   See list of all databases:
     ```
     mssql> SELECT name, database_id, create_date FROM sys.databases;
-    ```
-
-*   To see the names/paths of the files internal to the MS SQL backup file
-    (This step can be skipped; it is used only to show the internal files
-    whose locations in the restored database need to be specificed):
-    ```
-    mssql> RESTORE FILELISTONLY FROM DISK = 'vPICList_lite_2022_02.bak'
     ```
 
 *   See all tables in the database vPICList:
