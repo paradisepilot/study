@@ -99,26 +99,26 @@ using the command-line client (in particular, outside of an R session).
     % docker cp <HOST_FILE_SYSTEM_PATH to vPICList_lite_2022_02.bak> containerName:/var/opt/mssql/data/vPICList_lite_2022_02.bak
     ```
 
-*   To see the names/paths of the files internal to the MS SQL backup file
-    (This step can be skipped; it is used only to show the internal files
-    whose locations in the restored database need to be specificed):
+*   Restore the MS SQL backup file,
+    explicitly specifying where the internal files should be saved to
+    in the restored database:
+    ```
+    mssql> restore database vPICList from disk='vPICList_lite_2022_02.bak' with move 'vPICList_Data' to '/var/opt/mssql/data/vPICList.mdf', move 'vPICList_log' to '/var/opt/mssql/data/vPICList.ldf'
+    ```
+
+*   Explanation of the two `move` components of the above `restore database` command:
+
+    The database `vPICList` has two internal objects (`vPICList_Data`,`vPICList_log`),
+    whose default file system locations must be appropriately overridden
+    for the restoration of `vPICList` to be successful.
+
+    The following `mssql` command can be executed prior to the restoration of
+    `vPICList` and it shows the two aforementioned internal objects
+    (inside the backup file):
     ```
     mssql> RESTORE FILELISTONLY FROM DISK = 'vPICList_lite_2022_02.bak'
     ```
 
-    The output of the above command will indicate that the database `vPICList`
-    has two internal objects (`vPICList_Data`,`vPICList_log`)
-    with default file system locations,
-    which must be appropriately overridden for the restoration of `vPICList`
-    to work.
-    In particular, see the subsequent `mssql` command to see how the locations
-    of the above internal objects can be overridden via parameters in
-    the `restore database` command.
-
-*   Restore the MS SQL backup file, explicitly specifying where the internal files should be saved to in the restored database:
-    ```
-    mssql> restore database vPICList from disk='vPICList_lite_2022_02.bak' with move 'vPICList_Data' to '/var/opt/mssql/data/vPICList.mdf', move 'vPICList_log' to '/var/opt/mssql/data/vPICList.ldf'
-    ```
 # Some useful `mssql` commands:
 
 *   Check the host name
