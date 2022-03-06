@@ -69,12 +69,7 @@ SQLSETPOSIROW Size.: 8
     to launch the MS SQL Server container; see launch command above,
     where `db_usered = SA` and `db_passwd = L96175e3EH48MGqw0g`.
 
-# Restoring the `vPICList` database
-
-In this `vPIC` test pipeline, the restoration of the `vPICList` database
-is actually performed within the main program `main.R`.
-Here, we document the instructions how the restoration could be done
-using the command-line client (in particular, outside of an R session).
+# Preparation for restoring the `vPICList` database
 
 *   Download the `vPIC` MS SQL backup file from
     ```
@@ -93,6 +88,13 @@ using the command-line client (in particular, outside of an R session).
     ```
     % docker cp <HOST_FILE_SYSTEM_PATH to vPICList_lite_2022_02.bak> containerName:/var/opt/mssql/data/vPICList_lite_2022_02.bak
     ```
+
+# Restoring the `vPICList` database
+
+In this `vPIC` test pipeline, the restoration of the `vPICList` database
+is actually performed within the main program `main.R`.
+Here, we document the instructions how the restoration could be done
+using the command-line client (in particular, outside of an R session).
 
 *   Restore the MS SQL backup file,
     explicitly specifying where the internal files should be saved to
