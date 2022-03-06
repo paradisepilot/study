@@ -1,5 +1,5 @@
 
-# How to set up ODBC connection
+# How to set up ODBC connection (in macOS)
 
 1.  Install **unixodbc**
 
