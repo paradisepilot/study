@@ -49,7 +49,7 @@ SQLSETPOSIROW Size.: 8
     docker pull mcr.microsoft.com/mssql/server
     ```
 
-1.  Execute the following command in a terminal:
+1.  Execute the following command in a terminal to launch the MS SQL Server container:
 
     ```
     docker run -d --name containerName -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=L96175e3EH48MGqw0g' -p 1433:1433 mcr.microsoft.com/mssql/server
