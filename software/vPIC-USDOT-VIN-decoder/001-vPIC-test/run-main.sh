@@ -32,7 +32,7 @@ cp -r ${codeDIR} ${outputDIR}
 cp    $0         ${outputDIR}/code
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-### Docker Desktop is assumed installed.
+### Launch MS SQL Docker container. (Docker Desktop is assumed installed.)
 
 ### If it hasn't been done, pull MS SQL Server docker image from Microsoft's Docker Hub registry
 ### docker pull mcr.microsoft.com/mssql/server
