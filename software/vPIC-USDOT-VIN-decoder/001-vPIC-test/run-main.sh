@@ -35,16 +35,16 @@ cp    $0         ${outputDIR}/code
 ### Docker Desktop is assumed installed.
 
 ### Pull MS SQL Server docker image from Microsoft's Docker Hub registry
-# docker pull mcr.microsoft.com/mssql/server
+### docker pull mcr.microsoft.com/mssql/server
 
 ### Launch MS SQL Server container
-# docker run -d --name containerName -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Dummy20031230Password' -p 1433:1433 mcr.microsoft.com/mssql/server
+docker run -d --name containerName -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Dummy20031230Password' -p 1433:1433 mcr.microsoft.com/mssql/server
+sleep 10
 
 ### Copy vPIC MS SQL backup file from host file system to Docker container file system:
-# docker cp <path to the file vPICList_lite_2022_02.bak in host file system> containerName:/var/opt/mssql/data/vPICList_lite_2022_02.bak
-# docker cp ${dataDIR}/vPIC/2022-02/vPICList_lite_2022_02.bak                containerName:/var/opt/mssql/data/vPICList_lite_2022_02.bak
-
-# sleep 10
+### docker cp <path to the file vPICList_lite_2022_02.bak in host file system> containerName:/var/opt/mssql/data/vPICList_lite_2022_02.bak
+docker cp ${dataDIR}/vPIC/2022-02/vPICList_lite_2022_02.bak containerName:/var/opt/mssql/data/vPICList_lite_2022_02.bak
+sleep 10
 
 ##################################################
 myRscript=${codeDIR}/main.R
@@ -54,8 +54,10 @@ R --no-save --args ${dataDIR} ${codeDIR} ${outputDIR} < ${myRscript} > ${stdoutF
 
 ##################################################
 ### Kill vPIC Docker containter
-# sleep 10
-# docker kill containerName
+sleep 10
+docker container kill containerName
+sleep 10
+docker container rm --volumes containerName
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 exit

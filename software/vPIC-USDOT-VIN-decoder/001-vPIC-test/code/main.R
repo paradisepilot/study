@@ -38,10 +38,16 @@ my.connection <- odbc::dbConnect(
     drv      = odbc::odbc(),
     Driver   = "ODBC Driver for MS SQL",     # defined in /usr/local/etc/odbcinst.ini
     Server   = "Kenneths-MacBook-Pro.local", # mssql> SELECT HOST_NAME()
-    Database = "vPICList",
     UID      = "SA",
     PWD      = "Dummy20031230Password",
     Port     = 1433
+    );
+
+### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+statement.restore.vPIC <- "restore database vPICList from disk='vPICList_lite_2022_02.bak' with move 'vPICList_Data' to '/var/opt/mssql/data/vPICList.mdf', move 'vPICList_log' to '/var/opt/mssql/data/vPICList.ldf'";
+restore.vPIC <- odbc::dbGetQuery(
+    conn      = my.connection,
+    statement = statement.restore.vPIC
     );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
