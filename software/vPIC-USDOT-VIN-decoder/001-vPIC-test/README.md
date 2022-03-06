@@ -71,7 +71,8 @@ SQLSETPOSIROW Size.: 8
     ```
 
     The parameters `db_usered` and `db_passwd` must matched the ones used
-    to launch the MS SQL Server container; see launch command above.
+    to launch the MS SQL Server container; see launch command above,
+    where `db_usered = SA` and `db_passwd = L96175e3EH48MGqw0g`.
 
 # Some useful `mssql` commands:
 
