@@ -29,11 +29,13 @@ decode.via.vPIC <- function(
             );
 
         temp.value      <- as.data.frame(matrix(data = c(temp.vin,vPIC.results[,'Value'    ]), nrow = 1));
+        temp.created.on <- as.data.frame(matrix(data = c(temp.vin,vPIC.results[,'CreatedOn']), nrow = 1));
+
+        colnames(temp.value)      <- c("VIN",vPIC.results[,'Code']);
+        colnames(temp.created.on) <- c("VIN",vPIC.results[,'Code']);
 
         cat("\nstr(temp.value)\n");
         print( str(temp.value)   );
-
-        temp.created.on <- as.data.frame(matrix(data = c(temp.vin,vPIC.results[,'CreatedOn']), nrow = 1));
 
         cat("\nstr(temp.created.on)\n");
         print( str(temp.created.on)   );
