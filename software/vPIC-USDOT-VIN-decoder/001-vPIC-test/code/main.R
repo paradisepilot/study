@@ -86,6 +86,19 @@ decode.via.vPIC(
 DBI::dbDisconnect(conn = my.connection);
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+write.csv(
+    file      = "output-value.csv",
+    x         = arrow::read_parquet("output-value.parquet"),
+    row.names = FALSE
+    );
+
+write.csv(
+    file      = "output-created-on.csv",
+    x         = arrow::read_parquet("output-created-on.parquet"),
+    row.names = FALSE
+    );
+
+### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 
 ##################################################
 print( warnings() );
