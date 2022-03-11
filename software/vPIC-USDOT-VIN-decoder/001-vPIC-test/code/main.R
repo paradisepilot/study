@@ -34,10 +34,7 @@ for ( code.file in code.files ) {
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-my.seed <- 7654321;
-set.seed(my.seed);
-
-### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+# open connection to MS SQL server
 my.connection <- odbc::dbConnect(
     drv      = odbc::odbc(),
     Driver   = "ODBC Driver for MS SQL",     # defined in /usr/local/etc/odbcinst.ini
@@ -48,6 +45,7 @@ my.connection <- odbc::dbConnect(
     );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+# restore vPIC database from MS SQL backup file
 statement.restore.vPIC <- "restore database vPICList from disk='vPICList_lite_2022_02.bak' with move 'vPICList_Data' to '/var/opt/mssql/data/vPICList.mdf', move 'vPICList_log' to '/var/opt/mssql/data/vPICList.ldf'";
 restore.vPIC <- odbc::dbGetQuery(
     conn      = my.connection,
@@ -55,6 +53,7 @@ restore.vPIC <- odbc::dbGetQuery(
     );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+# hard-coding four fictitious VINs (generated with https://randommer.io/generate-vin) and their respective VIN-11's
 vin.17.s  <- c('1GCPCPC03BW4JTCSZ','1GCJC89U577PANEAH','1GTR2VC03B4V25VG5','1GTHC79U51HZF8UCA');
 vin.11.s  <- as.character(sapply(X = vin.17.s, FUN = function(x) { return(substr(x,1,11)) } ));
 
@@ -62,6 +61,8 @@ vin.11.s  <- as.character(sapply(X = vin.17.s, FUN = function(x) { return(substr
 temp.vins <- c(vin.11.s,vin.17.s);
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+# loop through the VIN-17's and VIN-11's, decoding each one,
+# print output of each to a separate CSV file
 for (temp.vin in temp.vins) {
     my.results <- odbc::dbGetQuery(
         conn      = my.connection,
@@ -75,6 +76,10 @@ for (temp.vin in temp.vins) {
     }
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+# Extract the Value column from the vPIC output of each input VIN,
+# stack up the transposes of these to form a single data.frame, and
+# save the resulting output to disk in parquet format.
+# do the same for the CreatedOn column.
 decode.via.vPIC(
     vPIC.connection   = my.connection,
     input.vins        = temp.vins,
@@ -83,9 +88,13 @@ decode.via.vPIC(
     );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+# close connection to MS SQL server
 DBI::dbDisconnect(conn = my.connection);
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+# read the two previously persisted parquet files, and
+# write them back to disk in CSV format (to facilitate
+# correctness test by inspection)
 write.csv(
     file      = "output-value.csv",
     x         = arrow::read_parquet("output-value.parquet"),

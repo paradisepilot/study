@@ -32,6 +32,11 @@ decode.via.vPIC <- function(
         colnames(temp.value)      <- c("VIN",vPIC.results[,'Code']);
         colnames(temp.created.on) <- c("VIN",vPIC.results[,'Code']);
 
+        # NOTE: The data frame vPIC.results corresponding to different VIN's
+        # may have different number of rows. Hence, the single-row data frame
+        # temp.value may have different number of columns for different VIN's.
+        # plyr::rbind.fill(...) is used here to stack up row vectors potentially
+        # having different columns.
         DF.value      <- plyr::rbind.fill(DF.value,     temp.value     );
         DF.created.on <- plyr::rbind.fill(DF.created.on,temp.created.on);
 
