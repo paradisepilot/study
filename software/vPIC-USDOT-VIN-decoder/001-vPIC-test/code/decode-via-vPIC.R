@@ -21,47 +21,25 @@ decode.via.vPIC <- function(
 
     for (temp.vin in input.vins) {
 
-        cat(paste0("\n### temp.vin = ",temp.vin,"\n"));
-
         vPIC.results <- odbc::dbGetQuery(
             conn      = vPIC.connection,
             statement = paste0("USE vPICList; EXEC [dbo].[spVinDecode] @v = N'",temp.vin,"'")
             );
 
-        temp.value      <- as.data.frame(matrix(data = c(temp.vin,vPIC.results[,'Value'    ]), nrow = 1));
-        temp.created.on <- as.data.frame(matrix(data = c(temp.vin,vPIC.results[,'CreatedOn']), nrow = 1));
+        temp.value      <- as.data.frame(matrix(data = c(temp.vin,as.character(vPIC.results[,'Value'    ])), nrow = 1));
+        temp.created.on <- as.data.frame(matrix(data = c(temp.vin,as.character(vPIC.results[,'CreatedOn'])), nrow = 1));
 
         colnames(temp.value)      <- c("VIN",vPIC.results[,'Code']);
         colnames(temp.created.on) <- c("VIN",vPIC.results[,'Code']);
 
-        cat("\nstr(temp.value)\n");
-        print( str(temp.value)   );
-
-        cat("\nstr(temp.created.on)\n");
-        print( str(temp.created.on)   );
-
-        DF.value <- plyr::rbind.fill(DF.value, temp.value);
-
-        cat("\nstr(DF.value)\n");
-        print( str(DF.value)   );
-
+        DF.value      <- plyr::rbind.fill(DF.value,     temp.value     );
         DF.created.on <- plyr::rbind.fill(DF.created.on,temp.created.on);
-
-        cat("\nstr(DF.created.on)\n");
-        print( str(DF.created.on)   );
 
         }
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    arrow::write_parquet(
-        sink = output.value,
-        x    = DF.value
-        );
-
-    arrow::write_parquet(
-        sink = output.created.on,
-        x    = DF.created.on
-        );
+    arrow::write_parquet(sink = output.value,      x = DF.value     );
+    arrow::write_parquet(sink = output.created.on, x = DF.created.on);
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat(paste0("\n",thisFunctionName,"() quits."));
