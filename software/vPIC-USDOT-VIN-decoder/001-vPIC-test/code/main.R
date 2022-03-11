@@ -20,10 +20,12 @@ setwd( output.directory );
 ##################################################
 require(odbc);
 require(DBI);
+require(arrow);
+require(plyr);
 
 # source supporting R code
 code.files <- c(
-    # "initializePlot.R",
+    "decode-via-vPIC.R"
     );
 
 for ( code.file in code.files ) {
@@ -58,6 +60,8 @@ vin.11.s  <- as.character(sapply(X = vin.17.s, FUN = function(x) { return(substr
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 temp.vins <- c(vin.11.s,vin.17.s);
+
+### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 for (temp.vin in temp.vins) {
     my.results <- odbc::dbGetQuery(
         conn      = my.connection,
@@ -69,6 +73,14 @@ for (temp.vin in temp.vins) {
         row.names = FALSE
         );
     }
+
+### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+decode.via.vPIC(
+    vPIC.connection   = my.connection,
+    input.vins        = temp.vins,
+    output.value      = "output-value.parquet",
+    output.created.on = "output-created-on.parquet"
+    );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 DBI::dbDisconnect(conn = my.connection);
