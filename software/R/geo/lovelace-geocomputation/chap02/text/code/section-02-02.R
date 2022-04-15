@@ -33,6 +33,11 @@ section.02.02 <- function(
     print( summary(world[,'lifeExp'])   );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    world_mini <- world[1:10,1:3];
+    cat("\nworld_mini\n");
+    print( world_mini   );
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat(paste0("\n",thisFunctionName,"() quits."));
     cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###\n");
     return( NULL );
