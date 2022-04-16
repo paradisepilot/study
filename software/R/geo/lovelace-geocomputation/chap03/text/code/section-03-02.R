@@ -10,6 +10,7 @@ section.03.02 <- function(
     require(dplyr);
     require(sf);
     require(spData);
+    require(tidyr);
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat("\nmethods(class = 'sf')\n");
@@ -89,6 +90,98 @@ section.03.02 <- function(
 
     cat("\nsf::st_drop_geometry(continents)\n");
     print( sf::st_drop_geometry(continents)   );
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    cat("\nstr(world)\n");
+    print( str(world)   );
+
+    cat("\nstr(coffee_data)\n");
+    print( str(coffee_data)   );
+
+    world.coffee <- dplyr::left_join(
+        x  = world,
+        y  = coffee_data,
+        by = "name_long"
+        );
+
+    cat("\nstr(world.coffee)\n");
+    print( str(world.coffee)   );
+
+    png.output <- "figure-03-01.png";
+    png(filename = png.output, width = 16, height = 8, units = "in", res = 300 ); #, bg = "transparent");
+    plot(x = world.coffee["coffee_production_2017"]);
+    dev.off();
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    world.coffee.inner <- dplyr::inner_join(
+        x  = world,
+        y  = coffee_data,
+        by = "name_long"
+        );
+
+    cat("\nstr(world.coffee.inner)\n");
+    print( str(world.coffee.inner)   );
+
+    cat("\nsetdiff(world$name_long,coffee_data$name_long)\n");
+    print( setdiff(world$name_long,coffee_data$name_long)   );
+
+    cat("\nsetdiff(coffee_data$name_long,world$name_long)\n");
+    print( setdiff(coffee_data$name_long,world$name_long)   );
+
+    coffee_data$name_long <- gsub(
+        x           = coffee_data$name_long,
+        pattern     = "^Congo, Dem\\. Rep\\. of$",
+        replacement = "Democratic Republic of the Congo"
+        );
+
+    world.coffee.inner <- dplyr::inner_join(
+        x  = world,
+        y  = coffee_data,
+        by = "name_long"
+        );
+
+    cat("\nstr(world.coffee.inner)\n");
+    print( str(world.coffee.inner)   );
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    world.pop.density <- world %>%
+        dplyr::mutate(
+            pop.densituy = pop / area_km2
+            );
+
+    cat("\nstr(world.pop.density) -- mutate\n");
+    print( str(world.pop.density)   );
+
+    world.pop.density <- world %>%
+        dplyr::transmute(
+            pop.densituy = pop / area_km2
+            );
+
+    cat("\nstr(world.pop.density) -- transmute\n");
+    print( str(world.pop.density)   );
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    world.unite <- world %>%
+        tidyr::unite(
+            col = "continent:region_un",
+            continent:region_un,
+            sep = ":",
+            remove = TRUE # remove original columns
+            );
+
+    cat("\nstr(world.unite)\n");
+    print( str(world.unite)   );
+
+    world.separate <- world.unite %>%
+        tidyr::separate(
+            col    = "continent:region_un",
+            into   = c("continent","region_un"),
+            sep    = ":",
+            remove = TRUE # remove original columns
+            );
+
+    cat("\nstr(world.separate)\n");
+    print( str(world.separate)   );
 
     # ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     # png.output <- "figure-02-03.png";

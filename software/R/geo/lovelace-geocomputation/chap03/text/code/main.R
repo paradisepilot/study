@@ -22,6 +22,7 @@ library(rgdal);
 library(sf);
 library(spData);
 library(spDataLarge);
+library(tidyr);
 
 # source supporting R code
 code.files <- c(
