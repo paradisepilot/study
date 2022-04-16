@@ -1,0 +1,308 @@
+
+section.03.02 <- function(
+    ) {
+
+    thisFunctionName <- "section.02.02";
+    cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###");
+    cat(paste0("\n",thisFunctionName,"() starts.\n\n"));
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    require(dplyr);
+    require(sf);
+    require(spData);
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    cat("\nmethods(class = 'sf')\n");
+    print( methods(class = 'sf')   );
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    cat("\nclass(spData::world)\n");
+    print( class(spData::world)   );
+
+    cat("\nstr(spData::world)\n");
+    print( str(spData::world)   );
+
+    cat("\ndim(spData::world)\n");
+    print( dim(spData::world)   );
+
+    cat("\nnrow(spData::world)\n");
+    print( nrow(spData::world)   );
+
+    cat("\nncol(spData::world)\n");
+    print( ncol(spData::world)   );
+
+    cat("\ncolnames(spData::world)\n");
+    print( colnames(spData::world)   );
+
+    cat("\nclass(sf::st_drop_geometry(spData::world))\n");
+    print( class(sf::st_drop_geometry(spData::world))   );
+
+    cat("\nstr(sf::st_drop_geometry(spData::world))\n");
+    print( str(sf::st_drop_geometry(spData::world))   );
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    world.1 <- world %>% dplyr::select(name_long, pop);
+    cat("\ncolnames(world.1)\n");
+    print( colnames(world.1)   );
+
+    world.2 <- world %>% dplyr::select(name_long:pop);
+    cat("\ncolnames(world.2)\n");
+    print( colnames(world.2)   );
+
+    world.3 <- world %>% dplyr::select(-subregion, -area_km2);
+    cat("\ncolnames(world.3)\n");
+    print( colnames(world.3)   );
+
+    world.4 <- world %>% dplyr::select(country = name_long, population.size = pop);
+    cat("\ncolnames(world.4)\n");
+    print( colnames(world.4)   );
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    vector.pop <- world %>% dplyr::pull(pop);
+    cat("\nstr(vector.pop)\n");
+    print( str(vector.pop)   );
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    countries.3.to.5 <- world %>% dplyr::slice(3:5);
+    cat("\nstr(countries.3.to.5)\n");
+    print( str(countries.3.to.5)   );
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    world.6 <- world %>% dplyr::filter(lifeExp > 82);
+    cat("\nstr(world.6)\n");
+    print( str(world.6)   );
+
+    world.7 <- world %>%
+        dplyr::filter(continent == "Asia") %>%
+        dplyr::select(name_long, continent) %>%
+        dplyr::slice(1:5);
+    cat("\nstr(world.7)\n");
+    print( str(world.7)   );
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    continents <- world %>%
+        dplyr::select(continent,pop) %>%
+        dplyr::group_by(continent) %>%
+        dplyr::summarize(population.size = sum(pop, na.rm = TRUE), n.countries = n());
+    cat("\nstr(continents)\n");
+    print( str(continents)   );
+
+    cat("\nsf::st_drop_geometry(continents)\n");
+    print( sf::st_drop_geometry(continents)   );
+
+    # ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    # png.output <- "figure-02-03.png";
+    # png(filename = png.output, width = 16, height = 8, units = "in", res = 300, bg = "transparent");
+    # plot(world);
+    # dev.off();
+    #
+    # ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    # cat("\nsummary(world[,'lifeExp'])\n");
+    # print( summary(world[,'lifeExp'])   );
+    #
+    # ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    # world_mini <- world[1:10,1:3];
+    # cat("\nworld_mini\n");
+    # print( world_mini   );
+    #
+    # ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    # png.output <- "figure-02-04-left.png";
+    # png(filename = png.output, width = 16, height = 8, units = "in", res = 300, bg = "transparent");
+    # plot(world[3:6]);
+    # dev.off();
+    #
+    # ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    # png.output <- "figure-02-04-right.png";
+    # png(filename = png.output, width = 16, height = 8, units = "in", res = 300, bg = "transparent");
+    # plot(world[,'pop']);
+    # dev.off();
+    #
+    # ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    # png.output <- "figure-02-04-z-not-shown.png";
+    #
+    # cat("\nstr(world[,'continent'])\n");
+    # print( str(world[,'continent'])   );
+    #
+    # cat("\nst_drop_geometry(world[,'continent'])\n");
+    # print( st_drop_geometry(world[,'continent'])   );
+    #
+    # cat("\nworld[,'continent']\n");
+    # print( world[,'continent']   );
+    #
+    # # world_asia <- world[world$continent == "Asia",];
+    # world_asia <- world[st_drop_geometry(world[,'continent']) == "Asia",];
+    # asia       <- st_union(world_asia);
+    #
+    # png(filename = png.output, width = 16, height = 8, units = "in", res = 300, bg = "transparent");
+    # plot(world[,'pop'], reset = FALSE);
+    # plot(asia, add = TRUE, col = "red");
+    # dev.off();
+    #
+    # ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    # png.output <- "figure-02-05.png";
+    # world_centroids <- st_centroid(world, of_largest = TRUE);
+    # png(filename = png.output, width = 16, height = 8, units = "in", res = 300, bg = "transparent");
+    # plot(world[,'continent'], reset = FALSE);
+    # plot(
+    #     add = TRUE,
+    #     x   = st_geometry(world_centroids),
+    #     cex = sqrt(as.numeric(as.data.frame(st_drop_geometry(world[,'pop']))[,1])) / 5000
+    #     );
+    # dev.off();
+    #
+    # ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    # png.output <- "figure-02-06.png";
+    # india <- world[st_drop_geometry(world[,'name_long']) == "India",];
+    # png(filename = png.output, width = 16, height = 8, units = "in", res = 300 ); #, bg = "transparent");
+    # plot(reset = FALSE, x = st_geometry(india), expandBB = c(0, 0.2, 0.1, 1), col = "gray", lwd = 5);
+    # plot(add = TRUE, x = world_asia[0]);
+    # dev.off();
+    #
+    # ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    # my.points <- list(
+    #     sf::st_point(x = c(5,2)                 ),
+    #     sf::st_point(x = c(5,2,3)               ),
+    #     sf::st_point(x = c(5,2,1),   dim = 'XYM'),
+    #     sf::st_point(x = c(5,2,3,1)             )
+    #     );
+    #
+    # for ( my.point in my.points ) {
+    #     cat("\n");
+    #     print( class( my.point) );
+    #     print( typeof(my.point) );
+    #     print( str(   my.point) );
+    #     }
+    # cat("\n");
+    #
+    # ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    # multipoint.as.matrix <- rbind(
+    #     c(5,2),
+    #     c(1,3),
+    #     c(3,4),
+    #     c(3,2)
+    #     );
+    #
+    # linestring.as.matrix <- rbind(
+    #     c(1,5),
+    #     c(4,4),
+    #     c(4,1),
+    #     c(2,2),
+    #     c(3,2)
+    #     );
+    #
+    # polygon.as.list.of.matrices <- list(
+    #     outer.boundary = rbind(c(1,5),c(2,2),c(4,1),c(4,4),c(1,5)),
+    #     inner.boundary = rbind(c(2,4),c(3,4),c(3,3),c(2,3),c(2,4))
+    #     );
+    #
+    # multilinestring.as.list.of.matrices <- list(
+    #     rbind(c(1,5),c(4,4),c(4,1),c(2,2),c(3,2)),
+    #     rbind(c(1,2),c(2,4))
+    #     );
+    #
+    # multipolygon.as.list.of.lists.of.matrices <- list(
+    #     polygon.as.list.of.matrices,
+    #     list(rbind(c(0,2),c(1,2),c(1,3),c(0,3),c(0,2)))
+    #     );
+    #
+    # list.geometry.collection <- list(
+    #     multiple.points       = st_multipoint(          multipoint.as.matrix                   ),
+    #     piecewise.linear.path = st_linestring(          linestring.as.matrix                   ),
+    #     polygon.with.hole     = st_polygon(                polygon.as.list.of.matrices         ),
+    #     multi.linestring      = st_multilinestring(multilinestring.as.list.of.matrices         ),
+    #     multi.polygon         = st_multipolygon(      multipolygon.as.list.of.lists.of.matrices)
+    #     );
+    #
+    # sf.geometry.collection <- st_geometrycollection(list.geometry.collection);
+    #
+    # cat("\nclass(sf.geometry.collection)\n");
+    # print( class(sf.geometry.collection)   );
+    #
+    # cat("\nstr(sf.geometry.collection)\n");
+    # print( str(sf.geometry.collection)   );
+    #
+    # ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    # point.1 <- sf::st_point(c(5,2));
+    # point.2 <- sf::st_point(c(1,3));
+    #
+    # polygon.1 <- sf::st_polygon(list(
+    #     outer.boundary = rbind(c(1,5),c(2,2),c(4,1),c(4,4),c(1,5)),
+    #     inner.boundary = rbind(c(2,4),c(3,4),c(3,3),c(2,3),c(2,4))
+    #     ));
+    #
+    # polygon.2 <- sf::st_polygon(list(
+    #     outer.boundary = rbind(c(0,2),c(1,2),c(1,3),c(0,3),c(0,2))
+    #     ));
+    #
+    # multilinestring.1 <- sf::st_multilinestring(list(
+    #     rbind(c(1,5),c(4,4),c(4,1),c(2,2),c(3,2)),
+    #     rbind(c(1,2),c(2,4))
+    #     ));
+    #
+    # multilinestring.2 <- sf::st_multilinestring(list(
+    #     rbind(c(2,9),c(7,9),c(5,6),c(4,7),c(2,9)),
+    #     rbind(c(1,7),c(3,8))
+    #     ));
+    #
+    # sfc.my.simple.feature.column <- sf::st_sfc(
+    #     point.1, point.2,
+    #     polygon.1,polygon.2,
+    #     multilinestring.1,multilinestring.2
+    #     );
+    #
+    # cat("\nclass(sfc.my.simple.feature.column)\n");
+    # print( class(sfc.my.simple.feature.column)   );
+    #
+    # cat("\nst_geometry_type(sfc.my.simple.feature.column)\n");
+    # print( st_geometry_type(sfc.my.simple.feature.column)   );
+    #
+    # cat("\nstr(sfc.my.simple.feature.column)\n");
+    # print( str(sfc.my.simple.feature.column)   );
+    #
+    # cat("\nsfc.my.simple.feature.column\n");
+    # print( sfc.my.simple.feature.column   );
+    #
+    # cat("\nst_crs(sfc.my.simple.feature.column)\n");
+    # print( st_crs(sfc.my.simple.feature.column)   );
+    #
+    # sfc.my.simple.feature.column <- sf::st_sfc(
+    #     point.1, point.2,
+    #     polygon.1,polygon.2,
+    #     multilinestring.1,multilinestring.2,
+    #     crs = 4326
+    #     );
+    #
+    # cat("\nsfc.my.simple.feature.column\n");
+    # print( sfc.my.simple.feature.column   );
+    #
+    # cat("\nst_crs(sfc.my.simple.feature.column)\n");
+    # print( st_crs(sfc.my.simple.feature.column)   );
+    #
+    # ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    # london.point  <- sf::st_point(c(0.1,51.5));
+    # london.geom   <- sf::st_sfc(london.point, crs = 4326);
+    # london.attrib <- data.frame(
+    #     name        = "London",
+    #     temperature = 25,
+    #     date        = as.Date("2017-06-21")
+    #     );
+    #
+    # london.sf <- sf::st_sf(
+    #     london.attrib,
+    #     geometry = london.geom
+    #     );
+    #
+    # cat("\nclass(london.sf)\n");
+    # print( class(london.sf)   );
+    #
+    # cat("\nlondon.sf\n");
+    # print( london.sf   );
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    cat(paste0("\n",thisFunctionName,"() quits."));
+    cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###\n");
+    return( NULL );
+
+    }
+
+##################################################
