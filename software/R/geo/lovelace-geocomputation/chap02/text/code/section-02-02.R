@@ -71,6 +71,18 @@ section.02.02 <- function(
     dev.off();
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    png.output <- "figure-02-05.png";
+    world_centroids <- st_centroid(world, of_largest = TRUE);
+    png(filename = png.output, width = 16, height = 8, units = "in", res = 300, bg = "transparent");
+    plot(world[,'continent'], reset = FALSE);
+    plot(
+        add = TRUE,
+        x   = st_geometry(world_centroids),
+        cex = sqrt(as.numeric(as.data.frame(st_drop_geometry(world[,'pop']))[,1])) / 5000
+        );
+    dev.off();
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat(paste0("\n",thisFunctionName,"() quits."));
     cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###\n");
     return( NULL );
