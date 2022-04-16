@@ -91,6 +91,69 @@ section.02.02 <- function(
     dev.off();
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    my.points <- list(
+        sf::st_point(x = c(5,2)                 ),
+        sf::st_point(x = c(5,2,3)               ),
+        sf::st_point(x = c(5,2,1),   dim = 'XYM'),
+        sf::st_point(x = c(5,2,3,1)             )
+        );
+
+    for ( my.point in my.points ) {
+        cat("\n");
+        print( class( my.point) );
+        print( typeof(my.point) );
+        print( str(   my.point) );
+        }
+    cat("\n");
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    multipoint.as.matrix <- rbind(
+        c(5,2),
+        c(1,3),
+        c(3,4),
+        c(3,2)
+        );
+
+    linestring.as.matrix <- rbind(
+        c(1,5),
+        c(4,4),
+        c(4,1),
+        c(2,2),
+        c(3,2)
+        );
+
+    polygon.as.list.of.matrices <- list(
+        outer.boundary = rbind(c(1,5),c(2,2),c(4,1),c(4,4),c(1,5)),
+        inner.boundary = rbind(c(2,4),c(3,4),c(3,3),c(2,3),c(2,4))
+        );
+
+    multilinestring.as.list.of.matrices <- list(
+        rbind(c(1,5),c(4,4),c(4,1),c(2,2),c(3,2)),
+        rbind(c(1,2),c(2,4))
+        );
+
+    multipolygon.as.list.of.lists.of.matrices <- list(
+        polygon.as.list.of.matrices,
+        list(rbind(c(0,2),c(1,2),c(1,3),c(0,3),c(0,2)))
+        );
+
+    list.geometry.collection <- list(
+        multiple.points       = st_multipoint(          multipoint.as.matrix                   ),
+        piecewise.linear.path = st_linestring(          linestring.as.matrix                   ),
+        polygon.with.hole     = st_polygon(                polygon.as.list.of.matrices         ),
+        multi.linestring      = st_multilinestring(multilinestring.as.list.of.matrices         ),
+        multi.polygon         = st_multipolygon(      multipolygon.as.list.of.lists.of.matrices)
+        );
+
+    sf.geometry.collection <- st_geometrycollection(list.geometry.collection);
+
+    cat("\nclass(sf.geometry.collection)\n");
+    print( class(sf.geometry.collection)   );
+
+    cat("\nstr(sf.geometry.collection)\n");
+    print( str(sf.geometry.collection)   );
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat(paste0("\n",thisFunctionName,"() quits."));
     cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###\n");
     return( NULL );
