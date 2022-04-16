@@ -16,15 +16,17 @@ start.proc.time <- proc.time();
 setwd( output.directory );
 
 ##################################################
-library(sf);
 library(raster);
+library(rgdal);
+library(sf);
 library(spData);
 library(spDataLarge);
 
 # source supporting R code
 code.files <- c(
     "section-02-02.R",
-    "section-02-03.R"
+    "section-02-03.R",
+    "section-02-04.R"
     );
 
 for ( code.file in code.files ) {
@@ -38,7 +40,8 @@ set.seed(my.seed);
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 # section.02.02();
-section.02.03();
+# section.02.03();
+section.02.04();
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 
