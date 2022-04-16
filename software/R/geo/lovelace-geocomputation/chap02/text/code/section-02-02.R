@@ -61,9 +61,8 @@ section.02.02 <- function(
     cat("\nworld[,'continent']\n");
     print( world[,'continent']   );
 
-    world_asia <- world;
-    # world_asia <- world_asia[world$continent == "Asia",];
-    world_asia <- world_asia[st_drop_geometry(world[,'continent']) == "Asia",];
+    # world_asia <- world[world$continent == "Asia",];
+    world_asia <- world[st_drop_geometry(world[,'continent']) == "Asia",];
     asia       <- st_union(world_asia);
 
     png(filename = png.output, width = 16, height = 8, units = "in", res = 300, bg = "transparent");
