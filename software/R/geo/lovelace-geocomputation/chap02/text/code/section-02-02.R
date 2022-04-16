@@ -154,6 +154,63 @@ section.02.02 <- function(
     print( str(sf.geometry.collection)   );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    point.1 <- sf::st_point(c(5,2));
+    point.2 <- sf::st_point(c(1,3));
+
+    polygon.1 <- sf::st_polygon(list(
+        outer.boundary = rbind(c(1,5),c(2,2),c(4,1),c(4,4),c(1,5)),
+        inner.boundary = rbind(c(2,4),c(3,4),c(3,3),c(2,3),c(2,4))
+        ));
+
+    polygon.2 <- sf::st_polygon(list(
+        outer.boundary = rbind(c(0,2),c(1,2),c(1,3),c(0,3),c(0,2))
+        ));
+
+    multilinestring.1 <- sf::st_multilinestring(list(
+        rbind(c(1,5),c(4,4),c(4,1),c(2,2),c(3,2)),
+        rbind(c(1,2),c(2,4))
+        ));
+
+    multilinestring.2 <- sf::st_multilinestring(list(
+        rbind(c(2,9),c(7,9),c(5,6),c(4,7),c(2,9)),
+        rbind(c(1,7),c(3,8))
+        ));
+
+    sfc.my.simple.feature.column <- sf::st_sfc(
+        point.1, point.2,
+        polygon.1,polygon.2,
+        multilinestring.1,multilinestring.2
+        );
+
+    cat("\nclass(sfc.my.simple.feature.column)\n");
+    print( class(sfc.my.simple.feature.column)   );
+
+    cat("\nst_geometry_type(sfc.my.simple.feature.column)\n");
+    print( st_geometry_type(sfc.my.simple.feature.column)   );
+
+    cat("\nstr(sfc.my.simple.feature.column)\n");
+    print( str(sfc.my.simple.feature.column)   );
+
+    cat("\nsfc.my.simple.feature.column\n");
+    print( sfc.my.simple.feature.column   );
+
+    cat("\nst_crs(sfc.my.simple.feature.column)\n");
+    print( st_crs(sfc.my.simple.feature.column)   );
+
+    sfc.my.simple.feature.column <- sf::st_sfc(
+        point.1, point.2,
+        polygon.1,polygon.2,
+        multilinestring.1,multilinestring.2,
+        crs = 4326
+        );
+
+    cat("\nsfc.my.simple.feature.column\n");
+    print( sfc.my.simple.feature.column   );
+
+    cat("\nst_crs(sfc.my.simple.feature.column)\n");
+    print( st_crs(sfc.my.simple.feature.column)   );
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat(paste0("\n",thisFunctionName,"() quits."));
     cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###\n");
     return( NULL );
