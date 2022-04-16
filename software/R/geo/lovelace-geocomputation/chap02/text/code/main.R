@@ -23,7 +23,8 @@ library(spDataLarge);
 
 # source supporting R code
 code.files <- c(
-    "section-02-02.R"
+    "section-02-02.R",
+    "section-02-03.R"
     );
 
 for ( code.file in code.files ) {
@@ -36,7 +37,8 @@ my.seed <- 7654321;
 set.seed(my.seed);
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-section.02.02();
+# section.02.02();
+section.02.03();
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 
