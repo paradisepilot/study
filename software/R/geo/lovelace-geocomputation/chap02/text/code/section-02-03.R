@@ -8,6 +8,7 @@ section.02.03 <- function(
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     require(raster);
+    require(rgdal);
     require(spData);
     require(spDataLarge);
 
@@ -23,6 +24,13 @@ section.02.03 <- function(
     png(filename = png.output, width = 16, height = 8, units = "in", res = 300, bg = "white");
     plot(raster.object);
     dev.off();
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    cat("\nraster::writeFormats()\n");
+    print( raster::writeFormats()   );
+
+    cat("\nrgdal::gdalDrivers()\n");
+    print( rgdal::gdalDrivers()   );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     raster.object.2 <- raster::raster(
