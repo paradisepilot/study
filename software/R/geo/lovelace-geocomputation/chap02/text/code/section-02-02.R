@@ -211,6 +211,26 @@ section.02.02 <- function(
     print( st_crs(sfc.my.simple.feature.column)   );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    london.point  <- sf::st_point(c(0.1,51.5));
+    london.geom   <- sf::st_sfc(london.point, crs = 4326);
+    london.attrib <- data.frame(
+        name        = "London",
+        temperature = 25,
+        date        = as.Date("2017-06-21")
+        );
+
+    london.sf <- sf::st_sf(
+        london.attrib,
+        geometry = london.geom
+        );
+
+    cat("\nclass(london.sf)\n");
+    print( class(london.sf)   );
+
+    cat("\nlondon.sf\n");
+    print( london.sf   );
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat(paste0("\n",thisFunctionName,"() quits."));
     cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###\n");
     return( NULL );
