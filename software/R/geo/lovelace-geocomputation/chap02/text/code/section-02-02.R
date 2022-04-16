@@ -38,6 +38,18 @@ section.02.02 <- function(
     print( world_mini   );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    png.output <- "figure-02-04-left.png";
+    png(filename = png.output, width = 16, height = 8, units = "in", res = 300, bg = "transparent");
+    plot(world[3:6]);
+    dev.off();
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    png.output <- "figure-02-04-right.png";
+    png(filename = png.output, width = 16, height = 8, units = "in", res = 300, bg = "transparent");
+    plot(world[,'pop']);
+    dev.off();
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat(paste0("\n",thisFunctionName,"() quits."));
     cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###\n");
     return( NULL );
