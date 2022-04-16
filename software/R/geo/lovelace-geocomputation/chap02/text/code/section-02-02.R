@@ -83,6 +83,14 @@ section.02.02 <- function(
     dev.off();
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    png.output <- "figure-02-06.png";
+    india <- world[st_drop_geometry(world[,'name_long']) == "India",];
+    png(filename = png.output, width = 16, height = 8, units = "in", res = 300 ); #, bg = "transparent");
+    plot(reset = FALSE, x = st_geometry(india), expandBB = c(0, 0.2, 0.1, 1), col = "gray", lwd = 5);
+    plot(add = TRUE, x = world_asia[0]);
+    dev.off();
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     cat(paste0("\n",thisFunctionName,"() quits."));
     cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###\n");
     return( NULL );
