@@ -265,6 +265,37 @@ section.04.02 <- function(
     print( agg.aw$value   );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    nz.highest <- nz_height %>%
+        dplyr::top_n(n = 1, wt = elevation);
+
+    cat("\nstr(nz.highest)\n");
+    print( str(nz.highest)   );
+
+    canterbury.centroid <- sf::st_centroid(canterbury);
+
+    cat("\nstr(canterbury.centroid)\n");
+    print( str(canterbury.centroid)   );
+
+    cat("\nsf::st_distance(nz.highest,canterbury.centroid)\n");
+    print( sf::st_distance(nz.highest,canterbury.centroid)   );
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    canter.otag <- nz %>% dplyr::filter( grepl("(Canter|Otag)",Name) );
+
+    cat("\nstr(canter.otag)\n");
+    print( str(canter.otag)   );
+
+    cat("\nsf::st_distance( nz_height[1:3,] , canter.otag )\n");
+    print( sf::st_distance( nz_height[1:3,] , canter.otag )   );
+
+    png.output <- "figure-canter-otag.png";
+    png(filename = png.output, width = 16, height = 8, units = "in", res = 300 ); #, bg = "transparent");
+    # par(bg = 'cadetblue2');
+    plot(reset = FALSE, x = sf::st_geometry(canter.otag)[2]);
+    plot(add   = TRUE,  x = sf::st_geometry(nz_height)[2:3]);
+    dev.off();
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     # cat("\nclass(spData::world)\n");
     # print( class(spData::world)   );
     #
