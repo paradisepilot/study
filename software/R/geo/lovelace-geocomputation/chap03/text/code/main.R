@@ -27,9 +27,7 @@ library(tidyr);
 # source supporting R code
 code.files <- c(
     "section-03-02.R",
-    "section-03-03.R",
-    "section-03-04.R",
-    "section-03-05.R"
+    "section-03-03.R"
     );
 
 for ( code.file in code.files ) {
@@ -42,10 +40,8 @@ my.seed <- 7654321;
 set.seed(my.seed);
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-section.03.02();
-# section.03.03();
-# section.03.04();
-# section.03.05();
+# section.03.02();
+section.03.03();
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 
