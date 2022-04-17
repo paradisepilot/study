@@ -2,7 +2,7 @@
 section.03.02 <- function(
     ) {
 
-    thisFunctionName <- "section.02.02";
+    thisFunctionName <- "section.03.02";
     cat("\n### ~~~~~~~~~~~~~~~~~~~~ ###");
     cat(paste0("\n",thisFunctionName,"() starts.\n\n"));
 
