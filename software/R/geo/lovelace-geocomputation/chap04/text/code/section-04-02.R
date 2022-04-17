@@ -117,6 +117,57 @@ section.04.02 <- function(
     print( lengths(sf::st_is_within_distance(x = sfc.points, y = sfc.polygon, dist = 0.9)) > 0   );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    set.seed(2018);
+    bb.world <- sf::st_bbox(world);
+
+    cat("\nbb.world\n");
+    print( bb.world   );
+
+    DF.random <- tibble(
+        x = runif(n = 10, min = bb.world['xmin'], max = bb.world['xmax']),
+        y = runif(n = 10, min = bb.world['ymin'], max = bb.world['ymax'])
+        );
+
+    random.points <- DF.random %>%
+        st_as_sf(coords = c("x","y")) %>%
+        st_set_crs(4326);
+
+    cat("\nstr(random.points)\n");
+    print( str(random.points)   );
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    world.random <- world[random.points,];
+
+    cat("\nstr(world.random)\n");
+    print( str(world.random)   );
+
+    selected.countries <- sf::st_join(x = random.points, y = world["name_long"]);
+
+    cat("\nstr(selected.countries)\n");
+    print( str(selected.countries)   );
+
+    png.output <- "figure-04-03a.png";
+    png(filename = png.output, width = 16, height = 8, units = "in", res = 300 ); #, bg = "transparent");
+    par(bg = 'cadetblue2');
+    plot(reset = FALSE, x = world[,'name_long'], col = "white");
+    plot(add   = TRUE,  x = random.points, pch = 4, col = "black", cex = 3.0, lwd = 5);
+    dev.off();
+
+    png.output <- "figure-04-03b.png";
+    png(filename = png.output, width = 16, height = 8, units = "in", res = 300 ); #, bg = "transparent");
+    par(bg = 'cadetblue2');
+    plot(reset = FALSE, x = world[,'name_long'], col = "white");
+    plot(add   = TRUE,  x = world.random[,'name_long']);
+    dev.off();
+
+    png.output <- "figure-04-03c.png";
+    png(filename = png.output, width = 16, height = 8, units = "in", res = 300 ); #, bg = "transparent");
+    par(bg = 'cadetblue2');
+    plot(reset = FALSE, x = world[,'name_long'], col = "white");
+    plot(add   = TRUE,  x = selected.countries[,'name_long'], pch = 4, cex = 3.0, lwd = 5);
+    dev.off();
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     # cat("\nclass(spData::world)\n");
     # print( class(spData::world)   );
     #
