@@ -226,6 +226,18 @@ section.04.02 <- function(
     dev.off();
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    nz_avghgt <- nz %>%
+        sf::st_join( nz_height ) %>%
+        dplyr::group_by( Name ) %>%
+        dplyr::summarize( mean.elevation = mean(elevation, na.rm = TRUE) );
+
+    png.output <- "figure-04-05.png";
+    png(filename = png.output, width = 16, height = 8, units = "in", res = 300 ); #, bg = "transparent");
+    par(bg = 'cadetblue2');
+    plot(x = nz_avghgt[,'mean.elevation']);
+    dev.off();
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     # cat("\nclass(spData::world)\n");
     # print( class(spData::world)   );
     #
