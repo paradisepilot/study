@@ -168,6 +168,64 @@ section.04.02 <- function(
     dev.off();
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    cat("\nstr(cycle_hire)\n");
+    print( str(cycle_hire)   );
+
+    cat("\nstr(cycle_hire_osm)\n");
+    print( str(cycle_hire_osm)   );
+
+    cat("\nst_crs(cycle_hire)\n");
+    print( st_crs(cycle_hire)   );
+
+    cat("\nst_crs(cycle_hire_osm)\n");
+    print( st_crs(cycle_hire_osm)   );
+
+    png.output <- "figure-04-04.png";
+    png(filename = png.output, width = 16, height = 8, units = "in", res = 300 ); #, bg = "transparent");
+    # par(bg = 'cadetblue2');
+    plot(reset = FALSE, x = st_geometry(cycle_hire),     col = "blue");
+    plot(add   = TRUE,  x = st_geometry(cycle_hire_osm), col = "red", pch = 4);
+    dev.off();
+
+    cat("\nany(st_touches(x = cycle_hire, y = cycle_hire_osm, sparse = FALSE))\n");
+    print( any(st_touches(x = cycle_hire, y = cycle_hire_osm, sparse = FALSE))   );
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    reprojected.cycle_hire     <- sf::st_transform(x = cycle_hire,     crs = 27700);
+    reprojected.cycle_hire_osm <- sf::st_transform(x = cycle_hire_osm, crs = 27700);
+
+    cat("\nsummary(base::lengths(sf::st_is_within_distance(x = reprojected.cycle_hire, y = reprojected.cycle_hire_osm, dist = 20)) > 0)\n");
+    print( summary(base::lengths(sf::st_is_within_distance(x = reprojected.cycle_hire, y = reprojected.cycle_hire_osm, dist = 20)) > 0)   );
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    temp.join <- sf::st_join(x = reprojected.cycle_hire, y = reprojected.cycle_hire_osm, join = sf::st_is_within_distance, dist = 20);
+
+    cat("\nnrow(reprojected.cycle_hire)\n");
+    print( nrow(reprojected.cycle_hire)   );
+
+    cat("\nnrow(temp.join)\n");
+    print( nrow(temp.join)   );
+
+    temp.join <- temp.join %>%
+        dplyr::group_by( id ) %>%
+        dplyr::summarize( capacity = mean(capacity) );
+
+    cat("\nnrow(temp.join) == nrow(reprojected.cycle_hire)\n");
+    print( nrow(temp.join) == nrow(reprojected.cycle_hire)   );
+
+    png.output <- "figure-capacity-cycle-hire-osm.png";
+    png(filename = png.output, width = 16, height = 8, units = "in", res = 300 ); #, bg = "transparent");
+    # par(bg = 'cadetblue2');
+    plot(cycle_hire_osm["capacity"], pch = 19);
+    dev.off();
+
+    png.output <- "figure-capacity-temp-join.png";
+    png(filename = png.output, width = 16, height = 8, units = "in", res = 300 ); #, bg = "transparent");
+    # par(bg = 'cadetblue2');
+    plot(temp.join["capacity"], pch = 19);
+    dev.off();
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     # cat("\nclass(spData::world)\n");
     # print( class(spData::world)   );
     #
