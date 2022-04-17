@@ -238,6 +238,33 @@ section.04.02 <- function(
     dev.off();
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    cat("\nstr(incongruent)\n");
+    print( str(incongruent)   );
+
+    cat("\nstr(aggregating_zones)\n");
+    print( str(aggregating_zones)   );
+
+    png.output <- "figure-04-06.png";
+    png(filename = png.output, width = 16, height = 8, units = "in", res = 300 ); #, bg = "transparent");
+    # par(bg = 'cadetblue2');
+    plot(reset = FALSE, x = incongruent[,"value"]);
+    # plot(add   = TRUE,  x = sf::st_geometry(aggregating_zones), lwd = 5, col = scales::alpha("black",0.5));
+    plot(add   = TRUE,  x = sf::st_geometry(aggregating_zones), col = "transparent", lty = 3, lwd = 6, border = "black");
+    dev.off();
+
+    agg.aw <- sf::st_interpolate_aw(
+        x         = incongruent[,"value"],
+        to        = aggregating_zones,
+        extensive = TRUE
+        );
+
+    cat("\nstr(agg.aw)\n");
+    print( str(agg.aw)   );
+
+    cat("\nagg.aw$value\n");
+    print( agg.aw$value   );
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     # cat("\nclass(spData::world)\n");
     # print( class(spData::world)   );
     #
