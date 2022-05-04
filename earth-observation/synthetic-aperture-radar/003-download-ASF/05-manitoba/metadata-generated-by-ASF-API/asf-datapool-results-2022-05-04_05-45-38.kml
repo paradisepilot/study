@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>ASF Datapool Search Results</name>
+    <description>Search Performed: </description>
+    <Style id="yellowLineGreenPoly">
+      <LineStyle>
+        <color>30ff8800</color>
+        <width>4</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>7f00ff00</color>
+      </PolyStyle>
+    </Style>
+    <Placemark>
+      <name>S1B_IW_GRDH_1SDV_20211214T001601_20211214T001626_030014_039562_9CCF</name>
+      <description> &lt;![CDATA[
+        <h1>Sentinel-1B (Interferometric Wide. 250 km swath, 5 m x 20 m spatial resolution and burst synchronization for interferometry. IW is considered to be the standard mode over land masses.), acquired 2021-12-14T00:16:26.000000</h1>
+        <h2>https://datapool.asf.alaska.edu/GRD_HD/SB/S1B_IW_GRDH_1SDV_20211214T001601_20211214T001626_030014_039562_9CCF.zip</h2>
+        <div style="position:absolute;left:20px;top:200px">
+          <h3>Metadata</h3>
+          <ul>
+            <li>Processing type: L1 Detected High-Res Dual-Pol (GRD-HD)</li>
+            <li>Frame: 167</li>
+            <li>Path: 63</li>
+            <li>Orbit: 30014</li>
+            <li>Start time: 2021-12-14T00:16:01.000000</li>
+            <li>End time: 2021-12-14T00:16:26.000000</li>
+            
+            <li>Faraday Rotation: None</li>
+            
+            <li>Ascending/Descending: ASCENDING</li>
+            
+            <li>Off Nadir Angle: None</li>
+            
+            
+            <li>Pointing Angle: None</li>
+            
+            
+          </ul>
+        </div>
+        <div style="position:absolute;left:300px;top:250px">
+          <a href="https://datapool.asf.alaska.edu/BROWSE/SB/S1B_IW_GRDH_1SDV_20211214T001601_20211214T001626_030014_039562_9CCF.jpg">
+            <img src="https://datapool.asf.alaska.edu/THUMBNAIL/SB/S1B_IW_GRDH_1SDV_20211214T001601_20211214T001626_030014_039562_9CCF_thumb.jpg"/>
+          </a>
+        </div>
+      </description>
+      <styleUrl>#yellowLineGreenPoly</styleUrl>
+      <Polygon>
+        <extrude>1</extrude>
+        <altitudeMode>relativeToGround</altitudeMode>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>
+              -95.524521,53.083000,2000
+              -95.149025,51.588028,2000
+              -98.776299,51.188976,2000
+              -99.274498,52.681477,2000
+              -95.524521,53.083000,2000
+            </coordinates>
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+    <Placemark>
+      <name>S1B_IW_GRDH_1SDV_20211214T001536_20211214T001601_030014_039562_A92B</name>
+      <description> &lt;![CDATA[
+        <h1>Sentinel-1B (Interferometric Wide. 250 km swath, 5 m x 20 m spatial resolution and burst synchronization for interferometry. IW is considered to be the standard mode over land masses.), acquired 2021-12-14T00:16:01.000000</h1>
+        <h2>https://datapool.asf.alaska.edu/GRD_HD/SB/S1B_IW_GRDH_1SDV_20211214T001536_20211214T001601_030014_039562_A92B.zip</h2>
+        <div style="position:absolute;left:20px;top:200px">
+          <h3>Metadata</h3>
+          <ul>
+            <li>Processing type: L1 Detected High-Res Dual-Pol (GRD-HD)</li>
+            <li>Frame: 162</li>
+            <li>Path: 63</li>
+            <li>Orbit: 30014</li>
+            <li>Start time: 2021-12-14T00:15:36.000000</li>
+            <li>End time: 2021-12-14T00:16:01.000000</li>
+            
+            <li>Faraday Rotation: None</li>
+            
+            <li>Ascending/Descending: ASCENDING</li>
+            
+            <li>Off Nadir Angle: None</li>
+            
+            
+            <li>Pointing Angle: None</li>
+            
+            
+          </ul>
+        </div>
+        <div style="position:absolute;left:300px;top:250px">
+          <a href="https://datapool.asf.alaska.edu/BROWSE/SB/S1B_IW_GRDH_1SDV_20211214T001536_20211214T001601_030014_039562_A92B.jpg">
+            <img src="https://datapool.asf.alaska.edu/THUMBNAIL/SB/S1B_IW_GRDH_1SDV_20211214T001536_20211214T001601_030014_039562_A92B_thumb.jpg"/>
+          </a>
+        </div>
+      </description>
+      <styleUrl>#yellowLineGreenPoly</styleUrl>
+      <Polygon>
+        <extrude>1</extrude>
+        <altitudeMode>relativeToGround</altitudeMode>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>
+              -95.150429,51.587803,2000
+              -94.786797,50.091995,2000
+              -98.299873,49.694878,2000
+              -98.776268,51.188885,2000
+              -95.150429,51.587803,2000
+            </coordinates>
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+    <Placemark>
+      <name>S1B_IW_GRDH_1SDV_20211214T001511_20211214T001536_030014_039562_0B0A</name>
+      <description> &lt;![CDATA[
+        <h1>Sentinel-1B (Interferometric Wide. 250 km swath, 5 m x 20 m spatial resolution and burst synchronization for interferometry. IW is considered to be the standard mode over land masses.), acquired 2021-12-14T00:15:36.000000</h1>
+        <h2>https://datapool.asf.alaska.edu/GRD_HD/SB/S1B_IW_GRDH_1SDV_20211214T001511_20211214T001536_030014_039562_0B0A.zip</h2>
+        <div style="position:absolute;left:20px;top:200px">
+          <h3>Metadata</h3>
+          <ul>
+            <li>Processing type: L1 Detected High-Res Dual-Pol (GRD-HD)</li>
+            <li>Frame: 157</li>
+            <li>Path: 63</li>
+            <li>Orbit: 30014</li>
+            <li>Start time: 2021-12-14T00:15:11.000000</li>
+            <li>End time: 2021-12-14T00:15:36.000000</li>
+            
+            <li>Faraday Rotation: None</li>
+            
+            <li>Ascending/Descending: ASCENDING</li>
+            
+            <li>Off Nadir Angle: None</li>
+            
+            
+            <li>Pointing Angle: None</li>
+            
+            
+          </ul>
+        </div>
+        <div style="position:absolute;left:300px;top:250px">
+          <a href="https://datapool.asf.alaska.edu/BROWSE/SB/S1B_IW_GRDH_1SDV_20211214T001511_20211214T001536_030014_039562_0B0A.jpg">
+            <img src="https://datapool.asf.alaska.edu/THUMBNAIL/SB/S1B_IW_GRDH_1SDV_20211214T001511_20211214T001536_030014_039562_0B0A_thumb.jpg"/>
+          </a>
+        </div>
+      </description>
+      <styleUrl>#yellowLineGreenPoly</styleUrl>
+      <Polygon>
+        <extrude>1</extrude>
+        <altitudeMode>relativeToGround</altitudeMode>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>
+              -94.788292,50.091759,2000
+              -94.433716,48.595364,2000
+              -97.841446,48.199646,2000
+              -98.299843,49.694786,2000
+              -94.788292,50.091759,2000
+            </coordinates>
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+    <Placemark>
+      <name>S1B_IW_GRDH_1SDV_20211212T003302_20211212T003327_029985_03946B_76B1</name>
+      <description> &lt;![CDATA[
+        <h1>Sentinel-1B (Interferometric Wide. 250 km swath, 5 m x 20 m spatial resolution and burst synchronization for interferometry. IW is considered to be the standard mode over land masses.), acquired 2021-12-12T00:33:27.000000</h1>
+        <h2>https://datapool.asf.alaska.edu/GRD_HD/SB/S1B_IW_GRDH_1SDV_20211212T003302_20211212T003327_029985_03946B_76B1.zip</h2>
+        <div style="position:absolute;left:20px;top:200px">
+          <h3>Metadata</h3>
+          <ul>
+            <li>Processing type: L1 Detected High-Res Dual-Pol (GRD-HD)</li>
+            <li>Frame: 174</li>
+            <li>Path: 34</li>
+            <li>Orbit: 29985</li>
+            <li>Start time: 2021-12-12T00:33:02.000000</li>
+            <li>End time: 2021-12-12T00:33:27.000000</li>
+            
+            <li>Faraday Rotation: None</li>
+            
+            <li>Ascending/Descending: ASCENDING</li>
+            
+            <li>Off Nadir Angle: None</li>
+            
+            
+            <li>Pointing Angle: None</li>
+            
+            
+          </ul>
+        </div>
+        <div style="position:absolute;left:300px;top:250px">
+          <a href="https://datapool.asf.alaska.edu/BROWSE/SB/S1B_IW_GRDH_1SDV_20211212T003302_20211212T003327_029985_03946B_76B1.jpg">
+            <img src="https://datapool.asf.alaska.edu/THUMBNAIL/SB/S1B_IW_GRDH_1SDV_20211212T003302_20211212T003327_029985_03946B_76B1_thumb.jpg"/>
+          </a>
+        </div>
+      </description>
+      <styleUrl>#yellowLineGreenPoly</styleUrl>
+      <Polygon>
+        <extrude>1</extrude>
+        <altitudeMode>relativeToGround</altitudeMode>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>
+              -100.144272,55.057518,2000
+              -99.748909,53.563908,2000
+              -103.547096,53.161076,2000
+              -104.080322,54.651134,2000
+              -100.144272,55.057518,2000
+            </coordinates>
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+    <Placemark>
+      <name>S1B_IW_GRDH_1SDV_20211212T003237_20211212T003302_029985_03946B_FCA1</name>
+      <description> &lt;![CDATA[
+        <h1>Sentinel-1B (Interferometric Wide. 250 km swath, 5 m x 20 m spatial resolution and burst synchronization for interferometry. IW is considered to be the standard mode over land masses.), acquired 2021-12-12T00:33:02.000000</h1>
+        <h2>https://datapool.asf.alaska.edu/GRD_HD/SB/S1B_IW_GRDH_1SDV_20211212T003237_20211212T003302_029985_03946B_FCA1.zip</h2>
+        <div style="position:absolute;left:20px;top:200px">
+          <h3>Metadata</h3>
+          <ul>
+            <li>Processing type: L1 Detected High-Res Dual-Pol (GRD-HD)</li>
+            <li>Frame: 169</li>
+            <li>Path: 34</li>
+            <li>Orbit: 29985</li>
+            <li>Start time: 2021-12-12T00:32:37.000000</li>
+            <li>End time: 2021-12-12T00:33:02.000000</li>
+            
+            <li>Faraday Rotation: None</li>
+            
+            <li>Ascending/Descending: ASCENDING</li>
+            
+            <li>Off Nadir Angle: None</li>
+            
+            
+            <li>Pointing Angle: None</li>
+            
+            
+          </ul>
+        </div>
+        <div style="position:absolute;left:300px;top:250px">
+          <a href="https://datapool.asf.alaska.edu/BROWSE/SB/S1B_IW_GRDH_1SDV_20211212T003237_20211212T003302_029985_03946B_FCA1.jpg">
+            <img src="https://datapool.asf.alaska.edu/THUMBNAIL/SB/S1B_IW_GRDH_1SDV_20211212T003237_20211212T003302_029985_03946B_FCA1_thumb.jpg"/>
+          </a>
+        </div>
+      </description>
+      <styleUrl>#yellowLineGreenPoly</styleUrl>
+      <Polygon>
+        <extrude>1</extrude>
+        <altitudeMode>relativeToGround</altitudeMode>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>
+              -99.750381,53.563683,2000
+              -99.371742,52.068871,2000
+              -103.042122,51.668846,2000
+              -103.547066,53.160984,2000
+              -99.750381,53.563683,2000
+            </coordinates>
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+    <Placemark>
+      <name>S1B_IW_GRDH_1SDV_20211212T003212_20211212T003237_029985_03946B_CE50</name>
+      <description> &lt;![CDATA[
+        <h1>Sentinel-1B (Interferometric Wide. 250 km swath, 5 m x 20 m spatial resolution and burst synchronization for interferometry. IW is considered to be the standard mode over land masses.), acquired 2021-12-12T00:32:37.000000</h1>
+        <h2>https://datapool.asf.alaska.edu/GRD_HD/SB/S1B_IW_GRDH_1SDV_20211212T003212_20211212T003237_029985_03946B_CE50.zip</h2>
+        <div style="position:absolute;left:20px;top:200px">
+          <h3>Metadata</h3>
+          <ul>
+            <li>Processing type: L1 Detected High-Res Dual-Pol (GRD-HD)</li>
+            <li>Frame: 164</li>
+            <li>Path: 34</li>
+            <li>Orbit: 29985</li>
+            <li>Start time: 2021-12-12T00:32:12.000000</li>
+            <li>End time: 2021-12-12T00:32:37.000000</li>
+            
+            <li>Faraday Rotation: None</li>
+            
+            <li>Ascending/Descending: ASCENDING</li>
+            
+            <li>Off Nadir Angle: None</li>
+            
+            
+            <li>Pointing Angle: None</li>
+            
+            
+          </ul>
+        </div>
+        <div style="position:absolute;left:300px;top:250px">
+          <a href="https://datapool.asf.alaska.edu/BROWSE/SB/S1B_IW_GRDH_1SDV_20211212T003212_20211212T003237_029985_03946B_CE50.jpg">
+            <img src="https://datapool.asf.alaska.edu/THUMBNAIL/SB/S1B_IW_GRDH_1SDV_20211212T003212_20211212T003237_029985_03946B_CE50_thumb.jpg"/>
+          </a>
+        </div>
+      </description>
+      <styleUrl>#yellowLineGreenPoly</styleUrl>
+      <Polygon>
+        <extrude>1</extrude>
+        <altitudeMode>relativeToGround</altitudeMode>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>
+              -99.373161,52.068645,2000
+              -99.004898,50.573261,2000
+              -102.557846,50.175411,2000
+              -103.042091,51.668755,2000
+              -99.373161,52.068645,2000
+            </coordinates>
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+    <Placemark>
+      <name>S1B_IW_GRDH_1SDV_20211212T003147_20211212T003212_029985_03946B_B2AB</name>
+      <description> &lt;![CDATA[
+        <h1>Sentinel-1B (Interferometric Wide. 250 km swath, 5 m x 20 m spatial resolution and burst synchronization for interferometry. IW is considered to be the standard mode over land masses.), acquired 2021-12-12T00:32:12.000000</h1>
+        <h2>https://datapool.asf.alaska.edu/GRD_HD/SB/S1B_IW_GRDH_1SDV_20211212T003147_20211212T003212_029985_03946B_B2AB.zip</h2>
+        <div style="position:absolute;left:20px;top:200px">
+          <h3>Metadata</h3>
+          <ul>
+            <li>Processing type: L1 Detected High-Res Dual-Pol (GRD-HD)</li>
+            <li>Frame: 159</li>
+            <li>Path: 34</li>
+            <li>Orbit: 29985</li>
+            <li>Start time: 2021-12-12T00:31:47.000000</li>
+            <li>End time: 2021-12-12T00:32:12.000000</li>
+            
+            <li>Faraday Rotation: None</li>
+            
+            <li>Ascending/Descending: ASCENDING</li>
+            
+            <li>Off Nadir Angle: None</li>
+            
+            
+            <li>Pointing Angle: None</li>
+            
+            
+          </ul>
+        </div>
+        <div style="position:absolute;left:300px;top:250px">
+          <a href="https://datapool.asf.alaska.edu/BROWSE/SB/S1B_IW_GRDH_1SDV_20211212T003147_20211212T003212_029985_03946B_B2AB.jpg">
+            <img src="https://datapool.asf.alaska.edu/THUMBNAIL/SB/S1B_IW_GRDH_1SDV_20211212T003147_20211212T003212_029985_03946B_B2AB_thumb.jpg"/>
+          </a>
+        </div>
+      </description>
+      <styleUrl>#yellowLineGreenPoly</styleUrl>
+      <Polygon>
+        <extrude>1</extrude>
+        <altitudeMode>relativeToGround</altitudeMode>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>
+              -99.006409,50.573025,2000
+              -98.651031,49.076626,2000
+              -102.095726,48.680279,2000
+              -102.557816,50.175320,2000
+              -99.006409,50.573025,2000
+            </coordinates>
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+    <Placemark>
+      <name>S1B_IW_GRDH_1SDV_20211202T001601_20211202T001626_029839_038FDF_259E</name>
+      <description> &lt;![CDATA[
+        <h1>Sentinel-1B (Interferometric Wide. 250 km swath, 5 m x 20 m spatial resolution and burst synchronization for interferometry. IW is considered to be the standard mode over land masses.), acquired 2021-12-02T00:16:26.000000</h1>
+        <h2>https://datapool.asf.alaska.edu/GRD_HD/SB/S1B_IW_GRDH_1SDV_20211202T001601_20211202T001626_029839_038FDF_259E.zip</h2>
+        <div style="position:absolute;left:20px;top:200px">
+          <h3>Metadata</h3>
+          <ul>
+            <li>Processing type: L1 Detected High-Res Dual-Pol (GRD-HD)</li>
+            <li>Frame: 167</li>
+            <li>Path: 63</li>
+            <li>Orbit: 29839</li>
+            <li>Start time: 2021-12-02T00:16:01.000000</li>
+            <li>End time: 2021-12-02T00:16:26.000000</li>
+            
+            <li>Faraday Rotation: None</li>
+            
+            <li>Ascending/Descending: ASCENDING</li>
+            
+            <li>Off Nadir Angle: None</li>
+            
+            
+            <li>Pointing Angle: None</li>
+            
+            
+          </ul>
+        </div>
+        <div style="position:absolute;left:300px;top:250px">
+          <a href="https://datapool.asf.alaska.edu/BROWSE/SB/S1B_IW_GRDH_1SDV_20211202T001601_20211202T001626_029839_038FDF_259E.jpg">
+            <img src="https://datapool.asf.alaska.edu/THUMBNAIL/SB/S1B_IW_GRDH_1SDV_20211202T001601_20211202T001626_029839_038FDF_259E_thumb.jpg"/>
+          </a>
+        </div>
+      </description>
+      <styleUrl>#yellowLineGreenPoly</styleUrl>
+      <Polygon>
+        <extrude>1</extrude>
+        <altitudeMode>relativeToGround</altitudeMode>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>
+              -95.522713,53.082966,2000
+              -95.147339,51.587990,2000
+              -98.774910,51.188969,2000
+              -99.273003,52.681477,2000
+              -95.522713,53.082966,2000
+            </coordinates>
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+  </Document>
+</kml>
