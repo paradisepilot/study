@@ -29,7 +29,7 @@ test.conda_create <- function(
 
         DF.conda.list  <- reticulate::conda_list();
         selected.row   <- grepl(x = DF.conda.list[,'python'], pattern = env.path);
-        my.python.path <- DF.conda.list[selected.row,'name'];
+        my.python.path <- DF.conda.list[selected.row,'python'];
 
     } else {
         cat("\nConda environment creation begins: '",env.path,"'\n");
