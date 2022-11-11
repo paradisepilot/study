@@ -18,7 +18,7 @@ test.conda_clone.install_ee <- function(
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     if ( dir.exists(clone.path) ) {
         cat("\nThe conda environment '",clone.path,"' already exists; activating this conda environment ...\n");
-        reticulate::use_condaenv(condaenv = clone.path);
+        reticulate::use_condaenv(condaenv = clone.path, required = TRUE);
         cat("\nThe conda environment '",clone.path,"' has been activated ...\n");
         DF.conda.list  <- reticulate::conda_list();
         selected.row   <- base::grepl(x = DF.conda.list[,'python'], pattern = clone.path);

@@ -21,7 +21,7 @@ test.conda_create <- function(
         ##### use_condaenv(condaenv = "condaEnvGEE")
         ##### Error: 'condaEnvGEE/bin/python' was not built with a shared library.
         ##### reticulate can only bind to copies of Python built with '--enable-shared'.
-        reticulate::use_condaenv(condaenv = env.path);
+        reticulate::use_condaenv(condaenv = env.path, required = TRUE);
         cat("\nThe conda environment '",env.path,"' has been activated ...\n");
         DF.conda.list  <- reticulate::conda_list();
         selected.row   <- grepl(x = DF.conda.list[,'python'], pattern = env.path);
