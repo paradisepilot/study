@@ -31,7 +31,7 @@ test.conda_clone.install_ee <- function(
             clone   = to.be.cloned
             );
         cat("\nConda environment cloning complete: '",to.be.cloned,"' --> '",clone.path,"'\n");
-        cat("\nInstallation of earthengine-api begin: '",clone.path,"'\n");
+        cat("\nInstallation of earthengine-api begins: '",clone.path,"'\n");
         reticulate::conda_install(
             envname  = clone.path,
             packages = c("earthengine-api"),
