@@ -44,7 +44,7 @@ print( gee.env.path );
 # test.conda_create(env.path = env.path);
 test.conda_clone.install_ee(
     clone.path   = gee.env.path,
-    to.be.cloned = "base" # "r-reticulate" did NOT work; it stalled for 30 minutes
+    to.be.cloned = "r-reticulate" # "base" # "r-reticulate" did NOT work; it stalled for 30 minutes
     );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
