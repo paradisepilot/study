@@ -44,7 +44,7 @@ print( gee.env.path );
 # test.conda_create(env.path = env.path);
 test.conda_clone.install_ee(
     clone.path   = gee.env.path,
-    to.be.cloned = "base" # "r-reticulate"
+    to.be.cloned = "r-reticulate" # "base"
     );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
