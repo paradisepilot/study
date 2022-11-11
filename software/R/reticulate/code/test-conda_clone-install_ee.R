@@ -33,6 +33,9 @@ test.conda_clone.install_ee <- function(
     print( my.python.path   );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    cat("\nclone.path\n");
+    print( clone.path   );
+
     cat("\nreticulate::py_list_packages(envname = clone.path, type = 'conda')\n");
     print(
         reticulate::py_list_packages(
