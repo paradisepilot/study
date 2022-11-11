@@ -17,20 +17,15 @@ test.conda_create <- function(
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     if ( dir.exists(env.path) ) {
         cat("\nThe conda environment '",env.path,"' already exists; activating this conda environment ...\n");
-
         ##### got the following error when trying to use the conda environment created with conda_create
         ##### use_condaenv(condaenv = "condaEnvGEE")
         ##### Error: 'condaEnvGEE/bin/python' was not built with a shared library.
         ##### reticulate can only bind to copies of Python built with '--enable-shared'.
-
-        # reticulate::use_condaenv(condaenv = env.path);
-        # cat("\nThe conda environment '",env.path,"' has been activated ...\n");
-        # my.python.path <- reticulate::py_config()[['python']];
-
+        reticulate::use_condaenv(condaenv = env.path);
+        cat("\nThe conda environment '",env.path,"' has been activated ...\n");
         DF.conda.list  <- reticulate::conda_list();
         selected.row   <- grepl(x = DF.conda.list[,'python'], pattern = env.path);
         my.python.path <- DF.conda.list[selected.row,'python'];
-
     } else {
         cat("\nConda environment creation begins: '",env.path,"'\n");
         my.python.path <- reticulate::conda_create(
