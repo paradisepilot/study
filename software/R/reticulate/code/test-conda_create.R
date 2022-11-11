@@ -32,7 +32,8 @@ test.conda_create <- function(
     print( my.python.path   );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    pritn(
+    cat("\nreticulate::py_list_packages(envname = env.path, type = 'conda')\n");
+    print(
         reticulate::py_list_packages(
             envname = env.path,
             type    = "conda"
