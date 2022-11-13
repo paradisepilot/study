@@ -21,7 +21,9 @@ require(reticulate);
 
 # source supporting R code
 code.files <- c(
-    "test-ee-Authenticate.R"
+    "getPyModule-ee.R",
+    "test-ee-Authenticate.R",
+    "test-ee-batch-export.R"
     );
 
 for ( code.file in code.files ) {
@@ -39,8 +41,23 @@ cat(paste0("\n# n.cores = ",n.cores,"\n"));
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 condaenv.gee <- "condaEnvGEE";
-test.ee_Authenticate(
-    condaenv.gee = condaenv.gee
+
+# test.ee_Authenticate(
+#     condaenv.gee = condaenv.gee
+#     );
+
+pyModule.ee <- getPyModule.ee(
+    condaenv.gee = "condaEnvGEE"
+    );
+
+# print( class(ee) );
+#
+# image <- ee$Image('CGIAR/SRTM90_V4');
+# print( image$bandNames()$getInfo() );
+
+### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+test.ee_batch_export(
+    pyModule.ee = pyModule.ee
     );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
