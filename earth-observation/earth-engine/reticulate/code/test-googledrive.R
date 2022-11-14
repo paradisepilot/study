@@ -16,22 +16,7 @@ test.googledrive <- function(
     require(googledrive);
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    # googledrive::drive_auth(
-    #     email = Sys.getenv("GOOGLE_ACCOUNT_EMAIL"),
-    #     token = Sys.getenv("GOOGLE_APPLICATION_CREDENTIALS"),
-    #     cache = Sys.getenv("GOOGLE_DRIVE_CREDENTIALS")
-    #     );
-
-    # googledrive::drive_auth(
-    #     email = Sys.getenv("GOOGLE_ACCOUNT_EMAIL"),
-    #     token = Sys.getenv("GOOGLE_DRIVE_TOKEN")
-    #     );
-
-    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     DF.drive <- as.data.frame(googledrive::drive_find());
-
-    # cat("\nstr(DF.drive)\n");
-    # print( str(DF.drive)   );
 
     cat("\nDF.drive[,c('name','id')]\n");
     print( DF.drive[,c('name','id')]   );
