@@ -8,6 +8,11 @@ test.googledrive <- function(
     cat(paste0("\n",thisFunctionName,"() starts.\n\n"));
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    options(
+        gargle_oauth_email = Sys.getenv("GARGLE_OAUTH_EMAIL"),
+        gargle_oauth_cache = Sys.getenv("GARGLE_OAUTH_CACHE")
+        );
+
     require(googledrive);
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
@@ -17,10 +22,10 @@ test.googledrive <- function(
     #     cache = Sys.getenv("GOOGLE_DRIVE_CREDENTIALS")
     #     );
 
-    googledrive::drive_auth(
-        email = Sys.getenv("GOOGLE_ACCOUNT_EMAIL"),
-        token = Sys.getenv("GOOGLE_APPLICATION_CREDENTIALS")
-        );
+    # googledrive::drive_auth(
+    #     email = Sys.getenv("GOOGLE_ACCOUNT_EMAIL"),
+    #     token = Sys.getenv("GOOGLE_DRIVE_TOKEN")
+    #     );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     DF.drive <- as.data.frame(googledrive::drive_find());
