@@ -17,13 +17,16 @@ start.proc.time <- proc.time();
 setwd( output.directory );
 
 ##################################################
+require(googledrive);
 require(reticulate);
+# require(rgee);
 
 # source supporting R code
 code.files <- c(
     "getPyModule-ee.R",
     "test-ee-Authenticate.R",
-    "test-ee-batch-export.R"
+    "test-ee-batch-export.R",
+    "test-googledrive.R"
     );
 
 for ( code.file in code.files ) {
@@ -50,15 +53,12 @@ pyModule.ee <- getPyModule.ee(
     condaenv.gee = "condaEnvGEE"
     );
 
-# print( class(ee) );
-#
-# image <- ee$Image('CGIAR/SRTM90_V4');
-# print( image$bandNames()$getInfo() );
-
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-test.ee_batch_export(
-    pyModule.ee = pyModule.ee
-    );
+# test.ee_batch_export(
+#     pyModule.ee = pyModule.ee
+#     );
+
+test.googledrive();
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 
