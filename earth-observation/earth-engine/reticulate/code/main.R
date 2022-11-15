@@ -54,9 +54,12 @@ pyModule.ee <- getPyModule.ee(
     );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-# test.ee_batch_export(
-#     pyModule.ee = pyModule.ee
-#     );
+test.ee_batch_export(
+    pyModule.ee = pyModule.ee
+    );
+
+# sleep for ten minutes
+Sys.sleep( 10 * 60 );
 
 test.googledrive();
 
