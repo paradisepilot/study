@@ -46,10 +46,6 @@ logging.basicConfig(filename='log.debug',level=logging.DEBUG)
 # from sklearn.ensemble        import RandomForestRegressor
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-startup_command = "python " + os.path.join(os.environ.get('HOME'),'.pythonrc')
-print(     startup_command )
-os.system( startup_command )
-
 print(              "\nHOME:" )
 print( os.environ.get('HOME') )
 
