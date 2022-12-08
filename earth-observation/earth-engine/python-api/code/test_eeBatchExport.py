@@ -1,7 +1,7 @@
 
 import ee
 
-def test_eeBatchExport():
+def test_eeBatchExport(google_drive_folder):
 
     thisFunctionName = "test_eeBatchExport"
     print( "\n########## " + thisFunctionName + "() starts ..." )
@@ -79,7 +79,7 @@ def test_eeBatchExport():
             'image'         : temp_image.select('ndvi'),
             'description'   : 'Image Export {}'.format(i+1),
             'fileNamePrefix': temp_image.id().getInfo(),
-            'folder'        : 'earthengine/patrick', #folder names with separators (e.g. 'path/to/file') are interpreted as literal strings, not system paths.
+            'folder'        : google_drive_folder, # 'earthengine/patrick', #folder names with separators (e.g. 'path/to/file') are interpreted as literal strings, not system paths.
             'scale'         : 100,
             'region'        : temp_image.geometry().bounds().getInfo()['coordinates'],
             'maxPixels'     : 1e10
