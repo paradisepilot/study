@@ -4,7 +4,7 @@ import ee
 ###################################################
 def test_eeAuthenticate():
 
-    thisFunctionName = "test_eeAuthenticate";
+    thisFunctionName = "test_eeAuthenticate"
     print( "\n### " + thisFunctionName + "() starts ..." )
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###

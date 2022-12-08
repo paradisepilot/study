@@ -5,6 +5,9 @@ import numpy as np
 ###################################################
 def test_eeBatchExport():
 
+    thisFunctionName = "test_eeBatchExport"
+    print( "\n### " + thisFunctionName + "() starts ..." )
+
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     s2 = ee.ImageCollection('COPERNICUS/S2_HARMONIZED')
     geometry = ee.Geometry.Polygon([[
@@ -39,6 +42,7 @@ def test_eeBatchExport():
     print(   stats.get('ndvi').getInfo()   )
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    print( "\n### " + thisFunctionName + "() exits ..." )
     return( None )
 
 ##### ##### ##### ##### #####
