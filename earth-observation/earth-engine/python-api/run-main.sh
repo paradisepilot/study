@@ -16,7 +16,6 @@ cp    $0         ${outputDIR}/code
 
 ########################################################
 if [[ "${OSTYPE}" =~ .*"linux".* ]]; then
-  source ${HOME}/.bash_env
   pythonBinDIR=/opt/conda/envs/condaEnvGEE/bin
 else
   pythonBinDIR=`which python`
@@ -27,5 +26,5 @@ fi
 myPythonScript=${codeDIR}/main.py
 stdoutFile=${outputDIR}/stdout.py.`basename ${myPythonScript} .py`
 stderrFile=${outputDIR}/stderr.py.`basename ${myPythonScript} .py`
-echo ${pythonBinDIR}/python
+source ${HOME}/.bash_env
 ${pythonBinDIR}/python ${myPythonScript} ${dataDIR} ${codeDIR} ${outputDIR} > ${stdoutFile} 2> ${stderrFile}
