@@ -27,4 +27,4 @@ myPythonScript=${codeDIR}/main.py
 stdoutFile=${outputDIR}/stdout.py.`basename ${myPythonScript} .py`
 stderrFile=${outputDIR}/stderr.py.`basename ${myPythonScript} .py`
 echo ${pythonBinDIR}/python
-# ${pythonBinDIR}/python ${myPythonScript} ${dataDIR} ${codeDIR} ${outputDIR} > ${stdoutFile} 2> ${stderrFile}
+${pythonBinDIR}/python ${myPythonScript} ${dataDIR} ${codeDIR} ${outputDIR} > ${stdoutFile} 2> ${stderrFile}
