@@ -18,7 +18,7 @@ cp    $0         ${outputDIR}/code
 if [[ "${OSTYPE}" =~ .*"linux".* ]]; then
   cp ${HOME}/.gee_environment_variables ${outputDIR}/code/gee_environment_variables.txt
   source ${HOME}/.gee_environment_variables
-  # pythonBinDIR=/opt/conda/envs/condaEnvGEE/bin
+  pythonBinDIR=${geeEnvDIR}/bin
 else
   pythonBinDIR=`which python`
   pythonBinDIR=${pythonBinDIR//\/python/}
