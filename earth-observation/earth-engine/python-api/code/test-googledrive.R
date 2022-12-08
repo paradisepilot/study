@@ -18,6 +18,11 @@ test.googledrive <- function(
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     DF.drive <- as.data.frame(googledrive::drive_find());
 
+    saveRDS(
+        object = DF.drive,
+        file   = "DF-google-drive.RData"
+        );
+
     cat("\nstr(DF.drive)\n");
     print( str(DF.drive)   );
 
