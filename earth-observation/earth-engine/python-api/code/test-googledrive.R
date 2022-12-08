@@ -18,6 +18,9 @@ test.googledrive <- function(
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     DF.drive <- as.data.frame(googledrive::drive_find());
 
+    cat("\nstr(DF.drive)\n");
+    print( str(DF.drive)   );
+
     cat("\nDF.drive[,c('name','id')]\n");
     print( DF.drive[,c('name','id')]   );
 
