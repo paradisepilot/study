@@ -26,24 +26,24 @@ logging.basicConfig(filename='log.debug',level=logging.DEBUG)
 ##################################################
 ##################################################
 # import seaborn (for improved graphics) if available
-import seaborn as sns
+# import seaborn as sns
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-import numpy   as np
-import pandas  as pd
-
-from examineData       import examineData
-from splitTrainTest    import splitTrainTest
-from trainEvaluate     import trainEvaluate
-from trainEvaluateGrid import trainEvaluateGrid
-from visualizeData     import visualizeData
-
-from PipelinePreprocessHousingData import PipelinePreprocessHousingData
-
-from sklearn.tree            import DecisionTreeRegressor
-from sklearn.linear_model    import LinearRegression
-from sklearn.model_selection import GridSearchCV
-from sklearn.ensemble        import RandomForestRegressor
+# import numpy   as np
+# import pandas  as pd
+#
+# from examineData       import examineData
+# from splitTrainTest    import splitTrainTest
+# from trainEvaluate     import trainEvaluate
+# from trainEvaluateGrid import trainEvaluateGrid
+# from visualizeData     import visualizeData
+#
+# from PipelinePreprocessHousingData import PipelinePreprocessHousingData
+#
+# from sklearn.tree            import DecisionTreeRegressor
+# from sklearn.linear_model    import LinearRegression
+# from sklearn.model_selection import GridSearchCV
+# from sklearn.ensemble        import RandomForestRegressor
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 startup_command = "python " + os.path.join(os.environ.get('HOME'),'.pythonrc')
