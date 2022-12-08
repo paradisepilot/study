@@ -84,7 +84,7 @@ def test_eeBatchExport():
             'region'        : temp_image.geometry().bounds().getInfo()['coordinates'],
             'maxPixels'     : 1e10
             })
-        # temp_task.start();
+        temp_task.start();
         print("\nStarted task: " + str(image_id) + "\n");
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
