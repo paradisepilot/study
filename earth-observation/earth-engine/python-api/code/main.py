@@ -29,7 +29,8 @@ logging.basicConfig(filename='log.debug',level=logging.DEBUG)
 # import seaborn as sns
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-from test_eeBatchExport import test_eeBatchExport
+from test_eeAuthenticate import test_eeAuthenticate
+from test_eeBatchExport  import test_eeBatchExport
 
 # import numpy   as np
 # import pandas  as pd
@@ -64,10 +65,7 @@ for path in sys.path:
     print(path)
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-import ee
-ee.Authenticate(auth_mode = "appdefault")
-ee.Initialize()
-
+test_eeAuthenticate()
 test_eeBatchExport()
 
 # ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
