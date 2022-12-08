@@ -16,6 +16,7 @@ cp    $0         ${outputDIR}/code
 
 ########################################################
 if [[ "${OSTYPE}" =~ .*"linux".* ]]; then
+  source ${HOME}/.bash_env
   pythonBinDIR=/opt/conda/envs/condaEnvGEE/bin
 else
   pythonBinDIR=`which python`
