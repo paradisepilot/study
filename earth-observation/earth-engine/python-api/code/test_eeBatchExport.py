@@ -1,12 +1,10 @@
 
 import ee
-import numpy as np
 
-###################################################
 def test_eeBatchExport():
 
     thisFunctionName = "test_eeBatchExport"
-    print( "\n### " + thisFunctionName + "() starts ..." )
+    print( "\n########## " + thisFunctionName + "() starts ..." )
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     my_point = ee.Geometry.Point(13.481643640792527,52.48959983479137);
@@ -48,10 +46,10 @@ def test_eeBatchExport():
     ndvi = withNdvi.median().select('ndvi')
 
     stats = ndvi.reduceRegion(**{
-      'reducer'   : ee.Reducer.mean(),
-      'geometry'  : my_polygon,
-      'scale'     : 10,
-      'maxPixels' : 1e10
+      'reducer'  : ee.Reducer.mean(),
+      'geometry' : my_polygon,
+      'scale'    : 10,
+      'maxPixels': 1e10
       })
 
     print("\nstats.getInfo()");
@@ -61,7 +59,36 @@ def test_eeBatchExport():
     print(   stats.get('ndvi').getInfo()   )
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-    print( "\n### " + thisFunctionName + "() exits ..." )
+    image_ids = withNdvi.aggregate_array('system:index').getInfo();
+
+    print("\nNumber of images: ", len(image_ids) )
+
+    print("\nimage_ids")
+    print(   image_ids )
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    temp_image = ee.Image(withNdvi.filter(ee.Filter.eq('system:index',image_ids[0])).first());
+    temp_info  = temp_image.geometry().bounds().getInfo();
+
+    print("\ntemp_info");
+    print(   temp_info );
+
+    for i, image_id in enumerate(image_ids):
+        temp_image = ee.Image(withNdvi.filter(ee.Filter.eq('system:index',image_id)).first());
+        temp_task  = ee.batch.Export.image.toDrive(**{
+            'image'         : temp_image.select('ndvi'),
+            'description'   : 'Image Export {}'.format(i+1),
+            'fileNamePrefix': temp_image.id().getInfo(),
+            'folder'        : 'earthengine',
+            'scale'         : 100,
+            'region'        : temp_image.geometry().bounds().getInfo()['coordinates'],
+            'maxPixels'     : 1e10
+            })
+        # temp_task.start();
+        print("\nStarted task: " + str(image_id) + "\n");
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    print( "\n########## " + thisFunctionName + "() exits ..." )
     return( None )
 
 ##### ##### ##### ##### #####
