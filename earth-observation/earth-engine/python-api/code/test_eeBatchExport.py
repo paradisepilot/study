@@ -1,4 +1,5 @@
 
+import ee
 import numpy as np
 
 ###################################################
@@ -38,12 +39,9 @@ def test_eeBatchExport():
     print(   stats.get('ndvi').getInfo()   )
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-
-    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     return( None )
 
 ##### ##### ##### ##### #####
-
 def maskS2clouds(image):
   qa = image.select('QA60')
   cloudBitMask = 1 << 10
