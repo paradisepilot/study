@@ -18,8 +18,8 @@ def test_eeBatchExport():
     ]])
 
     filtered = s2 \
-        .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', 30)) \
-        .filter(ee.Filter.date('2019-02-01', '2019-03-01')) \
+        .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE',30)) \
+        .filter(ee.Filter.date('2019-02-01','2019-03-01')) \
         .filter(ee.Filter.bounds(geometry))
 
     withNdvi = filtered \
@@ -57,5 +57,5 @@ def maskS2clouds(image):
       .copyProperties(image, ["system:time_start"])
 
 def addNDVI(image):
-  ndvi = image.normalizedDifference(['B8', 'B4']).rename('ndvi')
+  ndvi = image.normalizedDifference(['B8','B4']).rename('ndvi')
   return image.addBands(ndvi)
