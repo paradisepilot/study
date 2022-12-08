@@ -61,7 +61,7 @@ def test_eeBatchExport():
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     image_ids = withNdvi.aggregate_array('system:index').getInfo();
 
-    print("\nNumber of images: ", len(image_ids) )
+    print("\nlen(image_ids): ", len(image_ids) )
 
     print("\nimage_ids")
     print(   image_ids )
