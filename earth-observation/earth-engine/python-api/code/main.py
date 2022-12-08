@@ -20,6 +20,7 @@ print("####################")
 print( "\ndir_data: "   + dir_data   )
 print( "\ndir_code: "   + dir_code   )
 print( "\ndir_output: " + dir_output )
+print( "\nos.environ.get('GEE_ENV_DIR'): " + os.environ.get('GEE_ENV_DIR') )
 
 logging.basicConfig(filename='log.debug',level=logging.DEBUG)
 
@@ -49,11 +50,6 @@ from test_eeBatchExport  import test_eeBatchExport
 # from sklearn.ensemble        import RandomForestRegressor
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-print(              "\nHOME:" )
-print( os.environ.get('HOME') )
-
-print("\nos.path.join(os.environ.get('HOME'),'.pythonrc')")
-print(   os.path.join(os.environ.get('HOME'),'.pythonrc') )
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 print(              "\nGOOGLE_APPLICATION_CREDENTIALS:" )
