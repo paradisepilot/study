@@ -19,7 +19,8 @@ print( "\n" + myTime + "\n" )
 print( "\ndir_data: "   + dir_data   )
 print( "\ndir_code: "   + dir_code   )
 print( "\ndir_output: " + dir_output )
-print( "\nos.environ.get('GEE_ENV_DIR'): " + os.environ.get('GEE_ENV_DIR') )
+print( "\nos.environ.get('GEE_ENV_DIR'):")
+print( os.environ.get('GEE_ENV_DIR') )
 
 print( "\n### python module search paths:" )
 for path in sys.path:
