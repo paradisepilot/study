@@ -7,7 +7,7 @@ import stat
 dir_data            = os.path.realpath(sys.argv[1])
 dir_code            = os.path.realpath(sys.argv[2])
 dir_output          = os.path.realpath(sys.argv[3])
-google_drive_folder = os.path.realpath(sys.argv[4])
+google_drive_folder = sys.argv[4]
 
 if not os.path.exists(dir_output):
     os.makedirs(dir_output)

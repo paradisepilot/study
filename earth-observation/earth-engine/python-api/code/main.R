@@ -3,12 +3,12 @@ command.arguments   <- commandArgs(trailingOnly = TRUE);
 data.directory      <- normalizePath(command.arguments[1]);
 code.directory      <- normalizePath(command.arguments[2]);
 output.directory    <- normalizePath(command.arguments[3]);
-google.drive.folder <- normalizePath(command.arguments[4]);
+google.drive.folder <- command.arguments[4];
 
-print( data.directory      );
-print( code.directory      );
-print( output.directory    );
-print( google.drive.folder );
+cat("\ndata.directory:",      data.directory,      "\n");
+cat("\ncode.directory:",      code.directory,      "\n");
+cat("\noutput.directory:",    output.directory,    "\n");
+cat("\ngoogle.drive.folder:", google.drive.folder, "\n");
 
 print( format(Sys.time(),"%Y-%m-%d %T %Z") );
 
