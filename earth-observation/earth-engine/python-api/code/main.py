@@ -61,6 +61,11 @@ print( "\n### python module search paths:" )
 for path in sys.path:
     print(path)
 
+### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+import ee
+ee.Authenticate(auth_mode = " appdefault")
+ee.Initialize()
+
 # ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 # # load data
 # housingFILE = os.path.join(dir_data,'housing.csv')
