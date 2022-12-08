@@ -30,8 +30,12 @@ test.googledrive <- function(
     print( DF.drive[,c('name','id')]   );
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
+    row.index <- which(DF.drive[,'name'] == google.drive.folder);
+    google.drive.ID <- DF.drive[row.index[1],'id'];
+
+    ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     DF.earth.engine <- as.data.frame(googledrive::drive_ls(
-        path    = google.drive.folder,
+        path    = googledrive::as_id(google.drive.ID), # google.drive.folder,
         pattern = "\\.tif"
         ));
 
