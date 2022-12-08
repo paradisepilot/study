@@ -15,12 +15,17 @@ os.chdir(dir_output)
 
 myTime = "system time: " + datetime.datetime.now().strftime("%c")
 print( "\n" + myTime + "\n" )
-print("####################")
 
 print( "\ndir_data: "   + dir_data   )
 print( "\ndir_code: "   + dir_code   )
 print( "\ndir_output: " + dir_output )
 print( "\nos.environ.get('GEE_ENV_DIR'): " + os.environ.get('GEE_ENV_DIR') )
+
+print( "\n### python module search paths:" )
+for path in sys.path:
+    print(path)
+
+print("####################")
 
 logging.basicConfig(filename='log.debug',level=logging.DEBUG)
 
@@ -50,16 +55,6 @@ from test_eeBatchExport  import test_eeBatchExport
 # from sklearn.ensemble        import RandomForestRegressor
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-
-### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-print(              "\nGOOGLE_APPLICATION_CREDENTIALS:" )
-print( os.environ.get('GOOGLE_APPLICATION_CREDENTIALS') )
-
-### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-print( "\n### python module search paths:" )
-for path in sys.path:
-    print(path)
-
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 test_eeAuthenticate()
 test_eeBatchExport()
