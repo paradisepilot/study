@@ -56,10 +56,6 @@ print(   os.path.join(os.environ.get('HOME'),'.pythonrc') )
 print(              "\nGOOGLE_APPLICATION_CREDENTIALS:" )
 print( os.environ.get('GOOGLE_APPLICATION_CREDENTIALS') )
 
-os.environ.setdefault('GOOGLE_APPLICATION_CREDENTIALS','ZZZ')
-print(              "\nGOOGLE_APPLICATION_CREDENTIALS:" )
-print( os.environ.get('GOOGLE_APPLICATION_CREDENTIALS') )
-
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 print( "\n### python module search paths:" )
 for path in sys.path:
