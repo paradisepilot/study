@@ -16,6 +16,7 @@ cp    $0         ${outputDIR}/code
 
 ########################################################
 if [[ "${OSTYPE}" =~ .*"linux".* ]]; then
+  conda activate condaEnvGEE
   pythonBinDIR=`conda env list | egrep '^condaEnvGEE' | awk  '{print $3}'`/bin
 else
   pythonBinDIR=`which python`
