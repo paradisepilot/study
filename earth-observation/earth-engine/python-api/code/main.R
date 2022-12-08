@@ -1,12 +1,14 @@
 
-command.arguments <- commandArgs(trailingOnly = TRUE);
-data.directory    <- normalizePath(command.arguments[1]);
-code.directory    <- normalizePath(command.arguments[2]);
-output.directory  <- normalizePath(command.arguments[3]);
+command.arguments   <- commandArgs(trailingOnly = TRUE);
+data.directory      <- normalizePath(command.arguments[1]);
+code.directory      <- normalizePath(command.arguments[2]);
+output.directory    <- normalizePath(command.arguments[3]);
+google.drive.folder <- normalizePath(command.arguments[4]);
 
-print( data.directory );
-print( code.directory );
-print( output.directory );
+print( data.directory      );
+print( code.directory      );
+print( output.directory    );
+print( google.drive.folder );
 
 print( format(Sys.time(),"%Y-%m-%d %T %Z") );
 
@@ -23,9 +25,9 @@ require(reticulate);
 
 # source supporting R code
 code.files <- c(
-    "getPyModule-ee.R",
-    "test-ee-Authenticate.R",
-    "test-ee-batch-export.R",
+    # "getPyModule-ee.R",
+    # "test-ee-Authenticate.R",
+    # "test-ee-batch-export.R",
     "test-googledrive.R"
     );
 
@@ -43,25 +45,27 @@ n.cores  <- ifelse(test = is.macOS, yes = 2, no = parallel::detectCores() - 1);
 cat(paste0("\n# n.cores = ",n.cores,"\n"));
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-condaenv.gee <- "condaEnvGEE";
-
+# condaenv.gee <- "condaEnvGEE";
+#
 # test.ee_Authenticate(
 #     condaenv.gee = condaenv.gee
 #     );
-
-pyModule.ee <- getPyModule.ee(
-    condaenv.gee = "condaEnvGEE"
-    );
+#
+# pyModule.ee <- getPyModule.ee(
+#     condaenv.gee = "condaEnvGEE"
+#     );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-test.ee_batch_export(
-    pyModule.ee = pyModule.ee
+# test.ee_batch_export(
+#     pyModule.ee = pyModule.ee
+#     );
+#
+# # sleep for ten minutes
+# Sys.sleep( 10 * 60 );
+
+test.googledrive(
+    google.drive.folder = google.drive.folder
     );
-
-# sleep for ten minutes
-Sys.sleep( 10 * 60 );
-
-test.googledrive();
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 
