@@ -63,7 +63,7 @@ for path in sys.path:
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 import ee
-ee.Authenticate(auth_mode = " appdefault")
+ee.Authenticate(auth_mode = "appdefault")
 ee.Initialize()
 
 # ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
