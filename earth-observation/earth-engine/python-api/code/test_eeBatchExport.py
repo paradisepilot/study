@@ -79,7 +79,7 @@ def test_eeBatchExport():
             'image'         : temp_image.select('ndvi'),
             'description'   : 'Image Export {}'.format(i+1),
             'fileNamePrefix': temp_image.id().getInfo(),
-            'folder'        : 'earthengine',
+            'folder'        : 'earthengine/lst/patrick',
             'scale'         : 100,
             'region'        : temp_image.geometry().bounds().getInfo()['coordinates'],
             'maxPixels'     : 1e10
