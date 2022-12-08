@@ -25,7 +25,7 @@ print( "\n### python module search paths:" )
 for path in sys.path:
     print(path)
 
-print("####################")
+print("\n####################")
 
 logging.basicConfig(filename='log.debug',level=logging.DEBUG)
 
