@@ -35,9 +35,14 @@ test.googledrive <- function(
 
     ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
     DF.earth.engine <- as.data.frame(googledrive::drive_ls(
-        path    = googledrive::as_id(google.drive.ID), # google.drive.folder,
+        path    = googledrive::as_id(google.drive.ID),
         pattern = "\\.tif"
         ));
+
+    saveRDS(
+        object = DF.earth.engine,
+        file   = "DF-Drive-ls-folder.RData"
+        );
 
     cat("\nDF.earth.engine\n");
     print( DF.earth.engine   );
