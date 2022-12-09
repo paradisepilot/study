@@ -31,10 +31,10 @@ googleDriveFolder=earthengine/patrick
 myPythonScript=${codeDIR}/main.py
 stdoutFile=${outputDIR}/stdout.py.`basename ${myPythonScript} .py`
 stderrFile=${outputDIR}/stderr.py.`basename ${myPythonScript} .py`
-# ${pythonBinDIR}/python ${myPythonScript} ${dataDIR} ${codeDIR} ${outputDIR} ${googleDriveFolder} > ${stdoutFile} 2> ${stderrFile}
+${pythonBinDIR}/python ${myPythonScript} ${dataDIR} ${codeDIR} ${outputDIR} ${googleDriveFolder} > ${stdoutFile} 2> ${stderrFile}
 
 ##################################################
-# sleep 600
+sleep 600
 
 ##################################################
 myRscript=${codeDIR}/main.R
