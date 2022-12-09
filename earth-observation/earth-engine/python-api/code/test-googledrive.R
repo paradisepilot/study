@@ -23,8 +23,8 @@ test.googledrive <- function(
         file   = "DF-google-drive.RData"
         );
 
-    cat("\nstr(DF.drive)\n");
-    print( str(DF.drive)   );
+    # cat("\nstr(DF.drive)\n");
+    # print( str(DF.drive)   );
 
     cat("\nDF.drive[,c('name','id')]\n");
     print( DF.drive[,c('name','id')]   );
