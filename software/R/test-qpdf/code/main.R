@@ -40,7 +40,7 @@ my.seed <- 7654321;
 set.seed(my.seed);
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-my.password <- "B059";
+my.password <- "????";
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 dir.protected.PDFs <- "/Users/kennethchu/Documents/protected-PDFs";
