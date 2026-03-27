@@ -43,33 +43,9 @@ set.seed(my.seed);
 my.password <- "B059";
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-dir.protected.PDFs <- "/Users/kennethchu/Documents/Finances/Taxes/zzz-MeeMee/hktreasury-payment-advice";
+dir.protected.PDFs <- "/Users/kennethchu/Documents/protected-PDFs";
 print( dir.exists(dir.protected.PDFs) );
 print( list.files(dir.protected.PDFs) );
-
-### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
-# protected.PDFs <- base::list.files(
-#     path       = dir.protected.PDFs,
-#     pattern    = "\\.pdf$",
-#     full.names = TRUE
-#     );
-
-# my.file.info <- base::file.info(
-#     protected.PDFs,
-#     extra_cols = FALSE
-#     );
-
-# sorted.protected.PDFs <- protected.PDFs[order(my.file.info$mtime, decreasing = TRUE)];
-
-# DF.sorted.protected.PDFs <- data.frame(
-#     file.index = seq(1L,length(sorted.protected.PDFs)),
-#     file.path  = sorted.protected.PDFs
-#     );
-# write.csv(
-#     file      = "DF-sorted-protected-PDFs.csv",
-#     x         = DF.sorted.protected.PDFs,
-#     row.names = FALSE
-#     );
 
 ### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ###
 DF.protected.PDFs <- read.csv(file.path(dir.protected.PDFs,"DF-curated-protected-PDFs.csv"));
